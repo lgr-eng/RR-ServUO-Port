@@ -833,12 +833,12 @@ namespace Server
             if (prefix != 0)
             {
                 string str = m_File.ReadString();
-                Console.WriteLine($"ReadString: {str}");
+                //Console.WriteLine($"ReadString: {str}");
                 return str;
             }
             else
             {
-                Console.WriteLine("ReadString: NULL");
+                //Console.WriteLine("ReadString: NULL");
                 return null;
             }
         }
@@ -867,17 +867,17 @@ namespace Server
             int v = 0, shift = 0;
             byte b;
 
-            Console.WriteLine("Starting ReadEncodedInt...");
+            //Console.WriteLine("Starting ReadEncodedInt...");
 
             do
             {
                 b = m_File.ReadByte();
-                Console.WriteLine($"Byte read: {b:X2} (Shift: {shift})");
+                //Console.WriteLine($"Byte read: {b:X2} (Shift: {shift})");
                 v |= (b & 0x7F) << shift;
                 shift += 7;
             } while (b >= 0x80);
 
-            Console.WriteLine($"Final ReadEncodedInt: {v}");
+            //Console.WriteLine($"Final ReadEncodedInt: {v}");
             return v;
         }
 

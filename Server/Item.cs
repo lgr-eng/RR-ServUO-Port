@@ -636,6 +636,13 @@ namespace Server
     public class Item : IEntity, IHued, IComparable<Item>, ISerializable, ISpawnable
     {
         #region RRport
+        public Mobile m_LastMobile;
+        [CommandProperty(AccessLevel.GameMaster)]
+        public Mobile LastMobile { get { return m_LastMobile; } set { m_LastMobile = value; } }
+
+        public string m_LastMobileName;
+        [CommandProperty(AccessLevel.Owner)]
+        public string LastMobileName { get { return m_LastMobileName; } set { m_LastMobileName = value; InvalidateProperties(); } }
         [CommandProperty(AccessLevel.GameMaster)]
         public Terrain Terrain { get { return Terrains.GetTerrain(Map, Location, X, Y); } }
         [CommandProperty(AccessLevel.GameMaster)]
@@ -4594,55 +4601,406 @@ namespace Server
 
         int ISerializable.SerialIdentity { get { return m_Serial; } }
 
+        //public virtual void Serialize(GenericWriter writer)
+        //{
+        //    writer.Write(14); // version
+
+        //    // 14
+        //    writer.Write(Sockets != null ? Sockets.Count : 0);
+
+        //    if (Sockets != null)
+        //    {
+        //        foreach (var socket in Sockets)
+        //        {
+        //            ItemSocket.Save(socket, writer);
+        //        }
+        //    }
+
+        //    // 13: Merge sync
+        //    // 12: Light no longer backed by Direction
+
+        //    // 11
+        //    writer.Write(m_GridLocation);
+
+        //    // 10: Honesty moved to ItemSockets
+
+        //    // 9
+        //    SaveFlag flags = SaveFlag.None;
+
+        //    int x = m_Location.m_X, y = m_Location.m_Y, z = m_Location.m_Z;
+
+        //    if (x != 0 || y != 0 || z != 0)
+        //    {
+        //        if (x >= short.MinValue && x <= short.MaxValue && y >= short.MinValue && y <= short.MaxValue && z >= sbyte.MinValue &&
+        //            z <= sbyte.MaxValue)
+        //        {
+        //            if (x != 0 || y != 0)
+        //            {
+        //                if (x >= byte.MinValue && x <= byte.MaxValue && y >= byte.MinValue && y <= byte.MaxValue)
+        //                {
+        //                    flags |= SaveFlag.LocationByteXY;
+        //                }
+        //                else
+        //                {
+        //                    flags |= SaveFlag.LocationShortXY;
+        //                }
+        //            }
+
+        //            if (z != 0)
+        //            {
+        //                flags |= SaveFlag.LocationSByteZ;
+        //            }
+        //        }
+        //        else
+        //        {
+        //            flags |= SaveFlag.LocationFull;
+        //        }
+        //    }
+
+        //    var info = LookupCompactInfo();
+        //    var items = LookupItems();
+
+        //    if (m_Direction != Direction.North)
+        //    {
+        //        flags |= SaveFlag.Direction;
+        //    }
+
+        //    if (m_Light != 0)
+        //    {
+        //        flags |= SaveFlag.Light;
+        //    }
+
+        //    if (info != null && info.m_Bounce != null)
+        //    {
+        //        flags |= SaveFlag.Bounce;
+        //    }
+
+        //    if (m_LootType != LootType.Regular)
+        //    {
+        //        flags |= SaveFlag.LootType;
+        //    }
+
+        //    if (m_ItemID != 0)
+        //    {
+        //        flags |= SaveFlag.ItemID;
+        //    }
+
+        //    if (m_Hue != 0)
+        //    {
+        //        flags |= SaveFlag.Hue;
+        //    }
+
+        //    if (m_Amount != 1)
+        //    {
+        //        flags |= SaveFlag.Amount;
+        //    }
+
+        //    if (m_Layer != Layer.Invalid)
+        //    {
+        //        flags |= SaveFlag.Layer;
+        //    }
+
+        //    if (info != null && info.m_Name != null)
+        //    {
+        //        flags |= SaveFlag.Name;
+        //    }
+
+        //    if (m_Parent != null)
+        //    {
+        //        flags |= SaveFlag.Parent;
+        //    }
+
+        //    if (items != null && items.Count > 0)
+        //    {
+        //        flags |= SaveFlag.Items;
+        //    }
+
+        //    if (m_Map != Map.Internal)
+        //    {
+        //        flags |= SaveFlag.Map;
+        //    }
+
+        //    if (info != null && info.m_BlessedFor != null && !info.m_BlessedFor.Deleted)
+        //    {
+        //        flags |= SaveFlag.BlessedFor;
+        //    }
+
+        //    if (info != null && info.m_HeldBy != null && !info.m_HeldBy.Deleted)
+        //    {
+        //        flags |= SaveFlag.HeldBy;
+        //    }
+
+        //    if (info != null && info.m_SavedFlags != 0)
+        //    {
+        //        flags |= SaveFlag.SavedFlags;
+        //    }
+
+        //    if (info == null || info.m_Weight == -1)
+        //    {
+        //        flags |= SaveFlag.NullWeight;
+        //    }
+        //    else if (info.m_Weight == 0.0)
+        //    {
+        //        flags |= SaveFlag.WeightIs0;
+        //    }
+        //    else if (info.m_Weight != 1.0)
+        //    {
+        //        if (info.m_Weight == (int)info.m_Weight)
+        //        {
+        //            flags |= SaveFlag.IntWeight;
+        //        }
+        //        else
+        //        {
+        //            flags |= SaveFlag.WeightNot1or0;
+        //        }
+        //    }
+
+        //    var implFlags = (m_Flags & (ImplFlag.Visible | ImplFlag.Movable | ImplFlag.Stackable | ImplFlag.Insured |
+        //                                ImplFlag.PayedInsurance | ImplFlag.QuestItem));
+
+        //    if (implFlags != (ImplFlag.Visible | ImplFlag.Movable))
+        //    {
+        //        flags |= SaveFlag.ImplFlags;
+        //    }
+
+        //    writer.Write((int)flags);
+
+        //    /* begin last moved time optimization */
+        //    long ticks = m_LastMovedTime.Ticks;
+        //    long now = DateTime.UtcNow.Ticks;
+
+        //    TimeSpan d;
+
+        //    try
+        //    {
+        //        d = new TimeSpan(ticks - now);
+        //    }
+        //    catch
+        //    {
+        //        if (ticks < now)
+        //        {
+        //            d = TimeSpan.MaxValue;
+        //        }
+        //        else
+        //        {
+        //            d = TimeSpan.MaxValue;
+        //        }
+        //    }
+
+        //    double minutes = -d.TotalMinutes;
+
+        //    if (minutes < int.MinValue)
+        //    {
+        //        minutes = int.MinValue;
+        //    }
+        //    else if (minutes > int.MaxValue)
+        //    {
+        //        minutes = int.MaxValue;
+        //    }
+
+        //    writer.WriteEncodedInt((int)minutes);
+        //    /* end */
+
+        //    if (GetSaveFlag(flags, SaveFlag.Direction))
+        //    {
+        //        writer.Write((byte)m_Direction);
+        //    }
+
+        //    if (GetSaveFlag(flags, SaveFlag.Light))
+        //    {
+        //        writer.Write((byte)m_Light);
+        //    }
+
+        //    if (GetSaveFlag(flags, SaveFlag.Bounce))
+        //    {
+        //        // ReSharper disable once PossibleNullReferenceException
+        //        BounceInfo.Serialize(info.m_Bounce, writer);
+        //    }
+
+        //    if (GetSaveFlag(flags, SaveFlag.LootType))
+        //    {
+        //        writer.Write((byte)m_LootType);
+        //    }
+
+        //    if (GetSaveFlag(flags, SaveFlag.LocationFull))
+        //    {
+        //        writer.WriteEncodedInt(x);
+        //        writer.WriteEncodedInt(y);
+        //        writer.WriteEncodedInt(z);
+        //    }
+        //    else
+        //    {
+        //        if (GetSaveFlag(flags, SaveFlag.LocationByteXY))
+        //        {
+        //            writer.Write((byte)x);
+        //            writer.Write((byte)y);
+        //        }
+        //        else if (GetSaveFlag(flags, SaveFlag.LocationShortXY))
+        //        {
+        //            writer.Write((short)x);
+        //            writer.Write((short)y);
+        //        }
+
+        //        if (GetSaveFlag(flags, SaveFlag.LocationSByteZ))
+        //        {
+        //            writer.Write((sbyte)z);
+        //        }
+        //    }
+
+        //    if (GetSaveFlag(flags, SaveFlag.ItemID))
+        //    {
+        //        writer.WriteEncodedInt(m_ItemID);
+        //    }
+
+        //    if (GetSaveFlag(flags, SaveFlag.Hue))
+        //    {
+        //        writer.WriteEncodedInt(m_Hue);
+        //    }
+
+        //    if (GetSaveFlag(flags, SaveFlag.Amount))
+        //    {
+        //        writer.WriteEncodedInt(m_Amount);
+        //    }
+
+        //    if (GetSaveFlag(flags, SaveFlag.Layer))
+        //    {
+        //        writer.Write((byte)m_Layer);
+        //    }
+
+        //    if (GetSaveFlag(flags, SaveFlag.Name))
+        //    {
+        //        writer.Write(info.m_Name);
+        //    }
+
+        //    if (GetSaveFlag(flags, SaveFlag.Parent))
+        //    {
+        //        if (m_Parent is Mobile && !((Mobile)m_Parent).Deleted)
+        //        {
+        //            writer.Write(((Mobile)m_Parent).Serial);
+        //        }
+        //        else if (m_Parent is Item && !((Item)m_Parent).Deleted)
+        //        {
+        //            writer.Write(((Item)m_Parent).Serial);
+        //        }
+        //        else
+        //        {
+        //            writer.Write(Serial.MinusOne);
+        //        }
+        //    }
+
+        //    if (GetSaveFlag(flags, SaveFlag.Items))
+        //    {
+        //        writer.Write(items, false);
+        //    }
+
+        //    if (GetSaveFlag(flags, SaveFlag.IntWeight))
+        //    {
+        //        writer.WriteEncodedInt((int)info.m_Weight);
+        //    }
+        //    else if (GetSaveFlag(flags, SaveFlag.WeightNot1or0))
+        //    {
+        //        writer.Write(info.m_Weight);
+        //    }
+
+        //    if (GetSaveFlag(flags, SaveFlag.Map))
+        //    {
+        //        writer.Write(m_Map);
+        //    }
+
+        //    if (GetSaveFlag(flags, SaveFlag.ImplFlags))
+        //    {
+        //        writer.WriteEncodedInt((int)implFlags);
+        //    }
+
+        //    if (GetSaveFlag(flags, SaveFlag.InsuredFor))
+        //    {
+        //        writer.Write((Mobile)null);
+        //    }
+
+        //    if (GetSaveFlag(flags, SaveFlag.BlessedFor))
+        //    {
+        //        writer.Write(info.m_BlessedFor);
+        //    }
+
+        //    if (GetSaveFlag(flags, SaveFlag.HeldBy))
+        //    {
+        //        writer.Write(info.m_HeldBy);
+        //    }
+
+        //    if (GetSaveFlag(flags, SaveFlag.SavedFlags))
+        //    {
+        //        writer.WriteEncodedInt(info.m_SavedFlags);
+        //    }
+        //}
+
         public virtual void Serialize(GenericWriter writer)
         {
-            writer.Write(14); // version
+            writer.Write(13); // version
 
-            // 14
-            writer.Write(Sockets != null ? Sockets.Count : 0);
+            writer.Write(EnchantMod);
+            writer.Write(ColorHue1);
+            writer.Write(ColorText1);
+            writer.Write(ColorHue2);
+            writer.Write(ColorText2);
+            writer.Write(ColorHue3);
+            writer.Write(ColorText3);
+            writer.Write(ColorHue4);
+            writer.Write(ColorText4);
+            writer.Write(ColorHue5);
+            writer.Write(ColorText5);
+            writer.Write(WorldItemID);
+            writer.Write(Technology);
+            writer.Write(VirtualContainer);
+            writer.Write(NotIdentified);
+            writer.Write(NotIDAttempts);
+            writer.WriteEncodedInt((int)m_NotIDSource);
+            writer.WriteEncodedInt((int)m_NotIDSkill);
+            writer.WriteEncodedInt((int)m_Catalog);
+            writer.Write(CoinPrice);
+            writer.WriteEncodedInt((int)m_Resource);
+            writer.WriteEncodedInt((int)m_SubResource);
+            writer.Write(m_SubName);
+            writer.Write(ArtifactLevel);
+            writer.Write(NotModAble);
+            writer.Write(NeedsBothHands);
+            writer.Write(InfoData);
+            writer.Write(InfoText1);
+            writer.Write(InfoText2);
+            writer.Write(InfoText3);
+            writer.Write(InfoText4);
+            writer.Write(InfoText5);
+            writer.Write(Limits);
+            writer.Write(LimitsMax);
+            writer.Write(LimitsName);
+            writer.Write(LimitsDelete);
+            writer.Write(BuiltBy);
+            writer.Write(Built);
+            writer.WriteEncodedInt((int)m_Enchanted);
+            writer.Write(EnchantUses);
+            writer.Write(EnchantUsesMax);
+            writer.Write(GraphicID);
+            writer.Write(GraphicHue);
+            writer.Write((Mobile)LastMobile);
+            writer.Write(LastMobileName);
 
-            if (Sockets != null)
-            {
-                foreach (var socket in Sockets)
-                {
-                    ItemSocket.Save(socket, writer);
-                }
-            }
-
-            // 13: Merge sync
-            // 12: Light no longer backed by Direction
-
-            // 11
-            writer.Write(m_GridLocation);
-
-            // 10: Honesty moved to ItemSockets
-
-            // 9
             SaveFlag flags = SaveFlag.None;
 
             int x = m_Location.m_X, y = m_Location.m_Y, z = m_Location.m_Z;
 
             if (x != 0 || y != 0 || z != 0)
             {
-                if (x >= short.MinValue && x <= short.MaxValue && y >= short.MinValue && y <= short.MaxValue && z >= sbyte.MinValue &&
-                    z <= sbyte.MaxValue)
+                if (x >= short.MinValue && x <= short.MaxValue && y >= short.MinValue && y <= short.MaxValue && z >= sbyte.MinValue && z <= sbyte.MaxValue)
                 {
                     if (x != 0 || y != 0)
                     {
                         if (x >= byte.MinValue && x <= byte.MaxValue && y >= byte.MinValue && y <= byte.MaxValue)
-                        {
                             flags |= SaveFlag.LocationByteXY;
-                        }
                         else
-                        {
                             flags |= SaveFlag.LocationShortXY;
-                        }
                     }
 
                     if (z != 0)
-                    {
                         flags |= SaveFlag.LocationSByteZ;
-                    }
                 }
                 else
                 {
@@ -4650,170 +5008,93 @@ namespace Server
                 }
             }
 
-            var info = LookupCompactInfo();
-            var items = LookupItems();
+            CompactInfo info = LookupCompactInfo();
+            List<Item> items = LookupItems();
 
             if (m_Direction != Direction.North)
-            {
                 flags |= SaveFlag.Direction;
-            }
-
-            if (m_Light != 0)
-            {
-                flags |= SaveFlag.Light;
-            }
-
             if (info != null && info.m_Bounce != null)
-            {
                 flags |= SaveFlag.Bounce;
-            }
-
             if (m_LootType != LootType.Regular)
-            {
                 flags |= SaveFlag.LootType;
-            }
-
             if (m_ItemID != 0)
-            {
                 flags |= SaveFlag.ItemID;
-            }
-
             if (m_Hue != 0)
-            {
                 flags |= SaveFlag.Hue;
-            }
-
             if (m_Amount != 1)
-            {
                 flags |= SaveFlag.Amount;
-            }
-
             if (m_Layer != Layer.Invalid)
-            {
                 flags |= SaveFlag.Layer;
-            }
-
             if (info != null && info.m_Name != null)
-            {
                 flags |= SaveFlag.Name;
-            }
-
             if (m_Parent != null)
-            {
                 flags |= SaveFlag.Parent;
-            }
-
             if (items != null && items.Count > 0)
-            {
                 flags |= SaveFlag.Items;
-            }
-
             if (m_Map != Map.Internal)
-            {
                 flags |= SaveFlag.Map;
-            }
-
+            //if ( m_InsuredFor != null && !m_InsuredFor.Deleted )
+            //flags |= SaveFlag.InsuredFor;
             if (info != null && info.m_BlessedFor != null && !info.m_BlessedFor.Deleted)
-            {
                 flags |= SaveFlag.BlessedFor;
-            }
-
             if (info != null && info.m_HeldBy != null && !info.m_HeldBy.Deleted)
-            {
                 flags |= SaveFlag.HeldBy;
-            }
-
             if (info != null && info.m_SavedFlags != 0)
-            {
                 flags |= SaveFlag.SavedFlags;
-            }
 
             if (info == null || info.m_Weight == -1)
             {
                 flags |= SaveFlag.NullWeight;
             }
-            else if (info.m_Weight == 0.0)
+            else
             {
-                flags |= SaveFlag.WeightIs0;
-            }
-            else if (info.m_Weight != 1.0)
-            {
-                if (info.m_Weight == (int)info.m_Weight)
+                if (info.m_Weight == 0.0)
                 {
-                    flags |= SaveFlag.IntWeight;
+                    flags |= SaveFlag.WeightIs0;
                 }
-                else
+                else if (info.m_Weight != 1.0)
                 {
-                    flags |= SaveFlag.WeightNot1or0;
+                    if (info.m_Weight == (int)info.m_Weight)
+                        flags |= SaveFlag.IntWeight;
+                    else
+                        flags |= SaveFlag.WeightNot1or0;
                 }
             }
 
-            var implFlags = (m_Flags & (ImplFlag.Visible | ImplFlag.Movable | ImplFlag.Stackable | ImplFlag.Insured |
-                                        ImplFlag.PayedInsurance | ImplFlag.QuestItem));
+            ImplFlag implFlags = (m_Flags & (ImplFlag.Visible | ImplFlag.Movable | ImplFlag.Stackable | ImplFlag.Insured | ImplFlag.PayedInsurance | ImplFlag.QuestItem));
 
             if (implFlags != (ImplFlag.Visible | ImplFlag.Movable))
-            {
                 flags |= SaveFlag.ImplFlags;
-            }
 
             writer.Write((int)flags);
 
             /* begin last moved time optimization */
             long ticks = m_LastMovedTime.Ticks;
-            long now = DateTime.UtcNow.Ticks;
+            long now = DateTime.Now.Ticks;
 
             TimeSpan d;
 
-            try
-            {
-                d = new TimeSpan(ticks - now);
-            }
-            catch
-            {
-                if (ticks < now)
-                {
-                    d = TimeSpan.MaxValue;
-                }
-                else
-                {
-                    d = TimeSpan.MaxValue;
-                }
-            }
+            try { d = new TimeSpan(ticks - now); }
+            catch { if (ticks < now) d = TimeSpan.MaxValue; else d = TimeSpan.MaxValue; }
 
             double minutes = -d.TotalMinutes;
 
             if (minutes < int.MinValue)
-            {
                 minutes = int.MinValue;
-            }
             else if (minutes > int.MaxValue)
-            {
                 minutes = int.MaxValue;
-            }
 
             writer.WriteEncodedInt((int)minutes);
             /* end */
 
             if (GetSaveFlag(flags, SaveFlag.Direction))
-            {
                 writer.Write((byte)m_Direction);
-            }
-
-            if (GetSaveFlag(flags, SaveFlag.Light))
-            {
-                writer.Write((byte)m_Light);
-            }
 
             if (GetSaveFlag(flags, SaveFlag.Bounce))
-            {
-                // ReSharper disable once PossibleNullReferenceException
                 BounceInfo.Serialize(info.m_Bounce, writer);
-            }
 
             if (GetSaveFlag(flags, SaveFlag.LootType))
-            {
                 writer.Write((byte)m_LootType);
-            }
 
             if (GetSaveFlag(flags, SaveFlag.LocationFull))
             {
@@ -4835,95 +5116,59 @@ namespace Server
                 }
 
                 if (GetSaveFlag(flags, SaveFlag.LocationSByteZ))
-                {
                     writer.Write((sbyte)z);
-                }
             }
 
             if (GetSaveFlag(flags, SaveFlag.ItemID))
-            {
-                writer.WriteEncodedInt(m_ItemID);
-            }
+                writer.WriteEncodedInt((int)m_ItemID);
 
             if (GetSaveFlag(flags, SaveFlag.Hue))
-            {
-                writer.WriteEncodedInt(m_Hue);
-            }
+                writer.WriteEncodedInt((int)m_Hue);
 
             if (GetSaveFlag(flags, SaveFlag.Amount))
-            {
-                writer.WriteEncodedInt(m_Amount);
-            }
+                writer.WriteEncodedInt((int)m_Amount);
 
             if (GetSaveFlag(flags, SaveFlag.Layer))
-            {
                 writer.Write((byte)m_Layer);
-            }
 
             if (GetSaveFlag(flags, SaveFlag.Name))
-            {
-                writer.Write(info.m_Name);
-            }
+                writer.Write((string)info.m_Name);
 
             if (GetSaveFlag(flags, SaveFlag.Parent))
             {
                 if (m_Parent is Mobile && !((Mobile)m_Parent).Deleted)
-                {
                     writer.Write(((Mobile)m_Parent).Serial);
-                }
                 else if (m_Parent is Item && !((Item)m_Parent).Deleted)
-                {
                     writer.Write(((Item)m_Parent).Serial);
-                }
                 else
-                {
-                    writer.Write(Serial.MinusOne);
-                }
+                    writer.Write((int)Serial.MinusOne);
             }
 
             if (GetSaveFlag(flags, SaveFlag.Items))
-            {
                 writer.Write(items, false);
-            }
 
             if (GetSaveFlag(flags, SaveFlag.IntWeight))
-            {
                 writer.WriteEncodedInt((int)info.m_Weight);
-            }
             else if (GetSaveFlag(flags, SaveFlag.WeightNot1or0))
-            {
-                writer.Write(info.m_Weight);
-            }
+                writer.Write((double)info.m_Weight);
 
             if (GetSaveFlag(flags, SaveFlag.Map))
-            {
-                writer.Write(m_Map);
-            }
+                writer.Write((Map)m_Map);
 
             if (GetSaveFlag(flags, SaveFlag.ImplFlags))
-            {
                 writer.WriteEncodedInt((int)implFlags);
-            }
 
             if (GetSaveFlag(flags, SaveFlag.InsuredFor))
-            {
                 writer.Write((Mobile)null);
-            }
 
             if (GetSaveFlag(flags, SaveFlag.BlessedFor))
-            {
                 writer.Write(info.m_BlessedFor);
-            }
 
             if (GetSaveFlag(flags, SaveFlag.HeldBy))
-            {
                 writer.Write(info.m_HeldBy);
-            }
 
             if (GetSaveFlag(flags, SaveFlag.SavedFlags))
-            {
                 writer.WriteEncodedInt(info.m_SavedFlags);
-            }
         }
 
         public IPooledEnumerable<IEntity> GetObjectsInRange(int range)
@@ -5095,6 +5340,570 @@ namespace Server
             }
         }
 
+        //public virtual void Deserialize(GenericReader reader)
+        //{
+        //    int version = reader.ReadInt();
+
+        //    SetLastMoved();
+
+        //    switch (version)
+        //    {
+        //        case 14:
+        //            var socketCount = reader.ReadInt();
+
+        //            for (int i = 0; i < socketCount; i++)
+        //            {
+        //                ItemSocket.Load(this, reader);
+        //            }
+
+        //            goto case 13;
+        //        case 13:
+        //        case 12:
+        //        case 11:
+        //            m_GridLocation = reader.ReadByte();
+        //            goto case 10;
+        //        case 10:
+        //            {
+        //                // Honesty removed to ItemSockets
+        //                if (version < 14)
+        //                {
+        //                    reader.ReadDateTime();
+        //                    reader.ReadBool();
+        //                    reader.ReadMobile();
+        //                    reader.ReadString();
+
+        //                    HonestyItem = reader.ReadBool();
+        //                }
+
+        //                goto case 9;
+        //            }
+        //        case 9:
+        //        case 8:
+        //        case 7:
+        //        case 6:
+        //            {
+        //                SaveFlag flags = (SaveFlag)reader.ReadInt();
+
+        //                if (version < 7)
+        //                {
+        //                    LastMoved = reader.ReadDeltaTime();
+        //                }
+        //                else
+        //                {
+        //                    int minutes = reader.ReadEncodedInt();
+
+        //                    try
+        //                    {
+        //                        LastMoved = DateTime.UtcNow - TimeSpan.FromMinutes(minutes);
+        //                    }
+        //                    catch
+        //                    {
+        //                        LastMoved = DateTime.UtcNow;
+        //                    }
+        //                }
+
+        //                if (GetSaveFlag(flags, SaveFlag.Direction))
+        //                {
+        //                    m_Direction = (Direction)reader.ReadByte();
+        //                }
+
+        //                if (GetSaveFlag(flags, SaveFlag.Light))
+        //                {
+        //                    m_Light = (LightType)reader.ReadByte();
+        //                }
+        //                else if (version < 12)
+        //                {
+        //                    m_Light = (LightType)m_Direction;
+        //                }
+
+        //                if (GetSaveFlag(flags, SaveFlag.Bounce))
+        //                {
+        //                    AcquireCompactInfo().m_Bounce = BounceInfo.Deserialize(reader);
+        //                }
+
+        //                if (GetSaveFlag(flags, SaveFlag.LootType))
+        //                {
+        //                    m_LootType = (LootType)reader.ReadByte();
+        //                }
+
+        //                int x = 0, y = 0, z = 0;
+
+        //                if (GetSaveFlag(flags, SaveFlag.LocationFull))
+        //                {
+        //                    x = reader.ReadEncodedInt();
+        //                    y = reader.ReadEncodedInt();
+        //                    z = reader.ReadEncodedInt();
+        //                }
+        //                else
+        //                {
+        //                    if (GetSaveFlag(flags, SaveFlag.LocationByteXY))
+        //                    {
+        //                        x = reader.ReadByte();
+        //                        y = reader.ReadByte();
+        //                    }
+        //                    else if (GetSaveFlag(flags, SaveFlag.LocationShortXY))
+        //                    {
+        //                        x = reader.ReadShort();
+        //                        y = reader.ReadShort();
+        //                    }
+
+        //                    if (GetSaveFlag(flags, SaveFlag.LocationSByteZ))
+        //                    {
+        //                        z = reader.ReadSByte();
+        //                    }
+        //                }
+
+        //                m_Location = new Point3D(x, y, z);
+
+        //                if (GetSaveFlag(flags, SaveFlag.ItemID))
+        //                {
+        //                    m_ItemID = reader.ReadEncodedInt();
+        //                }
+
+        //                if (GetSaveFlag(flags, SaveFlag.Hue))
+        //                {
+        //                    m_Hue = reader.ReadEncodedInt();
+        //                }
+
+        //                if (GetSaveFlag(flags, SaveFlag.Amount))
+        //                {
+        //                    m_Amount = reader.ReadEncodedInt();
+        //                }
+        //                else
+        //                {
+        //                    m_Amount = 1;
+        //                }
+
+        //                if (GetSaveFlag(flags, SaveFlag.Layer))
+        //                {
+        //                    m_Layer = (Layer)reader.ReadByte();
+        //                }
+
+        //                if (GetSaveFlag(flags, SaveFlag.Name))
+        //                {
+        //                    string name = reader.ReadString();
+
+        //                    if (name != DefaultName)
+        //                    {
+        //                        AcquireCompactInfo().m_Name = name;
+        //                    }
+        //                }
+
+        //                if (GetSaveFlag(flags, SaveFlag.Parent))
+        //                {
+        //                    Serial parent = reader.ReadInt();
+
+        //                    if (parent.IsMobile)
+        //                    {
+        //                        m_Parent = World.FindMobile(parent);
+        //                    }
+        //                    else if (parent.IsItem)
+        //                    {
+        //                        m_Parent = World.FindItem(parent);
+        //                    }
+        //                    else
+        //                    {
+        //                        m_Parent = null;
+        //                    }
+
+        //                    if (m_Parent == null && (parent.IsMobile || parent.IsItem))
+        //                    {
+        //                        Delete();
+        //                    }
+        //                }
+
+        //                if (GetSaveFlag(flags, SaveFlag.Items))
+        //                {
+        //                    var items = reader.ReadStrongItemList();
+
+        //                    if (this is Container)
+        //                    {
+        //                        (this as Container).m_Items = items;
+        //                    }
+        //                    else
+        //                    {
+        //                        AcquireCompactInfo().m_Items = items;
+        //                    }
+        //                }
+
+        //                if (version < 8 || !GetSaveFlag(flags, SaveFlag.NullWeight))
+        //                {
+        //                    double weight;
+
+        //                    if (GetSaveFlag(flags, SaveFlag.IntWeight))
+        //                    {
+        //                        weight = reader.ReadEncodedInt();
+        //                    }
+        //                    else if (GetSaveFlag(flags, SaveFlag.WeightNot1or0))
+        //                    {
+        //                        weight = reader.ReadDouble();
+        //                    }
+        //                    else if (GetSaveFlag(flags, SaveFlag.WeightIs0))
+        //                    {
+        //                        weight = 0.0;
+        //                    }
+        //                    else
+        //                    {
+        //                        weight = 1.0;
+        //                    }
+
+        //                    if (weight != DefaultWeight)
+        //                    {
+        //                        AcquireCompactInfo().m_Weight = weight;
+        //                    }
+        //                }
+
+        //                if (GetSaveFlag(flags, SaveFlag.Map))
+        //                {
+        //                    m_Map = reader.ReadMap();
+        //                }
+        //                else
+        //                {
+        //                    m_Map = Map.Internal;
+        //                }
+
+        //                if (GetSaveFlag(flags, SaveFlag.Visible))
+        //                {
+        //                    SetFlag(ImplFlag.Visible, reader.ReadBool());
+        //                }
+        //                else
+        //                {
+        //                    SetFlag(ImplFlag.Visible, true);
+        //                }
+
+        //                if (GetSaveFlag(flags, SaveFlag.Movable))
+        //                {
+        //                    SetFlag(ImplFlag.Movable, reader.ReadBool());
+        //                }
+        //                else
+        //                {
+        //                    SetFlag(ImplFlag.Movable, true);
+        //                }
+
+        //                if (GetSaveFlag(flags, SaveFlag.Stackable))
+        //                {
+        //                    SetFlag(ImplFlag.Stackable, reader.ReadBool());
+        //                }
+
+        //                if (GetSaveFlag(flags, SaveFlag.ImplFlags))
+        //                {
+        //                    m_Flags = (ImplFlag)reader.ReadEncodedInt();
+        //                }
+
+        //                if (GetSaveFlag(flags, SaveFlag.InsuredFor))
+        //                {
+        //                    /*m_InsuredFor = */
+        //                    reader.ReadMobile();
+        //                }
+
+        //                if (GetSaveFlag(flags, SaveFlag.BlessedFor))
+        //                {
+        //                    AcquireCompactInfo().m_BlessedFor = reader.ReadMobile();
+        //                }
+
+        //                if (GetSaveFlag(flags, SaveFlag.HeldBy))
+        //                {
+        //                    AcquireCompactInfo().m_HeldBy = reader.ReadMobile();
+        //                }
+
+        //                if (GetSaveFlag(flags, SaveFlag.SavedFlags))
+        //                {
+        //                    AcquireCompactInfo().m_SavedFlags = reader.ReadEncodedInt();
+        //                }
+
+        //                if (m_Map != null && m_Parent == null)
+        //                {
+        //                    m_Map.OnEnter(this);
+        //                }
+
+        //                break;
+        //            }
+        //        case 5:
+        //            {
+        //                SaveFlag flags = (SaveFlag)reader.ReadInt();
+
+        //                LastMoved = reader.ReadDeltaTime();
+
+        //                if (GetSaveFlag(flags, SaveFlag.Direction))
+        //                {
+        //                    m_Direction = (Direction)reader.ReadByte();
+        //                }
+
+        //                if (GetSaveFlag(flags, SaveFlag.Bounce))
+        //                {
+        //                    AcquireCompactInfo().m_Bounce = BounceInfo.Deserialize(reader);
+        //                }
+
+        //                if (GetSaveFlag(flags, SaveFlag.LootType))
+        //                {
+        //                    m_LootType = (LootType)reader.ReadByte();
+        //                }
+
+        //                if (GetSaveFlag(flags, SaveFlag.LocationFull))
+        //                {
+        //                    m_Location = reader.ReadPoint3D();
+        //                }
+
+        //                if (GetSaveFlag(flags, SaveFlag.ItemID))
+        //                {
+        //                    m_ItemID = reader.ReadInt();
+        //                }
+
+        //                if (GetSaveFlag(flags, SaveFlag.Hue))
+        //                {
+        //                    m_Hue = reader.ReadInt();
+        //                }
+
+        //                if (GetSaveFlag(flags, SaveFlag.Amount))
+        //                {
+        //                    m_Amount = reader.ReadInt();
+        //                }
+        //                else
+        //                {
+        //                    m_Amount = 1;
+        //                }
+
+        //                if (GetSaveFlag(flags, SaveFlag.Layer))
+        //                {
+        //                    m_Layer = (Layer)reader.ReadByte();
+        //                }
+
+        //                if (GetSaveFlag(flags, SaveFlag.Name))
+        //                {
+        //                    string name = reader.ReadString();
+
+        //                    if (name != DefaultName)
+        //                    {
+        //                        AcquireCompactInfo().m_Name = name;
+        //                    }
+        //                }
+
+        //                if (GetSaveFlag(flags, SaveFlag.Parent))
+        //                {
+        //                    Serial parent = reader.ReadInt();
+
+        //                    if (parent.IsMobile)
+        //                    {
+        //                        m_Parent = World.FindMobile(parent);
+        //                    }
+        //                    else if (parent.IsItem)
+        //                    {
+        //                        m_Parent = World.FindItem(parent);
+        //                    }
+        //                    else
+        //                    {
+        //                        m_Parent = null;
+        //                    }
+
+        //                    if (m_Parent == null && (parent.IsMobile || parent.IsItem))
+        //                    {
+        //                        Delete();
+        //                    }
+        //                }
+
+        //                if (GetSaveFlag(flags, SaveFlag.Items))
+        //                {
+        //                    var items = reader.ReadStrongItemList();
+
+        //                    if (this is Container)
+        //                    {
+        //                        (this as Container).m_Items = items;
+        //                    }
+        //                    else
+        //                    {
+        //                        AcquireCompactInfo().m_Items = items;
+        //                    }
+        //                }
+
+        //                double weight;
+
+        //                if (GetSaveFlag(flags, SaveFlag.IntWeight))
+        //                {
+        //                    weight = reader.ReadEncodedInt();
+        //                }
+        //                else if (GetSaveFlag(flags, SaveFlag.WeightNot1or0))
+        //                {
+        //                    weight = reader.ReadDouble();
+        //                }
+        //                else if (GetSaveFlag(flags, SaveFlag.WeightIs0))
+        //                {
+        //                    weight = 0.0;
+        //                }
+        //                else
+        //                {
+        //                    weight = 1.0;
+        //                }
+
+        //                if (weight != DefaultWeight)
+        //                {
+        //                    AcquireCompactInfo().m_Weight = weight;
+        //                }
+
+        //                if (GetSaveFlag(flags, SaveFlag.Map))
+        //                {
+        //                    m_Map = reader.ReadMap();
+        //                }
+        //                else
+        //                {
+        //                    m_Map = Map.Internal;
+        //                }
+
+        //                if (GetSaveFlag(flags, SaveFlag.Visible))
+        //                {
+        //                    SetFlag(ImplFlag.Visible, reader.ReadBool());
+        //                }
+        //                else
+        //                {
+        //                    SetFlag(ImplFlag.Visible, true);
+        //                }
+
+        //                if (GetSaveFlag(flags, SaveFlag.Movable))
+        //                {
+        //                    SetFlag(ImplFlag.Movable, reader.ReadBool());
+        //                }
+        //                else
+        //                {
+        //                    SetFlag(ImplFlag.Movable, true);
+        //                }
+
+        //                if (GetSaveFlag(flags, SaveFlag.Stackable))
+        //                {
+        //                    SetFlag(ImplFlag.Stackable, reader.ReadBool());
+        //                }
+
+        //                if (m_Map != null && m_Parent == null)
+        //                {
+        //                    m_Map.OnEnter(this);
+        //                }
+
+        //                break;
+        //            }
+        //        case 4: // Just removed variables
+        //        case 3:
+        //            {
+        //                m_Direction = (Direction)reader.ReadInt();
+
+        //                goto case 2;
+        //            }
+        //        case 2:
+        //            {
+        //                AcquireCompactInfo().m_Bounce = BounceInfo.Deserialize(reader);
+        //                LastMoved = reader.ReadDeltaTime();
+
+        //                goto case 1;
+        //            }
+        //        case 1:
+        //            {
+        //                m_LootType = (LootType)reader.ReadByte(); //m_Newbied = reader.ReadBool();
+
+        //                goto case 0;
+        //            }
+        //        case 0:
+        //            {
+        //                m_Location = reader.ReadPoint3D();
+        //                m_ItemID = reader.ReadInt();
+        //                m_Hue = reader.ReadInt();
+        //                m_Amount = reader.ReadInt();
+        //                m_Layer = (Layer)reader.ReadByte();
+
+        //                string name = reader.ReadString();
+
+        //                if (name != DefaultName)
+        //                {
+        //                    AcquireCompactInfo().m_Name = name;
+        //                }
+
+        //                Serial parent = reader.ReadInt();
+
+        //                if (parent.IsMobile)
+        //                {
+        //                    m_Parent = World.FindMobile(parent);
+        //                }
+        //                else if (parent.IsItem)
+        //                {
+        //                    m_Parent = World.FindItem(parent);
+        //                }
+        //                else
+        //                {
+        //                    m_Parent = null;
+        //                }
+
+        //                if (m_Parent == null && (parent.IsMobile || parent.IsItem))
+        //                {
+        //                    Delete();
+        //                }
+
+        //                int count = reader.ReadInt();
+
+        //                if (count > 0)
+        //                {
+        //                    var items = new List<Item>(count);
+
+        //                    for (int i = 0; i < count; ++i)
+        //                    {
+        //                        Item item = reader.ReadItem();
+
+        //                        if (item != null)
+        //                        {
+        //                            items.Add(item);
+        //                        }
+        //                    }
+
+        //                    if (this is Container)
+        //                    {
+        //                        (this as Container).m_Items = items;
+        //                    }
+        //                    else
+        //                    {
+        //                        AcquireCompactInfo().m_Items = items;
+        //                    }
+        //                }
+
+        //                double weight = reader.ReadDouble();
+
+        //                if (weight != DefaultWeight)
+        //                {
+        //                    AcquireCompactInfo().m_Weight = weight;
+        //                }
+
+        //                if (version <= 3)
+        //                {
+        //                    reader.ReadInt();
+        //                    reader.ReadInt();
+        //                    reader.ReadInt();
+        //                }
+
+        //                m_Map = reader.ReadMap();
+        //                SetFlag(ImplFlag.Visible, reader.ReadBool());
+        //                SetFlag(ImplFlag.Movable, reader.ReadBool());
+
+        //                if (version <= 3)
+        //                {
+        //                    /*m_Deleted =*/
+        //                    reader.ReadBool();
+        //                }
+
+        //                Stackable = reader.ReadBool();
+
+        //                if (m_Map != null && m_Parent == null)
+        //                {
+        //                    m_Map.OnEnter(this);
+        //                }
+
+        //                break;
+        //            }
+        //    }
+
+        //    if (HeldBy != null)
+        //    {
+        //        Timer.DelayCall(TimeSpan.Zero, FixHolding_Sandbox);
+        //    }
+
+        //    VerifyCompactInfo();
+
+        //    UpdateLight();
+        //}
+
         public virtual void Deserialize(GenericReader reader)
         {
             int version = reader.ReadInt();
@@ -5103,34 +5912,68 @@ namespace Server
 
             switch (version)
             {
-                case 14:
-                    var socketCount = reader.ReadInt();
-
-                    for (int i = 0; i < socketCount; i++)
-                    {
-                        ItemSocket.Load(this, reader);
-                    }
-
-                    goto case 13;
                 case 13:
+                    {
+                        m_EnchantMod = reader.ReadInt();
+                        goto case 12;
+                    }
                 case 12:
+                    {
+                        ColorHue1 = reader.ReadString();
+                        ColorText1 = reader.ReadString();
+                        ColorHue2 = reader.ReadString();
+                        ColorText2 = reader.ReadString();
+                        ColorHue3 = reader.ReadString();
+                        ColorText3 = reader.ReadString();
+                        ColorHue4 = reader.ReadString();
+                        ColorText4 = reader.ReadString();
+                        ColorHue5 = reader.ReadString();
+                        ColorText5 = reader.ReadString();
+                        WorldItemID = reader.ReadInt();
+                        Technology = reader.ReadBool();
+                        VirtualContainer = reader.ReadBool();
+                        NotIdentified = reader.ReadBool();
+                        NotIDAttempts = reader.ReadInt();
+                        NotIDSource = (Identity)reader.ReadEncodedInt();
+                        NotIDSkill = (IDSkill)reader.ReadEncodedInt();
+                        Catalog = (Catalogs)reader.ReadEncodedInt();
+                        if (DefaultCatalog != Catalogs.None)
+                            Catalog = DefaultCatalog;
+                        CoinPrice = reader.ReadInt();
+                        m_Resource = (CraftResource)reader.ReadEncodedInt();
+                        m_SubResource = (CraftResource)reader.ReadEncodedInt();
+                        m_SubName = reader.ReadString();
+                        ArtifactLevel = reader.ReadInt();
+                        NotModAble = reader.ReadBool();
+                        NeedsBothHands = reader.ReadBool();
+                        InfoData = reader.ReadString();
+                        InfoText1 = reader.ReadString();
+                        InfoText2 = reader.ReadString();
+                        InfoText3 = reader.ReadString();
+                        InfoText4 = reader.ReadString();
+                        InfoText5 = reader.ReadString();
+                        Limits = reader.ReadInt();
+                        LimitsMax = reader.ReadInt();
+                        LimitsName = reader.ReadString();
+                        LimitsDelete = reader.ReadBool();
+                        BuiltBy = reader.ReadMobile();
+                        Built = reader.ReadBool();
+                        goto case 11;
+                    }
                 case 11:
-                    m_GridLocation = reader.ReadByte();
-                    goto case 10;
+                    {
+                        Enchanted = (MagicSpell)reader.ReadEncodedInt();
+                        m_EnchantUses = reader.ReadInt();
+                        m_EnchantUsesMax = reader.ReadInt();
+                        goto case 10;
+                    }
                 case 10:
                     {
-                        // Honesty removed to ItemSockets
-                        if (version < 14)
-                        {
-                            reader.ReadDateTime();
-                            reader.ReadBool();
-                            reader.ReadMobile();
-                            reader.ReadString();
-
-                            HonestyItem = reader.ReadBool();
-                        }
-
-                        goto case 9;
+                        GraphicID = reader.ReadInt();
+                        GraphicHue = reader.ReadInt();
+                        LastMobile = reader.ReadMobile();
+                        LastMobileName = reader.ReadString();
+                        goto case 6;
                     }
                 case 9:
                 case 8:
@@ -5147,39 +5990,18 @@ namespace Server
                         {
                             int minutes = reader.ReadEncodedInt();
 
-                            try
-                            {
-                                LastMoved = DateTime.UtcNow - TimeSpan.FromMinutes(minutes);
-                            }
-                            catch
-                            {
-                                LastMoved = DateTime.UtcNow;
-                            }
+                            try { LastMoved = DateTime.Now - TimeSpan.FromMinutes(minutes); }
+                            catch { LastMoved = DateTime.Now; }
                         }
 
                         if (GetSaveFlag(flags, SaveFlag.Direction))
-                        {
                             m_Direction = (Direction)reader.ReadByte();
-                        }
-
-                        if (GetSaveFlag(flags, SaveFlag.Light))
-                        {
-                            m_Light = (LightType)reader.ReadByte();
-                        }
-                        else if (version < 12)
-                        {
-                            m_Light = (LightType)m_Direction;
-                        }
 
                         if (GetSaveFlag(flags, SaveFlag.Bounce))
-                        {
                             AcquireCompactInfo().m_Bounce = BounceInfo.Deserialize(reader);
-                        }
 
                         if (GetSaveFlag(flags, SaveFlag.LootType))
-                        {
                             m_LootType = (LootType)reader.ReadByte();
-                        }
 
                         int x = 0, y = 0, z = 0;
 
@@ -5203,45 +6025,31 @@ namespace Server
                             }
 
                             if (GetSaveFlag(flags, SaveFlag.LocationSByteZ))
-                            {
                                 z = reader.ReadSByte();
-                            }
                         }
 
                         m_Location = new Point3D(x, y, z);
 
                         if (GetSaveFlag(flags, SaveFlag.ItemID))
-                        {
                             m_ItemID = reader.ReadEncodedInt();
-                        }
 
                         if (GetSaveFlag(flags, SaveFlag.Hue))
-                        {
                             m_Hue = reader.ReadEncodedInt();
-                        }
 
                         if (GetSaveFlag(flags, SaveFlag.Amount))
-                        {
                             m_Amount = reader.ReadEncodedInt();
-                        }
                         else
-                        {
                             m_Amount = 1;
-                        }
 
                         if (GetSaveFlag(flags, SaveFlag.Layer))
-                        {
                             m_Layer = (Layer)reader.ReadByte();
-                        }
 
                         if (GetSaveFlag(flags, SaveFlag.Name))
                         {
                             string name = reader.ReadString();
 
-                            if (name != DefaultName)
-                            {
+                            if (name != this.DefaultName)
                                 AcquireCompactInfo().m_Name = name;
-                            }
                         }
 
                         if (GetSaveFlag(flags, SaveFlag.Parent))
@@ -5249,36 +6057,24 @@ namespace Server
                             Serial parent = reader.ReadInt();
 
                             if (parent.IsMobile)
-                            {
                                 m_Parent = World.FindMobile(parent);
-                            }
                             else if (parent.IsItem)
-                            {
                                 m_Parent = World.FindItem(parent);
-                            }
                             else
-                            {
                                 m_Parent = null;
-                            }
 
                             if (m_Parent == null && (parent.IsMobile || parent.IsItem))
-                            {
                                 Delete();
-                            }
                         }
 
                         if (GetSaveFlag(flags, SaveFlag.Items))
                         {
-                            var items = reader.ReadStrongItemList();
+                            List<Item> items = reader.ReadStrongItemList();
 
                             if (this is Container)
-                            {
                                 (this as Container).m_Items = items;
-                            }
                             else
-                            {
                                 AcquireCompactInfo().m_Items = items;
-                            }
                         }
 
                         if (version < 8 || !GetSaveFlag(flags, SaveFlag.NullWeight))
@@ -5286,90 +6082,54 @@ namespace Server
                             double weight;
 
                             if (GetSaveFlag(flags, SaveFlag.IntWeight))
-                            {
                                 weight = reader.ReadEncodedInt();
-                            }
                             else if (GetSaveFlag(flags, SaveFlag.WeightNot1or0))
-                            {
                                 weight = reader.ReadDouble();
-                            }
                             else if (GetSaveFlag(flags, SaveFlag.WeightIs0))
-                            {
                                 weight = 0.0;
-                            }
                             else
-                            {
                                 weight = 1.0;
-                            }
 
                             if (weight != DefaultWeight)
-                            {
                                 AcquireCompactInfo().m_Weight = weight;
-                            }
                         }
 
                         if (GetSaveFlag(flags, SaveFlag.Map))
-                        {
                             m_Map = reader.ReadMap();
-                        }
                         else
-                        {
                             m_Map = Map.Internal;
-                        }
 
                         if (GetSaveFlag(flags, SaveFlag.Visible))
-                        {
                             SetFlag(ImplFlag.Visible, reader.ReadBool());
-                        }
                         else
-                        {
                             SetFlag(ImplFlag.Visible, true);
-                        }
 
                         if (GetSaveFlag(flags, SaveFlag.Movable))
-                        {
                             SetFlag(ImplFlag.Movable, reader.ReadBool());
-                        }
                         else
-                        {
                             SetFlag(ImplFlag.Movable, true);
-                        }
 
                         if (GetSaveFlag(flags, SaveFlag.Stackable))
-                        {
                             SetFlag(ImplFlag.Stackable, reader.ReadBool());
-                        }
 
                         if (GetSaveFlag(flags, SaveFlag.ImplFlags))
-                        {
                             m_Flags = (ImplFlag)reader.ReadEncodedInt();
-                        }
 
                         if (GetSaveFlag(flags, SaveFlag.InsuredFor))
-                        {
                             /*m_InsuredFor = */
                             reader.ReadMobile();
-                        }
 
                         if (GetSaveFlag(flags, SaveFlag.BlessedFor))
-                        {
                             AcquireCompactInfo().m_BlessedFor = reader.ReadMobile();
-                        }
 
                         if (GetSaveFlag(flags, SaveFlag.HeldBy))
-                        {
                             AcquireCompactInfo().m_HeldBy = reader.ReadMobile();
-                        }
 
                         if (GetSaveFlag(flags, SaveFlag.SavedFlags))
-                        {
                             AcquireCompactInfo().m_SavedFlags = reader.ReadEncodedInt();
-                        }
 
                         if (m_Map != null && m_Parent == null)
-                        {
                             m_Map.OnEnter(this);
-                        }
 
                         break;
                     }
@@ -5380,57 +6140,37 @@ namespace Server
                         LastMoved = reader.ReadDeltaTime();
 
                         if (GetSaveFlag(flags, SaveFlag.Direction))
-                        {
                             m_Direction = (Direction)reader.ReadByte();
-                        }
 
                         if (GetSaveFlag(flags, SaveFlag.Bounce))
-                        {
                             AcquireCompactInfo().m_Bounce = BounceInfo.Deserialize(reader);
-                        }
 
                         if (GetSaveFlag(flags, SaveFlag.LootType))
-                        {
                             m_LootType = (LootType)reader.ReadByte();
-                        }
 
                         if (GetSaveFlag(flags, SaveFlag.LocationFull))
-                        {
                             m_Location = reader.ReadPoint3D();
-                        }
 
                         if (GetSaveFlag(flags, SaveFlag.ItemID))
-                        {
                             m_ItemID = reader.ReadInt();
-                        }
 
                         if (GetSaveFlag(flags, SaveFlag.Hue))
-                        {
                             m_Hue = reader.ReadInt();
-                        }
 
                         if (GetSaveFlag(flags, SaveFlag.Amount))
-                        {
                             m_Amount = reader.ReadInt();
-                        }
                         else
-                        {
                             m_Amount = 1;
-                        }
 
                         if (GetSaveFlag(flags, SaveFlag.Layer))
-                        {
                             m_Layer = (Layer)reader.ReadByte();
-                        }
 
                         if (GetSaveFlag(flags, SaveFlag.Name))
                         {
                             string name = reader.ReadString();
 
-                            if (name != DefaultName)
-                            {
+                            if (name != this.DefaultName)
                                 AcquireCompactInfo().m_Name = name;
-                            }
                         }
 
                         if (GetSaveFlag(flags, SaveFlag.Parent))
@@ -5438,98 +6178,60 @@ namespace Server
                             Serial parent = reader.ReadInt();
 
                             if (parent.IsMobile)
-                            {
                                 m_Parent = World.FindMobile(parent);
-                            }
                             else if (parent.IsItem)
-                            {
                                 m_Parent = World.FindItem(parent);
-                            }
                             else
-                            {
                                 m_Parent = null;
-                            }
 
                             if (m_Parent == null && (parent.IsMobile || parent.IsItem))
-                            {
                                 Delete();
-                            }
                         }
 
                         if (GetSaveFlag(flags, SaveFlag.Items))
                         {
-                            var items = reader.ReadStrongItemList();
+                            List<Item> items = reader.ReadStrongItemList();
 
                             if (this is Container)
-                            {
                                 (this as Container).m_Items = items;
-                            }
                             else
-                            {
                                 AcquireCompactInfo().m_Items = items;
-                            }
                         }
 
                         double weight;
 
                         if (GetSaveFlag(flags, SaveFlag.IntWeight))
-                        {
                             weight = reader.ReadEncodedInt();
-                        }
                         else if (GetSaveFlag(flags, SaveFlag.WeightNot1or0))
-                        {
                             weight = reader.ReadDouble();
-                        }
                         else if (GetSaveFlag(flags, SaveFlag.WeightIs0))
-                        {
                             weight = 0.0;
-                        }
                         else
-                        {
                             weight = 1.0;
-                        }
 
                         if (weight != DefaultWeight)
-                        {
                             AcquireCompactInfo().m_Weight = weight;
-                        }
 
                         if (GetSaveFlag(flags, SaveFlag.Map))
-                        {
                             m_Map = reader.ReadMap();
-                        }
                         else
-                        {
                             m_Map = Map.Internal;
-                        }
 
                         if (GetSaveFlag(flags, SaveFlag.Visible))
-                        {
                             SetFlag(ImplFlag.Visible, reader.ReadBool());
-                        }
                         else
-                        {
                             SetFlag(ImplFlag.Visible, true);
-                        }
 
                         if (GetSaveFlag(flags, SaveFlag.Movable))
-                        {
                             SetFlag(ImplFlag.Movable, reader.ReadBool());
-                        }
                         else
-                        {
                             SetFlag(ImplFlag.Movable, true);
-                        }
 
                         if (GetSaveFlag(flags, SaveFlag.Stackable))
-                        {
                             SetFlag(ImplFlag.Stackable, reader.ReadBool());
-                        }
 
                         if (m_Map != null && m_Parent == null)
-                        {
                             m_Map.OnEnter(this);
-                        }
 
                         break;
                     }
@@ -5549,7 +6251,7 @@ namespace Server
                     }
                 case 1:
                     {
-                        m_LootType = (LootType)reader.ReadByte(); //m_Newbied = reader.ReadBool();
+                        m_LootType = (LootType)reader.ReadByte();//m_Newbied = reader.ReadBool();
 
                         goto case 0;
                     }
@@ -5563,63 +6265,45 @@ namespace Server
 
                         string name = reader.ReadString();
 
-                        if (name != DefaultName)
-                        {
+                        if (name != this.DefaultName)
                             AcquireCompactInfo().m_Name = name;
-                        }
 
                         Serial parent = reader.ReadInt();
 
                         if (parent.IsMobile)
-                        {
                             m_Parent = World.FindMobile(parent);
-                        }
                         else if (parent.IsItem)
-                        {
                             m_Parent = World.FindItem(parent);
-                        }
                         else
-                        {
                             m_Parent = null;
-                        }
 
                         if (m_Parent == null && (parent.IsMobile || parent.IsItem))
-                        {
                             Delete();
-                        }
 
                         int count = reader.ReadInt();
 
                         if (count > 0)
                         {
-                            var items = new List<Item>(count);
+                            List<Item> items = new List<Item>(count);
 
                             for (int i = 0; i < count; ++i)
                             {
                                 Item item = reader.ReadItem();
 
                                 if (item != null)
-                                {
                                     items.Add(item);
-                                }
                             }
 
                             if (this is Container)
-                            {
                                 (this as Container).m_Items = items;
-                            }
                             else
-                            {
                                 AcquireCompactInfo().m_Items = items;
-                            }
                         }
 
                         double weight = reader.ReadDouble();
 
                         if (weight != DefaultWeight)
-                        {
                             AcquireCompactInfo().m_Weight = weight;
-                        }
 
                         if (version <= 3)
                         {
@@ -5633,31 +6317,32 @@ namespace Server
                         SetFlag(ImplFlag.Movable, reader.ReadBool());
 
                         if (version <= 3)
-                        {
                             /*m_Deleted =*/
                             reader.ReadBool();
-                        }
 
                         Stackable = reader.ReadBool();
 
                         if (m_Map != null && m_Parent == null)
-                        {
                             m_Map.OnEnter(this);
-                        }
 
                         break;
                     }
             }
 
-            if (HeldBy != null)
-            {
-                Timer.DelayCall(TimeSpan.Zero, FixHolding_Sandbox);
-            }
+            if (this.HeldBy != null)
+                Timer.DelayCall(TimeSpan.Zero, new TimerCallback(FixHolding_Sandbox));
+
+            if (m_Resource == CraftResource.None && DefaultResource != CraftResource.None && version < 12)
+                m_Resource = DefaultResource;
 
             VerifyCompactInfo();
 
-            UpdateLight();
+            if (DefaultDescription != null)
+                InfoData = DefaultDescription;
+
+            SyncItem();
         }
+
 
         public virtual int GetMaxUpdateRange()
         {
