@@ -154,7 +154,7 @@ namespace Server.SkillHandlers
 			protected override void OnTarget( Mobile from, object target )
 			{
 				from.RevealingAction();
-				from.NextSkillTime = DateTime.Now + TimeSpan.FromSeconds( 1.0 );
+				from.NextSkillTime = Core.TickCount + 1000; ;
 
 				if ( m_Instrument.Parent != from && !m_Instrument.IsChildOf( from.Backpack ) )
 				{
@@ -249,7 +249,7 @@ namespace Server.SkillHandlers
 							m_Instrument.ConsumeUse( from );
 						}
 
-						from.NextSkillTime = DateTime.Now + TimeSpan.FromSeconds( 12.0 );
+						from.NextSkillTime = Core.TickCount + 12000; ;
 					}
 					else
 					{

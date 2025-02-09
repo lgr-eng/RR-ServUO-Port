@@ -305,7 +305,7 @@ namespace Server.Gumps
                         sb.Append(((maxIOCP - curIOCP) * 100) / maxIOCP);
                         sb.Append("%");
 
-                        List<BufferPool> pools = BufferPool.Pools;
+                        IList<BufferPool> pools = BufferPool.Pools;
 
                         lock (pools)
                         {
@@ -1790,7 +1790,7 @@ namespace Server.Gumps
 
                                     if (level > AccessLevel.Player)
                                     {
-                                        List<NetState> clients = NetState.Instances;
+                                        IList<NetState> clients = NetState.Instances;
                                         int count = 0;
 
                                         for (int i = 0; i < clients.Count; ++i)
@@ -1873,7 +1873,7 @@ namespace Server.Gumps
                                     }
                                     else
                                     {
-                                        List<NetState> instances = NetState.Instances;
+                                        IList<NetState> instances = NetState.Instances;
 
                                         for (int i = 0; i < instances.Count; ++i)
                                         {

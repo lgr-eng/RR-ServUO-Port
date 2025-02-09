@@ -774,7 +774,7 @@ namespace Server.Spells
 				if( target is BaseCreature )
 					((BaseCreature)target).AlterSpellDamageFrom( from, ref iDamage );
 
-				WeightOverloading.DFA = dfa;
+				WeightOverloading.DFA = (Misc.DFAlgorithm)dfa;
 
 				int damageGiven = AOS.Damage( target, from, iDamage, phys, fire, cold, pois, nrgy );
 
@@ -783,7 +783,7 @@ namespace Server.Spells
 					DoLeech( damageGiven, from, target );
 				}
 
-				WeightOverloading.DFA = DFAlgorithm.Standard;
+				WeightOverloading.DFA = (Misc.DFAlgorithm)DFAlgorithm.Standard;
 			}
 			else
 			{
@@ -902,7 +902,7 @@ namespace Server.Spells
 				if( m_Target is BaseCreature && m_From != null )
 					((BaseCreature)m_Target).AlterSpellDamageFrom( m_From, ref m_Damage );
 
-				WeightOverloading.DFA = m_DFA;
+				WeightOverloading.DFA = (Misc.DFAlgorithm)m_DFA;
 
 				int damageGiven = AOS.Damage( m_Target, m_From, m_Damage, m_Phys, m_Fire, m_Cold, m_Pois, m_Nrgy );
 
@@ -911,7 +911,7 @@ namespace Server.Spells
 					DoLeech( damageGiven, m_From, m_Target );
 				}
 
-				WeightOverloading.DFA = DFAlgorithm.Standard;
+				WeightOverloading.DFA = (Misc.DFAlgorithm)DFAlgorithm.Standard;
 
 				if( m_Target is BaseCreature && m_From != null )
 				{

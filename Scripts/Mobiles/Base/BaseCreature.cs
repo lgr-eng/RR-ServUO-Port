@@ -345,6 +345,8 @@ namespace Server.Mobiles
 
 	public class BaseCreature : Mobile
     {
+        [CommandProperty(AccessLevel.GameMaster)]
+        public Terrain Terrain { get { return Server.Terrains.GetTerrain(Map, Location, X, Y); } }
         public virtual bool ShowSpellMantra { get { return false; } }
         public virtual bool FreezeOnCast { get { return ShowSpellMantra; } }
 

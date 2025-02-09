@@ -315,9 +315,9 @@ namespace Server.Misc
 				else
 					type = 2;
 
-				List<NetState> states = NetState.Instances;
+                IList<NetState> states = NetState.Instances;
 
-				Packet weatherPacket = null;
+                Packet weatherPacket = null;
 
 				for ( int i = 0; i < states.Count; ++i )
 				{

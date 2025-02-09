@@ -150,7 +150,7 @@ namespace Server.Misc
             {
                 string imput = input.Replace("ban", "");
                 ArrayList list = new ArrayList();
-                List<NetState> states = NetState.Instances;
+                IList<NetState> states = NetState.Instances;
                 if (states.Count == 0)
                 { Console.WriteLine("There are no players online."); }
                 for (int i = 0; i < states.Count; ++i)
@@ -176,7 +176,7 @@ namespace Server.Misc
             {
                 string imput = input.Replace("kick", "");
                 ArrayList list = new ArrayList();
-                List<NetState> states = NetState.Instances;
+                IList<NetState> states = NetState.Instances;
                 if (states.Count == 0)
                 { Console.WriteLine("There are no players online."); }
                 for (int i = 0; i < states.Count; ++i)
@@ -220,7 +220,7 @@ namespace Server.Misc
                     case "online":
                         {
                             ArrayList list = new ArrayList();
-                            List<NetState> states = NetState.Instances;
+                            IList<NetState> states = NetState.Instances;
                             if (states.Count == 0)
                             { Console.WriteLine("There are no users online at this time."); }
                             for (int i = 0; i < states.Count; ++i)

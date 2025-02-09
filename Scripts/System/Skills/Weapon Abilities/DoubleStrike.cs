@@ -49,8 +49,8 @@ namespace Server.Items
 			{
 				BaseWeapon.InDoubleStrike = true;
 				attacker.RevealingAction();
-				attacker.NextCombatTime = DateTime.Now + weapon.OnSwing( attacker, defender );
-				BaseWeapon.InDoubleStrike = false;
+                attacker.NextCombatTime = Core.TickCount + (int)weapon.OnSwing(attacker, defender).TotalMilliseconds;
+                BaseWeapon.InDoubleStrike = false;
 			}
 		}
 	}

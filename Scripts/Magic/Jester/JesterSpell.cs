@@ -90,7 +90,7 @@ namespace Server.Spells.Jester
 		{
 			Caster.PlaySound( Caster.Female ? 816 : 1090 );
 			Caster.Say( "*sigh*" );
-			Caster.NextSpellTime = DateTime.Now;
+			Caster.NextSpellTime = Core.TickCount;
 		}
 
 		public override void DoHurtFizzle()

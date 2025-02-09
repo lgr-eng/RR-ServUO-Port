@@ -131,7 +131,7 @@ namespace Server.SkillHandlers
 			protected override void OnTargetFinish( Mobile from )
 			{
 				if ( m_SetSkillTime )
-					from.NextSkillTime = DateTime.Now;
+					from.NextSkillTime = Core.TickCount;
 			}
 
 			protected override void OnTarget( Mobile from, object targeted )
@@ -195,7 +195,7 @@ namespace Server.SkillHandlers
 							}
 							else
 							{
-								from.NextSkillTime = DateTime.Now + TimeSpan.FromSeconds( 5.0 );
+								from.NextSkillTime = Core.TickCount + 5000;
 								if ( targ is BaseCreature )
 								{
 									BaseCreature bc = (BaseCreature)targ;
@@ -223,8 +223,8 @@ namespace Server.SkillHandlers
 								}
 							}
 						}
-						from.NextSkillTime = DateTime.Now + TimeSpan.FromSeconds( 10.0 );
-						m_SetSkillTime = false;
+						from.NextSkillTime = Core.TickCount + 10000;
+                        m_SetSkillTime = false;
 						if ( from.Karma > -2459 ){ Titles.AwardKarma( from, -40, true ); }
 						if ( from.Fame > -2459 ){ Titles.AwardFame( from, -40, true ); }
 					}
@@ -258,7 +258,7 @@ namespace Server.SkillHandlers
 							}
 							else
 							{
-								from.NextSkillTime = DateTime.Now + TimeSpan.FromSeconds( 5.0 );
+								from.NextSkillTime = Core.TickCount + 5000;
 								if ( targ is BaseCreature )
 								{
 									BaseCreature bc = (BaseCreature)targ;
@@ -288,8 +288,8 @@ namespace Server.SkillHandlers
 								}
 							}
 						}
-						from.NextSkillTime = DateTime.Now + TimeSpan.FromSeconds( 10.0 );
-						m_SetSkillTime = false;
+						from.NextSkillTime = Core.TickCount + 10000;
+                        m_SetSkillTime = false;
 						if ( from.Karma > -2459 ){ Titles.AwardKarma( from, -40, true ); }
 						if ( from.Fame > -2459 ){ Titles.AwardFame( from, -40, true ); }
 					}
@@ -398,8 +398,8 @@ namespace Server.SkillHandlers
 						m_Target.SendLocalizedMessage( 500404 ); // They seem unwilling to give you any money.
 					}
 
-					m_From.NextSkillTime = DateTime.Now + TimeSpan.FromSeconds( 10.0 );
-				}
+					m_From.NextSkillTime = Core.TickCount + 10000;
+                }
 			}
 		}
 	}

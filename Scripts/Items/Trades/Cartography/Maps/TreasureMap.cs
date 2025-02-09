@@ -427,12 +427,12 @@ namespace Server.Items
 
 			private int m_Count;
 
-			private DateTime m_NextSkillTime;
-			private DateTime m_NextSpellTime;
-			private DateTime m_NextActionTime;
-			private DateTime m_LastMoveTime;
+            private readonly long m_NextSkillTime;
+            private readonly long m_NextSpellTime;
+            private readonly long m_NextActionTime;
+            private readonly long m_LastMoveTime;
 
-			public DigTimer( Mobile from, TreasureMap treasureMap, Point3D location, Map map ) : base( TimeSpan.Zero, TimeSpan.FromSeconds( 1.0 ) )
+            public DigTimer( Mobile from, TreasureMap treasureMap, Point3D location, Map map ) : base( TimeSpan.Zero, TimeSpan.FromSeconds( 1.0 ) )
 			{
 				m_From = from;
 				m_TreasureMap = treasureMap;

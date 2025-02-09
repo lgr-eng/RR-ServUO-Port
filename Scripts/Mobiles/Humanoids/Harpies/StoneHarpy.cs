@@ -102,7 +102,7 @@ namespace Server.Mobiles
 			if ( DateTime.Now < NextPickup )
 				return;
 
-			Peace( Combatant );
+			Peace((Mobile)Combatant);
 		}
 
 		public override bool CanRummageCorpses{ get{ return true; } }

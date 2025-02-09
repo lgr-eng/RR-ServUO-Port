@@ -498,7 +498,6 @@ namespace Server
                 return Terrain.Swamp;
             else if (SnowTerrain.Contains(LTile.ID))
                 return Terrain.Snow;
-
             return Terrain.None;
         }
 

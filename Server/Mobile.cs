@@ -10785,6 +10785,67 @@ namespace Server
         { }
 
         #region RRPort
+        public int m_StolenBoxTime;
+        [CommandProperty(AccessLevel.GameMaster)]
+        public int StolenBoxTime { get { return m_StolenBoxTime; } set { m_StolenBoxTime = value; } }
+        public string m_StolenArtifacts;
+        [CommandProperty(AccessLevel.GameMaster)]
+        public string StolenArtifacts { get { return m_StolenArtifacts; } set { m_StolenArtifacts = value; } }
+        public bool m_RaceWasFemale;
+        [CommandProperty(AccessLevel.GameMaster)]
+        public bool RaceWasFemale { get { return m_RaceWasFemale; } set { m_RaceWasFemale = value; } }
+        public bool m_RainbowMsg;
+        [CommandProperty(AccessLevel.GameMaster)]
+        public bool RainbowMsg { get { return m_RainbowMsg; } set { m_RainbowMsg = value; } }
+        public int m_RaceMagicSchool;
+        [CommandProperty(AccessLevel.GameMaster)]
+        public int RaceMagicSchool { get { return m_RaceMagicSchool; } set { m_RaceMagicSchool = value; } }
+        private bool m_InnOpen;
+        [CommandProperty(AccessLevel.Owner)]
+        public bool InnOpen { get { return m_InnOpen; } set { m_InnOpen = value; InvalidateProperties(); } }
+
+        private InnRoom m_InnRoom;
+        [CommandProperty(AccessLevel.GameMaster)]
+        public InnRoom InnRoom
+        {
+            get
+            {
+                if (m_InnRoom != null && !m_InnRoom.Deleted && m_InnRoom.Owner == this)
+                    return m_InnRoom;
+
+                m_InnRoom = FindItemOnLayer(Layer.Bank) as InnRoom;
+
+                if (this.BankBox != null && this.BankBox.FindItemByType(typeof(InnRoom)) != null)
+                    m_InnRoom = this.BankBox.FindItemByType(typeof(InnRoom)) as InnRoom;
+
+                if (m_InnRoom == null)
+                {
+                    m_InnRoom = new InnRoom(this);
+                    this.BankBox.DropItem(m_InnRoom);
+                }
+
+                return m_InnRoom;
+            }
+        }
+        public InnRoom FindInnNoCreate()
+        {
+            if (m_InnRoom != null && !m_InnRoom.Deleted && m_InnRoom.Owner == this)
+                return m_InnRoom;
+
+            if (this.BankBox != null && this.BankBox.FindItemByType(typeof(InnRoom)) != null)
+                m_InnRoom = this.BankBox.FindItemByType(typeof(InnRoom)) as InnRoom;
+
+            return m_InnRoom;
+        }
+        public void ResetInn()
+        {
+            if (m_InnRoom != null)
+            {
+                InnOpen = false;
+                ((Container)m_InnRoom).ItemID = 0x4CF0;
+                this.BankBox.DropItem(m_InnRoom);
+            }
+        }
         public void RecordFeatures(bool again)
         {
             if (RecordSkinColor < 1 || again)

@@ -219,11 +219,9 @@ namespace Server.Misc
 					op.WriteLine( "Clients:" );
 
 					try
-					{
-						List<NetState> states = NetState.Instances;
-
-						op.WriteLine( "- Count: {0}", states.Count );
-
+                    {
+                        IList<NetState> states = NetState.Instances;
+                        op.WriteLine( "- Count: {0}", states.Count );
 						for ( int i = 0; i < states.Count; ++i )
 						{
 							NetState state = states[i];

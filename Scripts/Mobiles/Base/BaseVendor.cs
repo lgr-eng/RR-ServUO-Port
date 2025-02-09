@@ -1017,9 +1017,9 @@ namespace Server.Mobiles
 			{
 				IShopSellInfo[] info = GetSellInfo();
 
-				Hashtable table = new Hashtable();
+                Dictionary<Item, SellItemState> table = new Dictionary<Item, SellItemState>();
 
-				foreach ( IShopSellInfo ssi in info )
+                foreach ( IShopSellInfo ssi in info )
 				{
 					Item[] items = pack.FindItemsByType( ssi.Types );
 
@@ -1060,7 +1060,7 @@ namespace Server.Mobiles
 
 					if ( this.RaceID == 0 && Utility.RandomBool() ){ this.PlaySound( this.Female ? 797 : 1069 ); }
 
-					from.Send( new VendorSellList( this, table ) );
+					from.Send( new VendorSellList( this, table.Values ) );
 				}
 				else
 				{

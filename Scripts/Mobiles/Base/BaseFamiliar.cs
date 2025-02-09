@@ -45,12 +45,12 @@ namespace Server.Mobiles
 
 			if ( !Hidden )
 			{
-				toAttack = master.Combatant;
+				toAttack = (Mobile)master.Combatant;
 
 				if ( toAttack == this )
 					toAttack = master;
 				else if ( toAttack == null )
-					toAttack = this.Combatant;
+					toAttack = (Mobile)this.Combatant;
 			}
 
 			if ( Combatant != toAttack )

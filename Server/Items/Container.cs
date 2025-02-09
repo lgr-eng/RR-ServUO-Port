@@ -2215,4 +2215,162 @@ namespace Server.Items
             m_DropSound = dropSound;
         }
     }
+
+    public class InnRoom : Container
+    {
+        private Mobile m_Owner;
+        private int v_TotalItems;
+
+        [CommandProperty(AccessLevel.GameMaster)]
+        public int TotalStored
+        {
+            get { return v_TotalItems; }
+        }
+
+        public override int DefaultMaxWeight
+        {
+            get
+            {
+                return 0;
+            }
+        }
+
+        public override int DefaultMaxItems { get { return 500; } }
+
+        public void VirtualTotals()
+        {
+            v_TotalItems = 0;
+
+            List<Item> items = m_Items;
+
+            if (items == null)
+                return;
+
+            for (int i = 0; i < items.Count; ++i)
+            {
+                Item item = items[i];
+
+                item.UpdateTotals();
+
+                if (item.IsVirtualItem)
+                    continue;
+
+                v_TotalItems += item.TotalItems + 1;
+            }
+        }
+
+        public override int GetTotal(TotalType type)
+        {
+            VirtualTotals();
+            return 0;
+        }
+
+        public override bool IsVirtualItem
+        {
+            get { return true; }
+        }
+
+        public override bool CheckHold(Mobile m, Item item, bool message, bool checkItems, int plusItems, int plusWeight)
+        {
+            int maxItems = this.MaxItems;
+
+            if (maxItems != 0 && v_TotalItems > maxItems)
+            {
+                if (message)
+                    SendFullItemsMessage(m, item);
+
+                return false;
+            }
+
+            return true;
+        }
+
+        public InnRoom(Serial serial) : base(serial)
+        {
+        }
+
+        public Mobile Owner
+        {
+            get
+            {
+                return m_Owner;
+            }
+        }
+
+        public override void OnDoubleClick(Mobile from)
+        {
+            DisplayTo(m_Owner);
+        }
+
+        public void Open()
+        {
+            ItemID = 0x4CF1;
+            if (m_Owner != null)
+            {
+                m_Owner.InnOpen = true;
+                VirtualTotals();
+                this.MoveToWorld(m_Owner.Location, m_Owner.Map);
+                m_Owner.PrivateOverheadMessage(MessageType.Regular, 0x3B2, true, String.Format("Your inn room has {0} items", v_TotalItems), m_Owner.NetState);
+                DisplayTo(m_Owner);
+            }
+        }
+
+        public override void Serialize(GenericWriter writer)
+        {
+            base.Serialize(writer);
+            writer.Write((int)0); // version
+            writer.Write((Mobile)m_Owner);
+        }
+
+        public override void Deserialize(GenericReader reader)
+        {
+            base.Deserialize(reader);
+            int version = reader.ReadInt();
+            m_Owner = reader.ReadMobile();
+            GumpID = 0xB3B;
+        }
+
+        public InnRoom(Mobile owner) : base(0x4CF0)
+        {
+            Movable = false;
+            Visible = false;
+            m_Owner = owner;
+            GumpID = 0xB3B;
+            LiftOverride = true;
+        }
+
+        public override void AddNameProperty(ObjectPropertyList list)
+        {
+        }
+
+        public override void GetProperties(ObjectPropertyList list)
+        {
+        }
+
+        public override bool IsAccessibleTo(Mobile check)
+        {
+            if (check == m_Owner || check.AccessLevel >= AccessLevel.GameMaster)
+                return base.IsAccessibleTo(check);
+            else
+                return false;
+        }
+
+        public override bool OnDragDrop(Mobile from, Item dropped)
+        {
+            VirtualTotals();
+            if (from == m_Owner || from.AccessLevel >= AccessLevel.GameMaster)
+                return base.OnDragDrop(from, dropped);
+            else
+                return false;
+        }
+
+        public override bool OnDragDropInto(Mobile from, Item item, Point3D p)
+        {
+            VirtualTotals();
+            if (from == m_Owner || from.AccessLevel >= AccessLevel.GameMaster)
+                return base.OnDragDropInto(from, item, p);
+            else
+                return false;
+        }
+    }
 }

@@ -113,7 +113,7 @@ namespace Server.Spells.Ninjitsu
 				}
 				else if (Caster is PlayerMobile)
 				{
-					if (GetLastAnimalForm(Caster) == -1 || DateTime.Now - Caster.LastMoveTime > Caster.ComputeMovementSpeed(Caster.Direction))
+					if (GetLastAnimalForm(Caster) == -1 || Core.TickCount - Caster.LastMoveTime > Caster.ComputeMovementSpeed(Caster.Direction))
 					{
 						Caster.CloseGump(typeof(AnimalFormGump));
 						Caster.SendGump(new AnimalFormGump(Caster, m_Entries, this));
@@ -526,7 +526,7 @@ namespace Server.Spells.Ninjitsu
 					if (m_Mobile.Combatant != null && m_Mobile.Combatant != m_LastTarget)
 					{
 						m_Counter = 1;
-						m_LastTarget = m_Mobile.Combatant;
+						m_LastTarget = (Mobile)m_Mobile.Combatant;
 					}
 
 					if (m_Mobile.Warmode && m_LastTarget != null && m_LastTarget.Alive && !m_LastTarget.Deleted && m_Counter-- <= 0)

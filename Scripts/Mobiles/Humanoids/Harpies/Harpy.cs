@@ -95,10 +95,10 @@ namespace Server.Mobiles
 		public override void OnThink()
 		{
 			base.OnThink();
-			if ( DateTime.Now < NextPickup )
+			if (DateTime.Now < NextPickup)
 				return;
 
-			Peace( Combatant );
+			Peace((Mobile)Combatant);
 		}
 
 		public override bool CanRummageCorpses{ get{ return true; } }

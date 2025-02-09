@@ -636,6 +636,10 @@ namespace Server
     public class Item : IEntity, IHued, IComparable<Item>, ISerializable, ISpawnable
     {
         #region RRport
+        [CommandProperty(AccessLevel.GameMaster)]
+        public Terrain Terrain { get { return Terrains.GetTerrain(Map, Location, X, Y); } }
+        [CommandProperty(AccessLevel.GameMaster)]
+        public Land Land { get { return Lands.GetLand(Map, Location, X, Y); } }
         public void ConsumeLimits(int amount)
         {
             --Limits;

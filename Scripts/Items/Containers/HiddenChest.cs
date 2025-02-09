@@ -85,7 +85,7 @@ namespace Server.Items
 					{
 						Item coins = new Gold( ( money * level ) );
 
-						if ( Server.Misc.Worlds.IsOnSpaceship( item.Location, item.Map ) ){
+						if ( Worlds.IsOnSpaceship( item.Location, item.Map ) ){
 							coins.Delete(); coins = new DDXormite(); coins.Amount = (int)( ( money * level ) / 3 ); }
 						else if ( item.Land == Land.Underworld ){
 							coins.Delete(); coins = new DDJewels(); coins.Amount = (int)( ( money * level ) / 2 ); }

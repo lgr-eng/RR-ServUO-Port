@@ -5815,14 +5815,12 @@ namespace Server.Mobiles
 
 		public override bool DoActionCombat()
 		{
-			Mobile combatant = m_Mobile.Combatant;
+			Mobile combatant = (Mobile)m_Mobile.Combatant;
 
 			if ( combatant == null || combatant.Deleted || combatant.Map != m_Mobile.Map )
 			{
 				m_Mobile.DebugSay( "My combatant is gone.." );
-
 				Action = ActionType.Wander;
-
 				return true;
 			}
 
@@ -5895,7 +5893,7 @@ namespace Server.Mobiles
 			AcquireFocusMob(m_Mobile.RangePerception * 2, m_Mobile.FightMode, true, false, true);
 
 			if ( m_Mobile.FocusMob == null )
-				m_Mobile.FocusMob = m_Mobile.Combatant;
+				m_Mobile.FocusMob = (Mobile)m_Mobile.Combatant;
 
 			return base.DoActionFlee();
 		}
@@ -5932,16 +5930,16 @@ namespace Server.Mobiles
 
 		public override bool DoActionCombat()
 		{
-			if ( m_Mobile.Combatant == null || m_Mobile.Combatant.Deleted || !m_Mobile.Combatant.Alive || m_Mobile.Combatant.IsDeadBondedPet )
+			if ( m_Mobile.Combatant == null || m_Mobile.Combatant.Deleted || !m_Mobile.Combatant.Alive || ((Mobile)m_Mobile.Combatant).IsDeadBondedPet )
 			{
 				m_Mobile.DebugSay("My combatant is deleted");
 				Action = ActionType.Guard;
 				return true;
 			}
 
-			if ( (m_Mobile.LastMoveTime + TimeSpan.FromSeconds( 1.0 )) < DateTime.Now )
-			{
-				if (WalkMobileRange(m_Mobile.Combatant, 1, true, m_Mobile.RangeFight, m_Mobile.Weapon.MaxRange))
+            if (Core.TickCount - m_Mobile.LastMoveTime > 1000)
+            {
+				if (WalkMobileRange((Mobile)m_Mobile.Combatant, 1, true, m_Mobile.RangeFight, m_Mobile.Weapon.MaxRange))
 				{
 					// Be sure to face the combatant
 					m_Mobile.Direction = m_Mobile.GetDirectionTo(m_Mobile.Combatant.Location);
@@ -6254,7 +6252,7 @@ namespace Server.Mobiles
 
 		public virtual void OnAggressiveAction( Mobile aggressor )
 		{
-			Mobile currentCombat = m_Mobile.Combatant;
+			Mobile currentCombat = (Mobile)m_Mobile.Combatant;
 
 			if( currentCombat != null && !aggressor.Hidden && currentCombat != aggressor && m_Mobile.GetDistanceToSqrt( currentCombat ) > m_Mobile.GetDistanceToSqrt( aggressor ) )
 				m_Mobile.Combatant = aggressor;
@@ -6896,7 +6894,7 @@ namespace Server.Mobiles
 					WalkRandomInHome( 2, 2, 1 );
 			}
 
-			if( m_Mobile.Combatant != null && !m_Mobile.Combatant.Deleted && m_Mobile.Combatant.Alive && !m_Mobile.Combatant.IsDeadBondedPet )
+			if( m_Mobile.Combatant != null && !m_Mobile.Combatant.Deleted && m_Mobile.Combatant.Alive && !((Mobile)m_Mobile.Combatant).IsDeadBondedPet )
 			{
 				m_Mobile.Direction = m_Mobile.GetDirectionTo( m_Mobile.Combatant );
 			}
@@ -6912,7 +6910,7 @@ namespace Server.Mobiles
 			}
 			else
 			{
-				Mobile c = m_Mobile.Combatant;
+				Mobile c = (Mobile)m_Mobile.Combatant;
 
 				if ( c == null || c.Deleted || c.Map != m_Mobile.Map || !c.Alive || c.IsDeadBondedPet )
 					Action = ActionType.Wander;
@@ -7144,7 +7142,7 @@ namespace Server.Mobiles
 
 			WalkRandomInHome( 3, 2, 1 );
 
-			if( m_Mobile.Combatant != null && !m_Mobile.Combatant.Deleted && m_Mobile.Combatant.Alive && !m_Mobile.Combatant.IsDeadBondedPet )
+			if( m_Mobile.Combatant != null && !m_Mobile.Combatant.Deleted && m_Mobile.Combatant.Alive && !((Mobile)m_Mobile.Combatant).IsDeadBondedPet)
 			{
 				m_Mobile.Warmode = true;
 				m_Mobile.Direction = m_Mobile.GetDirectionTo( m_Mobile.Combatant );
@@ -7178,7 +7176,7 @@ namespace Server.Mobiles
 
 					if( WalkMobileRange( m_Mobile.ControlMaster, 1, bRun, 0, 1 ) )
 					{
-						if( m_Mobile.Combatant != null && !m_Mobile.Combatant.Deleted && m_Mobile.Combatant.Alive && !m_Mobile.Combatant.IsDeadBondedPet )
+						if(m_Mobile.Combatant != null && !m_Mobile.Combatant.Deleted && m_Mobile.Combatant.Alive && !((Mobile)m_Mobile.Combatant).IsDeadBondedPet)
 						{
 							m_Mobile.Warmode = true;
 							m_Mobile.Direction = m_Mobile.GetDirectionTo( m_Mobile.Combatant );
@@ -7252,7 +7250,7 @@ namespace Server.Mobiles
 				{
 					if ( m_Mobile.ControlTarget != null ){ m_Mobile.MoveToWorld( (m_Mobile.ControlTarget).Location, (m_Mobile.ControlTarget).Map ); }
 
-					if( m_Mobile.Combatant != null && !m_Mobile.Combatant.Deleted && m_Mobile.Combatant.Alive && !m_Mobile.Combatant.IsDeadBondedPet )
+					if(m_Mobile.Combatant != null && !m_Mobile.Combatant.Deleted && m_Mobile.Combatant.Alive && !((Mobile)m_Mobile.Combatant).IsDeadBondedPet)
 					{
 						m_Mobile.Warmode = true;
 						m_Mobile.Direction = m_Mobile.GetDirectionTo( m_Mobile.Combatant );
@@ -7271,7 +7269,7 @@ namespace Server.Mobiles
 
 					if( WalkMobileRange( m_Mobile.ControlTarget, 1, bRun, 0, 1 ) )
 					{
-						if( m_Mobile.Combatant != null && !m_Mobile.Combatant.Deleted && m_Mobile.Combatant.Alive && !m_Mobile.Combatant.IsDeadBondedPet )
+						if(m_Mobile.Combatant != null && !m_Mobile.Combatant.Deleted && m_Mobile.Combatant.Alive && !((Mobile)m_Mobile.Combatant).IsDeadBondedPet)
 						{
 							m_Mobile.Warmode = true;
 							m_Mobile.Direction = m_Mobile.GetDirectionTo( m_Mobile.Combatant );
@@ -7407,7 +7405,7 @@ namespace Server.Mobiles
 			if( controlMaster == null || controlMaster.Deleted )
 				return true;
 
-			Mobile combatant = m_Mobile.Combatant;
+			Mobile combatant = (Mobile)m_Mobile.Combatant;
 
 			List<AggressorInfo> aggressors = controlMaster.Aggressors;
 
@@ -8473,7 +8471,7 @@ namespace Server.Mobiles
 		{
 			if( m_Mobile.CheckFlee() )
 			{
-				Mobile combatant = m_Mobile.Combatant;
+				Mobile combatant = (Mobile)m_Mobile.Combatant;
 
 				if( combatant == null )
 				{
@@ -9785,7 +9783,7 @@ namespace Server.Mobiles
 
 		public override bool DoActionCombat()
 		{
-			Mobile c = m_Mobile.Combatant;
+			Mobile c = (Mobile)m_Mobile.Combatant;
 			m_Mobile.Warmode = true;
 
 			if( c == null || c.Deleted || !c.Alive || c.IsDeadBondedPet || !m_Mobile.CanSee( c ) || !m_Mobile.CanBeHarmful( c, false ) || c.Map != m_Mobile.Map )
@@ -9838,7 +9836,7 @@ namespace Server.Mobiles
 					m_Mobile.Combatant = null;
 				}
 
-				c = m_Mobile.Combatant;
+				c = (Mobile)m_Mobile.Combatant;
 
 				if( c == null )
 				{
@@ -9993,7 +9991,7 @@ namespace Server.Mobiles
 
 		public override bool DoActionFlee()
 		{
-			Mobile c = m_Mobile.Combatant;
+			Mobile c = (Mobile)m_Mobile.Combatant;
 
 			if( ( m_Mobile.Mana > 20 || m_Mobile.Mana == m_Mobile.ManaMax ) && m_Mobile.Hits > ( m_Mobile.HitsMax / 2 ) )
 			{
@@ -10035,7 +10033,7 @@ namespace Server.Mobiles
 				Mobile active = null;
 				double activePrio = 0.0;
 
-				Mobile comb = m_Mobile.Combatant;
+				Mobile comb = (Mobile)m_Mobile.Combatant;
 
 				if( comb != null && !comb.Deleted && comb.Alive && !comb.IsDeadBondedPet && m_Mobile.InRange( comb, Core.ML ? 10 : 12 ) && CanDispel( comb ) )
 				{
@@ -10097,7 +10095,7 @@ namespace Server.Mobiles
 					Mobile active = null, inactive = null;
 					double actPrio = 0.0, inactPrio = 0.0;
 
-					Mobile comb = m_Mobile.Combatant;
+					Mobile comb = (Mobile)m_Mobile.Combatant;
 
 					if( comb != null && !comb.Deleted && comb.Alive && !comb.IsDeadBondedPet && CanDispel( comb ) )
 					{
@@ -10200,7 +10198,7 @@ namespace Server.Mobiles
 
 				if( toTarget == null )
 				{
-					toTarget = m_Mobile.Combatant;
+					toTarget = (Mobile)m_Mobile.Combatant;
 
 					if( toTarget != null )
 						RunTo( toTarget );
@@ -10217,7 +10215,7 @@ namespace Server.Mobiles
 			}
 			else
 			{
-				toTarget = m_Mobile.Combatant;
+				toTarget = (Mobile)m_Mobile.Combatant;
 
 				if( toTarget != null )
 					RunTo( toTarget );
@@ -10341,7 +10339,7 @@ namespace Server.Mobiles
 
 		public override bool DoActionCombat()
 		{
-			Mobile combatant = m_Mobile.Combatant;
+			Mobile combatant = (Mobile)m_Mobile.Combatant;
 
 			if ( combatant == null || combatant.Deleted || combatant.Map != m_Mobile.Map || !combatant.Alive || combatant.IsDeadBondedPet )
 			{
@@ -10366,7 +10364,7 @@ namespace Server.Mobiles
 					m_Mobile.Combatant = null;
 				}
 
-				combatant = m_Mobile.Combatant;
+				combatant = (Mobile)m_Mobile.Combatant;
 
 				if ( combatant == null )
 				{
@@ -10476,7 +10474,7 @@ namespace Server.Mobiles
 			}
 			else
 			{
-				m_Mobile.FocusMob = m_Mobile.Combatant;
+				m_Mobile.FocusMob = (Mobile)m_Mobile.Combatant;
 				base.DoActionFlee();
 			}
 
@@ -10515,7 +10513,7 @@ namespace Server.Mobiles
 
 		public override bool DoActionCombat()
 		{
-			Mobile combatant = m_Mobile.Combatant;
+			Mobile combatant = (Mobile)m_Mobile.Combatant;
 
 			if ( combatant == null || combatant.Deleted || combatant.Map != m_Mobile.Map )
 			{
@@ -10544,14 +10542,14 @@ namespace Server.Mobiles
 				if ( !m_Mobile.DisarmReady && m_Mobile.Skills[SkillName.FistFighting].Value >= 80.0 && m_Mobile.Skills[SkillName.ArmsLore].Value >= 80.0 && m_toDisarm != null )
 					EventSink.InvokeDisarmRequest( new DisarmRequestEventArgs( m_Mobile ) );
 
-				if ( m_toDisarm != null && m_toDisarm.IsChildOf( combatant.Backpack ) && m_Mobile.NextSkillTime <= DateTime.Now && (m_toDisarm.LootType != LootType.Blessed && m_toDisarm.LootType != LootType.Newbied) )
+				if ( m_toDisarm != null && m_toDisarm.IsChildOf( combatant.Backpack ) && m_Mobile.NextSkillTime <= Core.TickCount && (m_toDisarm.LootType != LootType.Blessed && m_toDisarm.LootType != LootType.Newbied) )
 				{
 					m_Mobile.DebugSay( "Trying to steal from combatant." );
 					m_Mobile.UseSkill( SkillName.Stealing );
 					if ( m_Mobile.Target != null )
 						m_Mobile.Target.Invoke( m_Mobile, m_toDisarm );
 				}
-				else if ( m_toDisarm == null && m_Mobile.NextSkillTime <= DateTime.Now )
+				else if ( m_toDisarm == null && m_Mobile.NextSkillTime <= Core.TickCount)
 				{
 					Container cpack = combatant.Backpack;
 
@@ -10724,7 +10722,7 @@ namespace Server.Mobiles
 			}
 			else
 			{
-				m_Mobile.FocusMob = m_Mobile.Combatant;
+				m_Mobile.FocusMob = (Mobile)m_Mobile.Combatant;
 				base.DoActionFlee();
 			}
 
@@ -10770,7 +10768,7 @@ namespace Server.Mobiles
 				return true;
 			}
 
-			if( WalkMobileRange( m_Mobile.Combatant, 1, true, m_Mobile.RangeFight, m_Mobile.RangeFight ) )
+			if( WalkMobileRange((Mobile)m_Mobile.Combatant, 1, true, m_Mobile.RangeFight, m_Mobile.RangeFight))
 			{
 				// Be sure to face the combatant
 				m_Mobile.Direction = m_Mobile.GetDirectionTo( m_Mobile.Combatant.Location );
@@ -10877,7 +10875,7 @@ namespace Server.Mobiles
 
 		public override bool DoActionCombat()
 		{
-			Mobile combatant = m_Mobile.Combatant;
+			Mobile combatant = (Mobile)m_Mobile.Combatant;
 
 			if ( combatant == null || combatant.Deleted || combatant.Map != m_Mobile.Map )
 			{
@@ -11025,7 +11023,7 @@ namespace Server.Mobiles
 
 		public override bool DoActionGuard()
 		{
-			m_Mobile.FocusMob = m_Mobile.Combatant;
+			m_Mobile.FocusMob = (Mobile)m_Mobile.Combatant;
 			return base.DoActionGuard();
 		}
 
