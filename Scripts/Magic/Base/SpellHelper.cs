@@ -774,17 +774,23 @@ namespace Server.Spells
 				if( target is BaseCreature )
 					((BaseCreature)target).AlterSpellDamageFrom( from, ref iDamage );
 
-				WeightOverloading.DFA = (Misc.DFAlgorithm)dfa;
+                if (target != null)
+                {
+                    target.DFA = dfa;
+                }
 
-				int damageGiven = AOS.Damage( target, from, iDamage, phys, fire, cold, pois, nrgy );
+                int damageGiven = AOS.Damage( target, from, iDamage, phys, fire, cold, pois, nrgy );
 
 				if ( from != null ) // sanity check
 				{
 					DoLeech( damageGiven, from, target );
 				}
 
-				WeightOverloading.DFA = (Misc.DFAlgorithm)DFAlgorithm.Standard;
-			}
+                if (target != null && target.DFA != DFAlgorithm.Standard)
+                {
+                    target.DFA = DFAlgorithm.Standard;
+                }
+            }
 			else
 			{
 				new SpellDamageTimerAOS( spell, target, from, iDamage, phys, fire, cold, pois, nrgy, delay, dfa ).Start();
@@ -895,25 +901,33 @@ namespace Server.Spells
 			}
 
 			protected override void OnTick()
-			{
-				if( m_From is BaseCreature && m_Target != null )
+            {
+                Mobile target = m_Target as Mobile;
+
+                if ( m_From is BaseCreature && m_Target != null )
 					((BaseCreature)m_From).AlterSpellDamageTo( m_Target, ref m_Damage );
 
 				if( m_Target is BaseCreature && m_From != null )
 					((BaseCreature)m_Target).AlterSpellDamageFrom( m_From, ref m_Damage );
 
-				WeightOverloading.DFA = (Misc.DFAlgorithm)m_DFA;
+                if (target != null)
+                {
+                    target.DFA = m_DFA;
+                }
 
-				int damageGiven = AOS.Damage( m_Target, m_From, m_Damage, m_Phys, m_Fire, m_Cold, m_Pois, m_Nrgy );
+                int damageGiven = AOS.Damage( m_Target, m_From, m_Damage, m_Phys, m_Fire, m_Cold, m_Pois, m_Nrgy );
 
 				if ( m_From != null ) // sanity check
 				{
 					DoLeech( damageGiven, m_From, m_Target );
 				}
 
-				WeightOverloading.DFA = (Misc.DFAlgorithm)DFAlgorithm.Standard;
+                if (target != null && target.DFA != DFAlgorithm.Standard)
+                {
+                    target.DFA = DFAlgorithm.Standard;
+                }
 
-				if( m_Target is BaseCreature && m_From != null )
+                if ( m_Target is BaseCreature && m_From != null )
 				{
 					BaseCreature c = (BaseCreature) m_Target;
 

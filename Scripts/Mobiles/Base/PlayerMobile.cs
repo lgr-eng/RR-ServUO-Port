@@ -764,10 +764,10 @@ namespace Server.Mobiles
                 PacketHandlers.RegisterThrottler(0x02, MovementThrottle_Callback);
             }
 
-            EventSink.Login += new LoginEventHandler(OnLogin);
-            EventSink.Logout += new LogoutEventHandler(OnLogout);
-            EventSink.Connected += new ConnectedEventHandler(EventSink_Connected);
-            EventSink.Disconnected += new DisconnectedEventHandler(EventSink_Disconnected);
+            EventSink.Login += OnLogin;
+            EventSink.Logout += OnLogout;
+            EventSink.Connected += EventSink_Connected;
+            EventSink.Disconnected += EventSink_Disconnected;
 
             if (Core.SE)
             {
@@ -2316,7 +2316,7 @@ namespace Server.Mobiles
             if (Confidence.IsRegenerating(this))
                 Confidence.StopRegenerating(this);
 
-            WeightOverloading.FatigueOnDamage(this, amount);
+            //WeightOverloading.FatigueOnDamage(this, amount);
 
             if (willKill && from is PlayerMobile)
                 Timer.DelayCall(TimeSpan.FromSeconds(10), new TimerCallback(((PlayerMobile)from).RecoverAmmo));

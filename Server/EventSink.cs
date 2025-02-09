@@ -195,6 +195,21 @@ namespace Server
 
     public delegate void MultiDesignQueryHandler(MultiDesignQueryEventArgs e);
 
+    #region RRport
+    public delegate void ChatRequestEventHandler(ChatRequestEventArgs e);
+
+    public class ChatRequestEventArgs : EventArgs
+    {
+        private Mobile m_Mobile;
+
+        public Mobile Mobile { get { return m_Mobile; } }
+
+        public ChatRequestEventArgs(Mobile mobile)
+        {
+            m_Mobile = mobile;
+        }
+    }
+    #endregion
     public class OnItemObtainedEventArgs : EventArgs
     {
         private readonly Mobile m_Mobile;
@@ -1784,6 +1799,15 @@ namespace Server
         public static event TeleportMovementEventHandler TeleportMovement;
         public static event MultiDesignQueryHandler MultiDesign;
 
+        #region RRPort
+        public static event ChatRequestEventHandler ChatRequest;
+        public static void InvokeChatRequest(ChatRequestEventArgs e)
+        {
+            if (ChatRequest != null)
+                ChatRequest(e);
+        }
+        #endregion
+
         public static void InvokeOnItemObtained(OnItemObtainedEventArgs e)
         {
             if (OnItemObtained != null)
@@ -2596,6 +2620,10 @@ namespace Server
             TeleportMovement = null;
 
             MultiDesign = null;
+
+            #region RRport
+            ChatRequest = null;
+            #endregion
         }
     }
 }

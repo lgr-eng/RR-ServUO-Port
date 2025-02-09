@@ -4,6 +4,7 @@ using Server.Network;
 using Server.Items;
 using Server.Targeting;
 using Server.Mobiles;
+using Server;
 
 namespace Server.Spells.Necromancy
 {
@@ -83,13 +84,13 @@ namespace Server.Spells.Necromancy
 
 				BuffInfo.AddBuff( m, new BuffInfo( BuffIcon.PainSpike, 1075667, buffTime, m, Convert.ToString( (int)damage ) ) );
 
-				Misc.WeightOverloading.DFA = Misc.DFAlgorithm.PainSpike;
-				m.Damage( (int) damage, Caster );
+                m.DFA = DFAlgorithm.PainSpike;
+                m.Damage( (int) damage, Caster );
 				SpellHelper.DoLeech( (int)damage, Caster, m );
-				Misc.WeightOverloading.DFA = Misc.DFAlgorithm.Standard;
+                m.DFA = DFAlgorithm.Standard;
 
-				//SpellHelper.Damage( this, m, damage, 100, 0, 0, 0, 0, Misc.DFAlgorithm.PainSpike );
-				HarmfulSpell( m );
+                //SpellHelper.Damage( this, m, damage, 100, 0, 0, 0, 0, Misc.DFAlgorithm.PainSpike );
+                HarmfulSpell( m );
 			}
 
 			FinishSequence();

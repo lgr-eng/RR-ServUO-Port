@@ -14,7 +14,14 @@ using Server.Spells.Shinobi;
 
 namespace Server
 {
-	public class AOS
+    public enum DamageType
+    {
+        Melee,
+        Ranged,
+        Spell,
+        SpellAOE
+    }
+    public class AOS
 	{
 		public static void DisableStatInfluences()
 		{
@@ -29,34 +36,73 @@ namespace Server
 			}
 		}
 
-		public static int Damage( Mobile m, int damage, bool ignoreArmor, int phys, int fire, int cold, int pois, int nrgy )
-		{
-			return Damage( m, null, damage, ignoreArmor, phys, fire, cold, pois, nrgy );
-		}
+        public static int Damage(IDamageable m, int damage, bool ignoreArmor, int phys, int fire, int cold, int pois, int nrgy)
+        {
+            return Damage(m, null, damage, ignoreArmor, phys, fire, cold, pois, nrgy);
+        }
 
-		public static int Damage( Mobile m, int damage, int phys, int fire, int cold, int pois, int nrgy )
-		{
-			return Damage( m, null, damage, phys, fire, cold, pois, nrgy );
-		}
+        public static int Damage(IDamageable m, int damage, int phys, int fire, int cold, int pois, int nrgy)
+        {
+            return Damage(m, null, damage, phys, fire, cold, pois, nrgy);
+        }
 
-		public static int Damage( Mobile m, Mobile from, int damage, int phys, int fire, int cold, int pois, int nrgy )
-		{
-			return Damage( m, from, damage, false, phys, fire, cold, pois, nrgy, 0, 0, false, false, false );
-		}
+        public static int Damage(IDamageable m, Mobile from, int damage, int phys, int fire, int cold, int pois, int nrgy)
+        {
+            return Damage(m, from, damage, false, phys, fire, cold, pois, nrgy, 0, 0, false);
+        }
 
-		public static int Damage( Mobile m, Mobile from, int damage, bool ignoreArmor, int phys, int fire, int cold, int pois, int nrgy )
-		{
-			return Damage( m, from, damage, ignoreArmor, phys, fire, cold, pois, nrgy, 0, 0, false, false, false );
-		}
+        public static int Damage(IDamageable m, Mobile from, int damage, int phys, int fire, int cold, int pois, int nrgy, int chaos)
+        {
+            return Damage(m, from, damage, false, phys, fire, cold, pois, nrgy, chaos, 0, false);
+        }
 
-		public static int Damage( Mobile m, Mobile from, int damage, int phys, int fire, int cold, int pois, int nrgy, bool keepAlive )
-		{
-			return Damage( m, from, damage, false, phys, fire, cold, pois, nrgy, 0, 0, keepAlive, false, false );
-		}
+        public static int Damage(IDamageable m, Mobile from, int damage, int phys, int fire, int cold, int pois, int nrgy, int chaos, int direct)
+        {
+            return Damage(m, from, damage, false, phys, fire, cold, pois, nrgy, chaos, direct, false);
+        }
 
-		public static int Damage( Mobile m, Mobile from, int damage, bool ignoreArmor, int phys, int fire, int cold, int pois, int nrgy, int chaos, int direct, bool keepAlive, bool archer, bool deathStrike )
-		{
-			if( m == null || m.Deleted || !m.Alive || damage <= 0 )
+        public static int Damage(IDamageable m, Mobile from, int damage, bool ignoreArmor, int phys, int fire, int cold, int pois, int nrgy)
+        {
+            return Damage(m, from, damage, ignoreArmor, phys, fire, cold, pois, nrgy, 0, 0, false);
+        }
+
+        public static int Damage(IDamageable m, Mobile from, int damage, int phys, int fire, int cold, int pois, int nrgy, bool keepAlive)
+        {
+            return Damage(m, from, damage, false, phys, fire, cold, pois, nrgy, 0, 0, keepAlive);
+        }
+
+        public static int Damage(IDamageable m, Mobile from, int damage, bool ignoreArmor, int phys, int fire, int cold, int pois, int nrgy, int chaos, int direct, bool keepAlive, bool archer, bool deathStrike)
+        {
+            return Damage(m, from, damage, false, phys, fire, cold, pois, nrgy, chaos, direct, keepAlive, archer ? DamageType.Ranged : DamageType.Melee); // old deathStrike damage, kept for compatibility
+        }
+
+        public static int Damage(IDamageable m, Mobile from, int damage, int phys, int fire, int cold, int pois, int nrgy, DamageType type)
+        {
+            return Damage(m, from, damage, false, phys, fire, cold, pois, nrgy, 0, 0, false, type);
+        }
+
+        public static int Damage(IDamageable m, Mobile from, int damage, int phys, int fire, int cold, int pois, int nrgy, int chaos, int direct, DamageType type)
+        {
+            return Damage(m, from, damage, false, phys, fire, cold, pois, nrgy, chaos, direct, false, type);
+        }
+
+        public static int Damage(IDamageable damageable, Mobile from, int damage, bool ignoreArmor, int phys, int fire, int cold, int pois, int nrgy, int chaos, int direct, bool keepAlive, DamageType type = DamageType.Melee)
+        {
+            Mobile m = damageable as Mobile;
+
+            if (m == null)
+            {
+                Console.WriteLine("ERROR: `AOS.Damage()` called with NULL target!");
+                return 0;
+            }
+
+            if (from == null)
+            {
+                Console.WriteLine("WARNING: `AOS.Damage()` called with NULL attacker!");
+                return 0;
+            }
+
+            if ( m == null || m.Deleted || !m.Alive || damage <= 0 )
 				return 0;
 
 			if( !Core.AOS )
@@ -85,12 +131,12 @@ namespace Server
 				}
 			}
 
-			BaseQuiver quiver = null;
-			
-			if ( archer && from != null )
+            bool ranged = type == DamageType.Ranged;
+            BaseQuiver quiver = null;			
+			if (ranged && from != null )
 				quiver = from.FindItemOnLayer( Layer.Cloak ) as BaseQuiver;
 
-			int totalDamage;
+			int totalDamage = 0;
 
 			if( !ignoreArmor )
 			{
@@ -125,10 +171,10 @@ namespace Server
 				if ( quiver != null )
 					damage += damage * quiver.DamageIncrease / 100;
 
-				if ( !deathStrike )
-					totalDamage = Math.Min( damage, 35 );	// Direct Damage cap of 35
-				else
-					totalDamage = Math.Min( damage, 70 );	// Direct Damage cap of 70
+				//if ( !deathStrike )
+				//	totalDamage = Math.Min( damage, 35 );	// Direct Damage cap of 35
+				//else
+				//	totalDamage = Math.Min( damage, 70 );	// Direct Damage cap of 70
 			}
 			else
 			{

@@ -5546,13 +5546,30 @@ namespace Server
 
         public virtual int Damage(int amount, Mobile from, bool informMount, bool checkDisrupt)
         {
+            string logFilePath = @"E:\UO RR Porting\RR Port\CrashLog.txt";
+
+            void LogToFile(string message)
+            {
+                using (StreamWriter sw = File.AppendText(logFilePath))
+                {
+                    sw.WriteLine($"{DateTime.Now}: {message}");
+                }
+            }
+
+            LogToFile("=== Mobile.Damage() Debug Log ===");
+            LogToFile($"Target: {this?.Name ?? "NULL"} (ID: {this?.Serial ?? 0}) is taking {amount} damage.");
+            LogToFile($"Attacker: {from?.Name ?? "NULL"} (ID: {from?.Serial ?? 0})");
+            LogToFile($"InformMount: {informMount}, CheckDisrupt: {checkDisrupt}");
+
             if (!CanBeDamaged() || m_Deleted)
             {
+                LogToFile("WARNING: Target cannot be damaged or has been deleted.");
                 return 0;
             }
 
             if (!Region.OnDamage(this, ref amount))
             {
+                LogToFile("WARNING: Damage was blocked by the region settings.");
                 return 0;
             }
 
@@ -5561,20 +5578,22 @@ namespace Server
                 int oldHits = Hits;
                 int newHits = oldHits - amount;
 
+                LogToFile($"Old HP: {oldHits}, New HP after damage: {newHits}");
+
                 if (checkDisrupt && m_Spell != null)
                 {
+                    LogToFile("INFO: Target was casting a spell, disrupting.");
                     m_Spell.OnCasterHurt();
                 }
 
                 if (from != null)
                 {
+                    LogToFile($"INFO: Registering damage dealt by {from.Name}.");
                     RegisterDamage(amount, from);
                 }
 
                 DisruptiveAction();
-
                 Paralyzed = false;
-
                 SendDamagePacket(from, amount);
                 OnDamage(amount, from, newHits < 0);
 
@@ -5582,30 +5601,96 @@ namespace Server
 
                 if (m != null && informMount)
                 {
+                    LogToFile($"INFO: Mount detected, informing it about damage.");
                     m.OnRiderDamaged(from, ref amount, newHits < 0);
                 }
 
                 if (newHits < 0)
                 {
+                    LogToFile("INFO: Target is now dead.");
                     m_LastKiller = from;
-
                     Hits = 0;
 
                     if (oldHits >= 0)
                     {
+                        LogToFile("INFO: Calling Kill() method.");
                         Kill();
                     }
                 }
                 else
                 {
+                    LogToFile("INFO: Applying fatigue handler.");
                     FatigueHandler(this, amount, DFA);
 
                     Hits = newHits;
                 }
             }
 
+            LogToFile("=== END OF DAMAGE FUNCTION ===");
             return amount;
         }
+
+        //public virtual int Damage(int amount, Mobile from, bool informMount, bool checkDisrupt)
+        //{     
+        //    if (!CanBeDamaged() || m_Deleted)
+        //    {
+        //        return 0;
+        //    }
+
+        //    if (!Region.OnDamage(this, ref amount))
+        //    {
+        //        return 0;
+        //    }
+
+        //    if (amount > 0)
+        //    {
+        //        int oldHits = Hits;
+        //        int newHits = oldHits - amount;
+
+        //        if (checkDisrupt && m_Spell != null)
+        //        {
+        //            m_Spell.OnCasterHurt();
+        //        }
+
+        //        if (from != null)
+        //        {
+        //            RegisterDamage(amount, from);
+        //        }
+
+        //        DisruptiveAction();
+
+        //        Paralyzed = false;
+
+        //        SendDamagePacket(from, amount);
+        //        OnDamage(amount, from, newHits < 0);
+
+        //        IMount m = Mount;
+
+        //        if (m != null && informMount)
+        //        {
+        //            m.OnRiderDamaged(from, ref amount, newHits < 0);
+        //        }
+
+        //        if (newHits < 0)
+        //        {
+        //            m_LastKiller = from;
+
+        //            Hits = 0;
+
+        //            if (oldHits >= 0)
+        //            {
+        //                Kill();
+        //            }
+        //        }
+        //        else
+        //        {
+        //            FatigueHandler(this, amount, DFA);
+
+        //            Hits = newHits;
+        //        }
+        //    }
+        //    return amount;
+        //}
 
         public virtual void SendDamagePacket(Mobile from, int amount)
         {
@@ -7380,28 +7465,28 @@ namespace Server
 
             var equipped = FindItemOnLayer(item.Layer);
 
-            if (equipped != null && equipped != item)
-            {
-                try
-                {
-                    using (StreamWriter op = new StreamWriter("LayerConflict.log", true))
-                    {
-                        op.WriteLine("# {0}", DateTime.UtcNow);
-                        op.WriteLine("Offending Mobile: {0} [{1}]", GetType().ToString(), this);
-                        op.WriteLine("Offending Item: {0} [{1}]", item, item.GetType().ToString());
-                        op.WriteLine("Equipped Item: {0} [{1}]", equipped, equipped.GetType().ToString());
-                        op.WriteLine("Layer: {0}", item.Layer.ToString());
-                        op.WriteLine();
-                    }
+            //if (equipped != null && equipped != item)
+            //{
+            //    try
+            //    {
+            //        using (StreamWriter op = new StreamWriter("LayerConflict.log", true))
+            //        {
+            //            op.WriteLine("# {0}", DateTime.UtcNow);
+            //            op.WriteLine("Offending Mobile: {0} [{1}]", GetType().ToString(), this);
+            //            op.WriteLine("Offending Item: {0} [{1}]", item, item.GetType().ToString());
+            //            op.WriteLine("Equipped Item: {0} [{1}]", equipped, equipped.GetType().ToString());
+            //            op.WriteLine("Layer: {0}", item.Layer.ToString());
+            //            op.WriteLine();
+            //        }
 
-                    Utility.WriteConsoleColor(ConsoleColor.Red, String.Format("Offending Mobile: {0} [{1}]", GetType().ToString(), this));
-                    Utility.WriteConsoleColor(ConsoleColor.Red, String.Format("Offending Item: {0} [{1}]", item, item.GetType().ToString()));
-                    Utility.WriteConsoleColor(ConsoleColor.Red, String.Format("Equipped Item: {0} [{1}]", equipped, equipped.GetType().ToString()));
-                    Utility.WriteConsoleColor(ConsoleColor.Red, String.Format("Layer: {0}", item.Layer.ToString()));
-                }
-                catch
-                { }
-            }
+            //        Utility.WriteConsoleColor(ConsoleColor.Red, String.Format("Offending Mobile: {0} [{1}]", GetType().ToString(), this));
+            //        Utility.WriteConsoleColor(ConsoleColor.Red, String.Format("Offending Item: {0} [{1}]", item, item.GetType().ToString()));
+            //        Utility.WriteConsoleColor(ConsoleColor.Red, String.Format("Equipped Item: {0} [{1}]", equipped, equipped.GetType().ToString()));
+            //        Utility.WriteConsoleColor(ConsoleColor.Red, String.Format("Layer: {0}", item.Layer.ToString()));
+            //    }
+            //    catch
+            //    { }
+            //}
 
             item.Parent = this;
             item.Map = m_Map;

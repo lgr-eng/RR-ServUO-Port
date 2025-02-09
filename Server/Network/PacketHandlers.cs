@@ -166,7 +166,18 @@ namespace Server.Network
             RegisterEncoded(0x28, true, GuildGumpRequest);
 
             RegisterEncoded(0x32, true, QuestGumpRequest);
+
+            #region RRport
+            Register(0xB5, 64, true, ChatRequest);
+            #endregion
         }
+
+        #region RRport
+        public static void ChatRequest(NetState state, PacketReader pvSrc)
+        {
+            EventSink.InvokeChatRequest(new ChatRequestEventArgs(state.Mobile));
+        }
+        #endregion
 
         public static void Register(int packetID, int length, bool ingame, OnPacketReceive onReceive)
         {

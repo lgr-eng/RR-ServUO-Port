@@ -43,12 +43,15 @@ namespace Server.Misc
 				Console.WriteLine("");
 			}
 
-			if ( !MySettings.S_RunRoutinesAtStartup )
-				Console.WriteLine("You may now play " + MySettings.S_ServerName + "!");
-			else if ( File.Exists( "Data/Data.ref" ) )
-				Console.WriteLine("Rebuilding the world. Please wait...");
-			else
-				Console.WriteLine("Running startup routines. Please wait...");
+            if (!MySettings.S_RunRoutinesAtStartup)
+            {
+                Console.WriteLine("S_RunRoutinesAtStartup");
+                Console.WriteLine("You may now play " + MySettings.S_ServerName + "!");
+            }
+            else if (File.Exists("Data/Data.ref"))
+                Console.WriteLine("Rebuilding the world. Please wait...");
+            else
+                Console.WriteLine("Running startup routines. Please wait...");
 			Console.WriteLine("");
         }
         private static void OnSpeech(SpeechEventArgs args)

@@ -16,6 +16,7 @@ using Server.Spells.Eighth;
 using AMA = Server.Items.ArmorMeditationAllowance;
 using AMT = Server.Items.ArmorMaterialType;
 using ABT = Server.Items.ArmorBodyType;
+using System.Linq;
 
 namespace Server.Items
 {
@@ -98,7 +99,47 @@ namespace Server.Items
 			armor.m_AosSkillBonuses = new AosSkillBonuses( newItem, m_AosSkillBonuses );
 		}
 
-		public override void OnLocationChange( Point3D oldLocation )
+        public static double GetInherentStaminaLossReduction(Mobile from)
+        {
+            if (!Core.SA)
+            {
+                return 0.0;
+            }
+
+            double toReduce = 0.0;
+            int count = 0;
+
+            foreach (var armor in from.Items.OfType<BaseArmor>().OrderBy(arm => -GetArmorRatingReduction(arm)))
+            {
+                if (count == 5)
+                    break;
+
+                toReduce += GetArmorRatingReduction(armor);
+                count++;
+            }
+
+            return toReduce;
+        }
+        public static double GetArmorRatingReduction(BaseArmor armor)
+        {
+            switch (armor.MaterialType)
+            {
+                default: return 0.0;
+                case ArmorMaterialType.Cloth:
+                case ArmorMaterialType.Leather:
+                    return .1;
+                case ArmorMaterialType.Studded:
+                case ArmorMaterialType.Bone:
+                    return .5;
+                case ArmorMaterialType.Ringmail:
+                case ArmorMaterialType.Chainmail:
+                case ArmorMaterialType.Plate:
+                case ArmorMaterialType.Scaled:
+                    return 1.0;
+            }
+        }
+
+        public override void OnLocationChange( Point3D oldLocation )
 		{
 			ResourceMods.DefaultItemHue( this );
 			base.OnLocationChange( oldLocation );

@@ -2011,9 +2011,9 @@ namespace Server.Mobiles
 				from.Damage( amount, from );
 			}
 
-			//base.Damage( amount, from );
+            amount = base.Damage(amount, from, informMount, checkDisrupt);
 
-			if ( SubdueBeforeTame && !Controlled )
+            if ( SubdueBeforeTame && !Controlled )
 			{
 				if ( (oldHits > (this.HitsMax / 10)) && (this.Hits <= (this.HitsMax / 10)) )
 					PublicOverheadMessage( MessageType.Regular, 0x3B2, false, "* The creature has been beaten into subjugation! *" );
@@ -2368,7 +2368,6 @@ namespace Server.Mobiles
 
                     if (iSteed != null)
                     {
-                        Console.WriteLine("iSteed correctly spawned " + this.GetType().Name);
                         BaseMount steed = new EvilMount();
                         steed.Body = iSteed.Body;
                         steed.ItemID = iSteed.ItemID;
@@ -2378,11 +2377,7 @@ namespace Server.Mobiles
                         steed.Rider = this;
                         ActiveSpeed = 0.1;
                         PassiveSpeed = 0.2;
-                    }
-                    else
-                    {
-                        Console.WriteLine("Warning: iSteed is null in OnAfterSpawn() for " + this.GetType().Name);
-                    }                    
+                    }                  
 				}
 			}
 
@@ -3991,8 +3986,6 @@ namespace Server.Mobiles
 
 			if( Confidence.IsRegenerating( this ) )
 				Confidence.StopRegenerating( this );
-
-			WeightOverloading.FatigueOnDamage( this, amount );
 
 			InhumanSpeech speechType = this.SpeechType;
 

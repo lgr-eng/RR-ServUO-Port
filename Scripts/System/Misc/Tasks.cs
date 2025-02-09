@@ -219,9 +219,10 @@ namespace Server.Items
 			if ( MySettings.ConsoleLog )
 				Console.WriteLine( "(200 Minute) Tasks Complete!" );
 			if ( MySettings.S_RunRoutinesAtStartup && DoAction && !( File.Exists( "Data/Data.ref" ) ) )
-			{
-				Console.WriteLine("You may now play " + MySettings.S_ServerName + "!");
-				Console.WriteLine("");
+            {
+                Console.WriteLine("Task1");
+                Console.WriteLine("You may now play " + MySettings.S_ServerName + "!");
+                Console.WriteLine("");
 			}
 		}
 	}
@@ -568,7 +569,7 @@ namespace Server.Items
 		public class TaskTimer : Timer 
 		{
 			private Item i_item; 
-			public TaskTimer( Item task ) : base( TimeSpan.FromMinutes( 60.0 ) )
+			public TaskTimer( Item task ) : base( TimeSpan.FromMinutes( 0.3 ) )
 			{ 
 				Priority = TimerPriority.OneMinute; 
 				i_item = task; 
@@ -597,33 +598,34 @@ namespace Server.Items
 
 		public static void BuildThis( Item itm )
 		{
-			Mobile from = null;
+            Mobile from = null;
 
-			foreach ( Account a in Accounts.GetAccounts() )
-			{
-				if (a == null)
-					break;
+            foreach (Account a in Accounts.GetAccounts())
+            {
+                if (a == null)
+                    break;
 
-				int index = 0;
+                int index = 0;
 
-				for (int i = 0; i < a.Length; ++i)
-				{
-					Mobile m = a[i];
+                for (int i = 0; i < a.Length; ++i)
+                {
+                    Mobile m = a[i];
 
-					if (m == null)
-						continue;
+                    if (m == null)
+                        continue;
 
-					if ( m.AccessLevel == AccessLevel.Owner )
-						from = m;
+                    if (m.AccessLevel == AccessLevel.Owner)
+                        from = m;
 
-					++index;
-				}
-			}
+                    ++index;
+                }
+            }
 
-			if ( from != null )
-				CommandSystem.Handle(from, String.Format("{0}{1}", CommandSystem.Prefix, "BuildWorld"));
+            //if (from != null)
+            //    CommandSystem.Handle(from, String.Format("{0}{1}", CommandSystem.Prefix, "BuildWorld"));
 
-			Console.WriteLine("You may now play " + MySettings.S_ServerName + "!");
+            Console.WriteLine("Task2");
+            Console.WriteLine("You may now play " + MySettings.S_ServerName + "!");
 			Console.WriteLine("");
 		}
 

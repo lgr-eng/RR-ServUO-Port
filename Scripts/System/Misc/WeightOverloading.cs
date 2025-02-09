@@ -1,129 +1,138 @@
 using System;
-using Server;
+using System.Collections.Generic;
+
 using Server.Mobiles;
+using Server.Items;
 
 namespace Server.Misc
 {
-	public enum DFAlgorithm
-	{
-		Standard,
-		PainSpike
-	}
+    //public enum DFAlgorithm
+    //{
+    //    Standard,
+    //    PainSpike
+    //}
+    public class WeightOverloading
+    {
+        public const int OverloadAllowance = 4;// We can be four stones overweight without getting fatigued
+        public static int GetMaxWeight(Mobile m)
+        {
+            return m.MaxWeight;
+        }
+        public static void Initialize()
+        {
+            EventSink.Movement += new MovementEventHandler(EventSink_Movement);
+            Mobile.FatigueHandler = FatigueOnDamage;
+        }
 
-	public class WeightOverloading
-	{
-		public static void Initialize()
-		{
-			EventSink.Movement += new MovementEventHandler( EventSink_Movement );
-		}
+        public static void FatigueOnDamage(Mobile m, int damage, DFAlgorithm df)
+        {
+            double fatigue = 0.0;
+            var hits = Math.Max(1, m.Hits);
 
-		private static DFAlgorithm m_DFA;
+            switch (m.DFA)
+            {
+                case DFAlgorithm.Standard:
+                    {
+                        fatigue = (damage * (m.HitsMax / hits) * ((double)m.Stam / m.StamMax)) - 5;
+                    }
+                    break;
+                case DFAlgorithm.PainSpike:
+                    {
+                        fatigue = (damage * ((m.HitsMax / hits) + ((50.0 + m.Stam) / m.StamMax) - 1.0)) - 5;
+                    }
+                    break;
+            }
 
-		public static DFAlgorithm DFA
-		{
-			get{ return m_DFA; }
-			set{ m_DFA = value; }
-		}
+            var reduction = BaseArmor.GetInherentStaminaLossReduction(m) + 1;
 
-		public static void FatigueOnDamage( Mobile m, int damage )
-		{
-			double fatigue = 0.0;
+            if (reduction > 1)
+            {
+                fatigue = fatigue / reduction;
+            }
 
-			switch ( m_DFA )
-			{
-				case DFAlgorithm.Standard:
-				{
-					fatigue = (damage * (100.0 / m.Hits) * ((double)m.Stam / 100)) - 5.0;
-					break;
-				}
-				case DFAlgorithm.PainSpike:
-				{
-					fatigue = (damage * ((100.0 / m.Hits) + ((50.0 + m.Stam) / 100) - 1.0)) - 5.0;
-					break;
-				}
-			}
+            if (fatigue > 0)
+            {
+                // On EA, if follows this special rule to reduce the chances of your stamina being dropped to 0
+                if (m.Stam - fatigue <= 10)
+                {
+                    m.Stam -= (int)(fatigue * ((double)m.Hits / (double)m.HitsMax));
+                }
+                else
+                {
+                    m.Stam -= (int)fatigue;
+                }
+            }
+        }
 
-			if ( fatigue > 0 )
-				m.Stam -= (int)fatigue;
-		}
+        public static void EventSink_Movement(MovementEventArgs e)
+        {
+            Mobile from = e.Mobile;
 
-		public const int OverloadAllowance = 4; // We can be four stones overweight without getting fatigued
+            if (!from.Alive || from.IsStaff())
+                return;
 
-		public static int GetMaxWeight( Mobile m )
-		{
-			return m.MaxWeight;
-		}
+            if (!from.Player)
+            {
+                return;
+            }
 
-		public static void EventSink_Movement( MovementEventArgs e )
-		{
-			Mobile from = e.Mobile;
+            int maxWeight = from.MaxWeight + OverloadAllowance;
+            int overWeight = (Mobile.BodyWeight + from.TotalWeight) - maxWeight;
 
-			if ( !from.Alive || from.AccessLevel > AccessLevel.Player  )
-				return;
+            if (overWeight > 0)
+            {
+                from.Stam -= GetStamLoss(from, overWeight, (e.Direction & Direction.Running) != 0);
 
-			if ( !from.Player )
-			{
-				// Else it won't work on monsters.
-				Spells.Ninjitsu.DeathStrike.AddStep( from );
-				return;
-			}
+                if (from.Stam == 0)
+                {
+                    from.SendLocalizedMessage(500109); // You are too fatigued to move, because you are carrying too much weight!
+                    e.Blocked = true;
+                    return;
+                }
+            }
 
-			int maxWeight = GetMaxWeight( from ) + OverloadAllowance;
-			int overWeight = (Mobile.BodyWeight + from.TotalWeight) - maxWeight;
+            if (!Core.SA && ((from.Stam * 100) / Math.Max(from.StamMax, 1)) < 10)
+            {
+                --from.Stam;
+            }
 
-			if ( overWeight > 0 )
-			{
-				from.Stam -= GetStamLoss( from, overWeight, (e.Direction & Direction.Running) != 0 );
+            if (from.Stam == 0)
+            {
+                from.SendLocalizedMessage(from.Mounted ? 500108 : 500110); // Your mount is too fatigued to move. : You are too fatigued to move.
+                e.Blocked = true;
+                return;
+            }
 
-				if ( from.Stam == 0 )
-				{
-					from.SendLocalizedMessage( 500109 ); // You are too fatigued to move, because you are carrying too much weight!
-					e.Blocked = true;
-					return;
-				}
-			}
+            var pm = from as PlayerMobile;
 
-			if ( ((from.Stam * 100) / Math.Max( from.StamMax, 1 )) < 10 )
-				--from.Stam;
+            if (pm != null)
+            {
+                int amt = Core.SA ? 10 : (from.Mounted ? 48 : 16);
 
-			if ( from.Stam == 0 )
-			{
-				from.SendLocalizedMessage( 500110 ); // You are too fatigued to move.
-				e.Blocked = true;
-				return;
-			}
+                if ((++pm.StepsTaken % amt) == 0)
+                    --from.Stam;
+            }
+        }
 
-			if ( from is PlayerMobile )
-			{
-				int amt = ( from.Mounted ? 48 : 16 );
-				PlayerMobile pm = (PlayerMobile)from;
+        public static int GetStamLoss(Mobile from, int overWeight, bool running)
+        {
+            int loss = 5 + (overWeight / 25);
 
-				if ( (++pm.StepsTaken % amt) == 0 )
-					--from.Stam;
-			}
+            if (from.Mounted)
+                loss /= 3;
 
-			Spells.Ninjitsu.DeathStrike.AddStep( from );
-		}
+            if (running)
+                loss *= 2;
 
-		public static int GetStamLoss( Mobile from, int overWeight, bool running )
-		{
-			int loss = 5 + (overWeight / 25);
+            return loss;
+        }
 
-			if ( from.Mounted )
-				loss /= 3;
+        public static bool IsOverloaded(Mobile m)
+        {
+            if (!m.Player || !m.Alive || m.IsStaff())
+                return false;
 
-			if ( running )
-				loss *= 2;
-
-			return loss;
-		}
-
-		public static bool IsOverloaded( Mobile m )
-		{
-			if ( !m.Player || !m.Alive || m.AccessLevel > AccessLevel.Player )
-				return false;
-
-			return ( (Mobile.BodyWeight + m.TotalWeight) > (GetMaxWeight( m ) + OverloadAllowance) );
-		}
-	}
+            return ((Mobile.BodyWeight + m.TotalWeight) > (m.MaxWeight + OverloadAllowance));
+        }
+    }
 }
