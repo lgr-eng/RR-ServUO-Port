@@ -5804,9 +5804,472 @@ namespace Server
                 }
             }
         }
-
         [CommandProperty(AccessLevel.GameMaster)]
         public bool Squelched { get { return m_Squelched; } set { m_Squelched = value; } }
+        //     public virtual void Deserialize(GenericReader reader)
+        //     {
+        //         int version = reader.ReadInt();
+
+        //         switch (version)
+        //         {
+        //             case 37:
+        //                 {
+        //                     m_DisplayGuildAbbr = reader.ReadBool();
+
+        //                     goto case 36;
+        //                 }
+        //             case 36:
+        //                 {
+        //                     HarvestOrdinary = reader.ReadBool();
+        //                     ContainerLoot = reader.ReadInt();
+        //                     ContainerHarvest = reader.ReadInt();
+        //                     ContainerCraft = reader.ReadInt();
+        //                     m_BloodHue = reader.ReadInt();
+        //                     m_Deaths = reader.ReadInt();
+        //                 }
+        //                 goto case 35;
+        //             case 35:
+        //                 {
+        //                     NoAutoAttack = reader.ReadBool();
+        //                     GuardImmune = reader.ReadBool();
+        //                 }
+        //                 goto case 34;
+        //             case 34:
+        //                 {
+        //                     RainbowMsg = reader.ReadBool();
+        //                     m_StrCap = reader.ReadInt();
+        //                     m_DexCap = reader.ReadInt();
+        //                     m_IntCap = reader.ReadInt();
+        //                     m_StrMaxCap = reader.ReadInt();
+        //                     m_DexMaxCap = reader.ReadInt();
+        //                     m_IntMaxCap = reader.ReadInt();
+        //                     goto case 33;
+        //                 }
+        //             case 33:
+        //                 {
+        //                     RaceMakeSounds = reader.ReadBool();
+        //                     RaceMagicSchool = reader.ReadInt();
+        //                     RaceWasFemale = reader.ReadBool();
+        //                     RaceSection = reader.ReadInt();
+        //                     RaceHomeLand = reader.ReadInt();
+        //                     m_SpecialSlayerMechanics = reader.ReadBool();
+
+        //                     if (reader.ReadBool())
+        //                     {
+        //                         int length = reader.ReadInt();
+
+        //                         for (int i = 0; i < length; i++)
+        //                         {
+        //                             m_SlayerVulnerabilities.Add(reader.ReadString());
+        //                         }
+
+        //                     }
+        //                     else
+        //                     {
+        //                         m_SlayerVulnerabilities = new List<string>();
+        //                     }
+
+        //                     goto case 32;
+        //                 }
+        //             case 32:
+        //                 {
+        //                     RecordHair = reader.ReadInt();
+        //                     RecordBeard = reader.ReadInt();
+        //                     RecordHairColor = reader.ReadInt();
+        //                     RecordBeardColor = reader.ReadInt();
+        //                     RecordSkinColor = reader.ReadInt();
+        //                     RaceID = reader.ReadInt(); if (RaceID == 1031) { RaceID = 810; }
+        //                     RaceAngerSound = reader.ReadInt();
+        //                     RaceIdleSound = reader.ReadInt();
+        //                     RaceDeathSound = reader.ReadInt();
+        //                     RaceAttackSound = reader.ReadInt();
+        //                     RaceHurtSound = reader.ReadInt();
+        //                     CoinPurse = reader.ReadInt();
+        //                     DataStoreInt2 = reader.ReadInt();
+        //                     DataStoreInt3 = reader.ReadInt();
+        //                     DataStoreInt4 = reader.ReadInt();
+        //                     StolenBoxTime = reader.ReadInt();
+        //                     DataStoreStr1 = reader.ReadString();
+        //                     DataStoreStr2 = reader.ReadString();
+        //                     DataStoreStr3 = reader.ReadString();
+        //                     DataStoreStr4 = reader.ReadString();
+        //                     StolenArtifacts = reader.ReadString();
+        //                     m_IgnoreMobiles = reader.ReadBool();
+
+        //                     goto case 31;
+        //                 }
+        //             case 31:
+        //                 {
+        //                     m_LastStrGain = reader.ReadDeltaTime();
+        //                     m_LastIntGain = reader.ReadDeltaTime();
+        //                     m_LastDexGain = reader.ReadDeltaTime();
+
+        //                     goto case 30;
+        //                 }
+        //             case 30:
+        //                 {
+        //                     byte hairflag = reader.ReadByte();
+
+        //                     if ((hairflag & 0x01) != 0)
+        //                     {
+        //                         m_Hair = new HairInfo(reader);
+        //                     }
+
+        //                     if ((hairflag & 0x02) != 0)
+        //                     {
+        //                         m_FacialHair = new FacialHairInfo(reader);
+        //                     }
+
+        //                     if ((hairflag & 0x04) != 0)
+        //                     {
+        //                         m_Face = new FaceInfo(reader);
+        //                     }
+
+        //                     goto case 29;
+        //                 }
+        //             case 29:
+        //                 {
+        //                     m_Race = reader.ReadRace();
+        //                     goto case 28;
+        //                 }
+        //             case 28:
+        //                 {
+        //                     if (version <= 30)
+        //                     {
+        //                         LastStatGain = reader.ReadDeltaTime();
+        //                     }
+
+        //                     goto case 27;
+        //                 }
+        //             case 27:
+        //                 {
+        //                     m_TithingPoints = reader.ReadInt();
+
+        //                     goto case 26;
+        //                 }
+        //             case 26:
+        //             case 25:
+        //             case 24:
+        //                 {
+        //                     m_Corpse = reader.ReadItem() as Container;
+
+        //                     goto case 23;
+        //                 }
+        //             case 23:
+        //                 {
+        //                     m_CreationTime = reader.ReadDateTime();
+
+        //                     goto case 22;
+        //                 }
+        //             case 22: // Just removed followers
+        //             case 21:
+        //                 {
+        //                     m_Stabled = reader.ReadStrongMobileList();
+
+        //                     goto case 20;
+        //                 }
+        //             case 20:
+        //                 {
+        //                     m_CantWalk = reader.ReadBool();
+
+        //                     goto case 19;
+        //                 }
+        //             case 19: // Just removed variables
+        //             case 18:
+        //                 {
+        //                     m_Virtues = new VirtueInfo(reader);
+
+        //                     goto case 17;
+        //                 }
+        //             case 17:
+        //                 {
+        //                     m_Thirst = reader.ReadInt();
+        //                     m_BAC = reader.ReadInt();
+
+        //                     goto case 16;
+        //                 }
+        //             case 16:
+        //                 {
+        //                     m_ShortTermMurders = reader.ReadInt();
+
+        //                     if (version <= 24)
+        //                     {
+        //                         reader.ReadDateTime();
+        //                         reader.ReadDateTime();
+        //                     }
+
+        //                     goto case 15;
+        //                 }
+        //             case 15:
+        //                 {
+        //                     if (version < 22)
+        //                     {
+        //                         reader.ReadInt(); // followers
+        //                     }
+
+        //                     m_FollowersMax = reader.ReadInt();
+
+        //                     goto case 14;
+        //                 }
+        //             case 14:
+        //                 {
+        //                     m_MagicDamageAbsorb = reader.ReadInt();
+
+        //                     goto case 13;
+        //                 }
+        //             case 13:
+        //                 {
+        //                     m_GuildFealty = reader.ReadMobile();
+
+        //                     goto case 12;
+        //                 }
+        //             case 12:
+        //                 {
+        //                     m_Guild = reader.ReadGuild();
+
+        //                     goto case 11;
+        //                 }
+        //             case 11:
+        //                 {
+        //                     m_DisplayGuildTitle = reader.ReadBool();
+
+        //                     goto case 10;
+        //                 }
+        //             case 10:
+        //                 {
+        //                     m_CanSwim = reader.ReadBool();
+
+        //                     goto case 9;
+        //                 }
+        //             case 9:
+        //                 {
+        //                     m_Squelched = reader.ReadBool();
+
+        //                     goto case 8;
+        //                 }
+        //             case 8:
+        //                 {
+        //                     m_Holding = reader.ReadItem();
+
+        //                     goto case 7;
+        //                 }
+        //             case 7:
+        //                 {
+        //                     m_VirtualArmor = reader.ReadInt();
+
+        //                     goto case 6;
+        //                 }
+        //             case 6:
+        //                 {
+        //                     m_BaseSoundID = reader.ReadInt();
+
+        //                     goto case 5;
+        //                 }
+        //             case 5:
+        //                 {
+        //                     m_DisarmReady = reader.ReadBool();
+        //                     m_StunReady = reader.ReadBool();
+
+        //                     goto case 4;
+        //                 }
+        //             case 4:
+        //                 {
+        //                     if (version <= 25)
+        //                     {
+        //                         Poison.Deserialize(reader);
+        //                     }
+
+        //                     goto case 3;
+        //                 }
+        //             case 3:
+        //                 {
+        //                     m_StatCap = reader.ReadInt();
+
+        //                     goto case 2;
+        //                 }
+        //             case 2:
+        //                 {
+        //                     m_NameHue = reader.ReadInt();
+
+        //                     goto case 1;
+        //                 }
+        //             case 1:
+        //                 {
+        //                     m_Hunger = reader.ReadInt();
+
+        //                     goto case 0;
+        //                 }
+        //             case 0:
+        //                 {
+        //                     if (version < 37)
+        //                     {
+        //                         m_DisplayGuildAbbr = true;
+        //                     }
+
+        //                     if (version < 34)
+        //                     {
+        //                         m_StrCap = Config.Get("PlayerCaps.StrCap", 125);
+        //                         m_DexCap = Config.Get("PlayerCaps.DexCap", 125);
+        //                         m_IntCap = Config.Get("PlayerCaps.IntCap", 125);
+        //                         m_StrMaxCap = Config.Get("PlayerCaps.StrMaxCap", 150);
+        //                         m_DexMaxCap = Config.Get("PlayerCaps.DexMaxCap", 150);
+        //                         m_IntMaxCap = Config.Get("PlayerCaps.IntMaxCap", 150);
+        //                     }
+
+        //                     if (version < 21)
+        //                     {
+        //                         m_Stabled = new List<Mobile>();
+        //                     }
+
+        //                     if (version < 18)
+        //                     {
+        //                         m_Virtues = new VirtueInfo();
+        //                     }
+
+        //                     if (version < 11)
+        //                     {
+        //                         m_DisplayGuildTitle = true;
+        //                     }
+
+        //                     if (version < 3)
+        //                     {
+        //                         m_StatCap = Config.Get("PlayerCaps.TotalStatCap", 225);
+        //                     }
+
+        //                     if (version < 15)
+        //                     {
+        //                         m_Followers = 0;
+        //                         m_FollowersMax = 5;
+        //                     }
+
+        //                     m_Location = reader.ReadPoint3D();
+        //                     m_Body = new Body(reader.ReadInt());
+        //                     m_Name = reader.ReadString();
+        //                     m_GuildTitle = reader.ReadString();
+        //                     m_Criminal = reader.ReadBool();
+        //                     m_Kills = reader.ReadInt();
+        //                     m_SpeechHue = reader.ReadInt();
+        //                     m_EmoteHue = reader.ReadInt();
+        //                     m_WhisperHue = reader.ReadInt();
+        //                     m_YellHue = reader.ReadInt();
+        //                     m_Language = reader.ReadString();
+        //                     m_Female = reader.ReadBool();
+        //                     m_Warmode = reader.ReadBool();
+        //                     m_Hidden = reader.ReadBool();
+        //                     m_Direction = (Direction)reader.ReadByte();
+        //                     m_Hue = reader.ReadInt();
+        //                     m_Str = reader.ReadInt();
+        //                     m_Dex = reader.ReadInt();
+        //                     m_Int = reader.ReadInt();
+        //                     m_Hits = reader.ReadInt();
+        //                     m_Stam = reader.ReadInt();
+        //                     m_Mana = reader.ReadInt();
+        //                     m_Map = reader.ReadMap();
+        //                     m_Blessed = reader.ReadBool();
+        //                     m_Fame = reader.ReadInt();
+        //                     m_Karma = reader.ReadInt();
+        //                     m_AccessLevel = (AccessLevel)reader.ReadByte();
+
+        //                     m_Skills = new Skills(this, reader);
+
+        //                     m_Items = reader.ReadStrongItemList();
+
+        //                     m_Player = reader.ReadBool();
+        //                     m_Title = reader.ReadString();
+        //                     m_Profile = reader.ReadString();
+        //                     m_ProfileLocked = reader.ReadBool();
+
+        //                     if (version <= 18)
+        //                     {
+        //                         reader.ReadInt();
+        //                         reader.ReadInt();
+        //                         reader.ReadInt();
+        //                     }
+
+        //                     m_AutoPageNotify = reader.ReadBool();
+
+        //                     m_LogoutLocation = reader.ReadPoint3D();
+        //                     m_LogoutMap = reader.ReadMap();
+
+        //                     m_StrLock = (StatLockType)reader.ReadByte();
+        //                     m_DexLock = (StatLockType)reader.ReadByte();
+        //                     m_IntLock = (StatLockType)reader.ReadByte();
+
+        //                     m_StatMods = new List<StatMod>();
+        //                     m_SkillMods = new List<SkillMod>();
+
+        //                     if (reader.ReadBool())
+        //                     {
+        //                         m_StuckMenuUses = new DateTime[reader.ReadInt()];
+
+        //                         for (int i = 0; i < m_StuckMenuUses.Length; ++i)
+        //                         {
+        //                             m_StuckMenuUses[i] = reader.ReadDateTime();
+        //                         }
+        //                     }
+        //                     else
+        //                     {
+        //                         m_StuckMenuUses = null;
+        //                     }
+
+        //                     if (m_Player && m_Map != Map.Internal)
+        //                     {
+        //                         m_LogoutLocation = m_Location;
+        //                         m_LogoutMap = m_Map;
+
+        //                         m_Map = Map.Internal;
+        //                     }
+
+        //                     if (m_Map != null)
+        //                     {
+        //                         m_Map.OnEnter(this);
+        //                     }
+
+        //                     if (m_Criminal)
+        //                     {
+        //                         if (m_ExpireCriminal == null)
+        //                         {
+        //                             m_ExpireCriminal = new ExpireCriminalTimer(this);
+        //                         }
+
+        //                         m_ExpireCriminal.Start();
+        //                     }
+
+        //                     if (ShouldCheckStatTimers)
+        //                     {
+        //                         CheckStatTimers();
+        //                     }
+
+        //                     if (!m_Player && m_Dex <= 100 && m_CombatTimer != null)
+        //                     {
+        //                         m_CombatTimer.Priority = TimerPriority.FiftyMS;
+        //                     }
+        //                     else if (m_CombatTimer != null)
+        //                     {
+        //                         m_CombatTimer.Priority = TimerPriority.EveryTick;
+        //                     }
+
+        //                     UpdateRegion();
+
+        //                     UpdateResistances();
+
+        //                     break;
+        //                 }
+        //         }
+
+        //         if (!m_Player)
+        //         {
+        //             Utility.Intern(ref m_Name);
+        //         }
+
+        //         Utility.Intern(ref m_Title);
+        //         Utility.Intern(ref m_Language);
+
+        //         /*	//Moved into cleanup in scripts.
+        //if( version < 30 )
+        //Timer.DelayCall( TimeSpan.Zero, new TimerCallback( ConvertHair ) );
+        //* */
+        //     }
 
         public virtual void Deserialize(GenericReader reader)
         {
@@ -5814,37 +6277,25 @@ namespace Server
 
             switch (version)
             {
-                case 37:
-                    {
-                        m_DisplayGuildAbbr = reader.ReadBool();
-
-                        goto case 36;
-                    }
                 case 36:
                     {
                         HarvestOrdinary = reader.ReadBool();
                         ContainerLoot = reader.ReadInt();
                         ContainerHarvest = reader.ReadInt();
                         ContainerCraft = reader.ReadInt();
-                        m_BloodHue = reader.ReadInt();
-                        m_Deaths = reader.ReadInt();
+
+                        goto case 35;
                     }
-                    goto case 35;
                 case 35:
                     {
                         NoAutoAttack = reader.ReadBool();
-                        GuardImmune = reader.ReadBool();
+
+                        goto case 34;
                     }
-                    goto case 34;
                 case 34:
                     {
                         RainbowMsg = reader.ReadBool();
-                        m_StrCap = reader.ReadInt();
-                        m_DexCap = reader.ReadInt();
-                        m_IntCap = reader.ReadInt();
-                        m_StrMaxCap = reader.ReadInt();
-                        m_DexMaxCap = reader.ReadInt();
-                        m_IntMaxCap = reader.ReadInt();
+
                         goto case 33;
                     }
                 case 33:
@@ -5854,22 +6305,6 @@ namespace Server
                         RaceWasFemale = reader.ReadBool();
                         RaceSection = reader.ReadInt();
                         RaceHomeLand = reader.ReadInt();
-                        m_SpecialSlayerMechanics = reader.ReadBool();
-
-                        if (reader.ReadBool())
-                        {
-                            int length = reader.ReadInt();
-
-                            for (int i = 0; i < length; i++)
-                            {
-                                m_SlayerVulnerabilities.Add(reader.ReadString());
-                            }
-
-                        }
-                        else
-                        {
-                            m_SlayerVulnerabilities = new List<string>();
-                        }
 
                         goto case 32;
                     }
@@ -5896,7 +6331,6 @@ namespace Server
                         DataStoreStr3 = reader.ReadString();
                         DataStoreStr4 = reader.ReadString();
                         StolenArtifacts = reader.ReadString();
-                        m_IgnoreMobiles = reader.ReadBool();
 
                         goto case 31;
                     }
@@ -5913,19 +6347,9 @@ namespace Server
                         byte hairflag = reader.ReadByte();
 
                         if ((hairflag & 0x01) != 0)
-                        {
                             m_Hair = new HairInfo(reader);
-                        }
-
                         if ((hairflag & 0x02) != 0)
-                        {
                             m_FacialHair = new FacialHairInfo(reader);
-                        }
-
-                        if ((hairflag & 0x04) != 0)
-                        {
-                            m_Face = new FaceInfo(reader);
-                        }
 
                         goto case 29;
                     }
@@ -5937,9 +6361,7 @@ namespace Server
                 case 28:
                     {
                         if (version <= 30)
-                        {
                             LastStatGain = reader.ReadDeltaTime();
-                        }
 
                         goto case 27;
                     }
@@ -6005,9 +6427,7 @@ namespace Server
                 case 15:
                     {
                         if (version < 22)
-                        {
                             reader.ReadInt(); // followers
-                        }
 
                         m_FollowersMax = reader.ReadInt();
 
@@ -6103,40 +6523,17 @@ namespace Server
                     }
                 case 0:
                     {
-                        if (version < 37)
-                        {
-                            m_DisplayGuildAbbr = true;
-                        }
-
-                        if (version < 34)
-                        {
-                            m_StrCap = Config.Get("PlayerCaps.StrCap", 125);
-                            m_DexCap = Config.Get("PlayerCaps.DexCap", 125);
-                            m_IntCap = Config.Get("PlayerCaps.IntCap", 125);
-                            m_StrMaxCap = Config.Get("PlayerCaps.StrMaxCap", 150);
-                            m_DexMaxCap = Config.Get("PlayerCaps.DexMaxCap", 150);
-                            m_IntMaxCap = Config.Get("PlayerCaps.IntMaxCap", 150);
-                        }
-
                         if (version < 21)
-                        {
                             m_Stabled = new List<Mobile>();
-                        }
 
                         if (version < 18)
-                        {
                             m_Virtues = new VirtueInfo();
-                        }
 
                         if (version < 11)
-                        {
                             m_DisplayGuildTitle = true;
-                        }
 
                         if (version < 3)
-                        {
-                            m_StatCap = Config.Get("PlayerCaps.TotalStatCap", 225);
-                        }
+                            m_StatCap = 225;
 
                         if (version < 15)
                         {
@@ -6223,33 +6620,23 @@ namespace Server
                         }
 
                         if (m_Map != null)
-                        {
                             m_Map.OnEnter(this);
-                        }
 
                         if (m_Criminal)
                         {
                             if (m_ExpireCriminal == null)
-                            {
                                 m_ExpireCriminal = new ExpireCriminalTimer(this);
-                            }
 
                             m_ExpireCriminal.Start();
                         }
 
                         if (ShouldCheckStatTimers)
-                        {
                             CheckStatTimers();
-                        }
 
                         if (!m_Player && m_Dex <= 100 && m_CombatTimer != null)
-                        {
                             m_CombatTimer.Priority = TimerPriority.FiftyMS;
-                        }
                         else if (m_CombatTimer != null)
-                        {
                             m_CombatTimer.Priority = TimerPriority.EveryTick;
-                        }
 
                         UpdateRegion();
 
@@ -6260,17 +6647,10 @@ namespace Server
             }
 
             if (!m_Player)
-            {
                 Utility.Intern(ref m_Name);
-            }
 
             Utility.Intern(ref m_Title);
             Utility.Intern(ref m_Language);
-
-            /*	//Moved into cleanup in scripts.
-			if( version < 30 )
-			Timer.DelayCall( TimeSpan.Zero, new TimerCallback( ConvertHair ) );
-			* */
         }
 
         public void ConvertHair()
@@ -6404,21 +6784,233 @@ namespace Server
 
         int ISerializable.SerialIdentity { get { return m_Serial; } }
 
+        //public virtual void Serialize(GenericWriter writer)
+        //{
+        //    writer.Write(37); // version
+
+        //    writer.Write(HarvestOrdinary);
+        //    writer.Write(ContainerLoot);
+        //    writer.Write(ContainerHarvest);
+        //    writer.Write(ContainerCraft);
+        //    writer.Write(NoAutoAttack);
+        //    writer.Write(RainbowMsg);
+        //    writer.Write(RaceMakeSounds);
+        //    writer.Write(RaceMagicSchool);
+        //    writer.Write(RaceWasFemale);
+        //    writer.Write(RaceSection);
+        //    writer.Write(RaceHomeLand);
+        //    writer.Write(RecordHair);
+        //    writer.Write(RecordBeard);
+        //    writer.Write(RecordHairColor);
+        //    writer.Write(RecordBeardColor);
+        //    writer.Write(RecordSkinColor);
+        //    writer.Write(RaceID);
+        //    writer.Write(RaceAngerSound);
+        //    writer.Write(RaceIdleSound);
+        //    writer.Write(RaceDeathSound);
+        //    writer.Write(RaceAttackSound);
+        //    writer.Write(RaceHurtSound);
+        //    writer.Write(CoinPurse);
+        //    writer.Write(DataStoreInt2);
+        //    writer.Write(DataStoreInt3);
+        //    writer.Write(DataStoreInt4);
+        //    writer.Write(StolenBoxTime);
+        //    writer.Write(DataStoreStr1);
+        //    writer.Write(DataStoreStr2);
+        //    writer.Write(DataStoreStr3);
+        //    writer.Write(DataStoreStr4);
+        //    writer.Write(StolenArtifacts);
+
+
+        //    // 37
+        //    writer.Write(m_DisplayGuildAbbr);
+        //    // 36
+        //    writer.Write(m_BloodHue);
+        //    writer.Write(m_Deaths);
+        //    // 35
+        //    writer.Write(GuardImmune);
+        //    // 34
+        //    writer.Write(m_StrCap);
+        //    writer.Write(m_DexCap);
+        //    writer.Write(m_IntCap);
+        //    writer.Write(m_StrMaxCap);
+        //    writer.Write(m_DexMaxCap);
+        //    writer.Write(m_IntMaxCap);
+        //    writer.Write(m_SpecialSlayerMechanics);
+        //    if (m_SlayerVulnerabilities != null && m_SlayerVulnerabilities.Count > 0)
+        //    {
+        //        writer.Write(true);
+
+        //        writer.Write(m_SlayerVulnerabilities.Count);
+
+        //        for (int i = 0; i < m_SlayerVulnerabilities.Count; i++)
+        //        {
+        //            writer.Write(m_SlayerVulnerabilities[i]);
+        //        }
+        //    }
+        //    else
+        //    {
+        //        writer.Write(false);
+        //    }
+        //    writer.Write(m_IgnoreMobiles);
+        //    writer.WriteDeltaTime(m_LastStrGain);
+        //    writer.WriteDeltaTime(m_LastIntGain);
+        //    writer.WriteDeltaTime(m_LastDexGain);
+        //    byte hairflag = 0x00;
+        //    if (m_Hair != null)
+        //    {
+        //        hairflag |= 0x01;
+        //    }
+        //    if (m_FacialHair != null)
+        //    {
+        //        hairflag |= 0x02;
+        //    }
+        //    if (m_Face != null)
+        //    {
+        //        hairflag |= 0x04;
+        //    }
+        //    writer.Write(hairflag);
+        //    if ((hairflag & 0x01) != 0)
+        //    {
+        //        m_Hair.Serialize(writer);
+        //    }
+        //    if ((hairflag & 0x02) != 0)
+        //    {
+        //        m_FacialHair.Serialize(writer);
+        //    }
+        //    if ((hairflag & 0x04) != 0)
+        //    {
+        //        if (m_Face != null)
+        //        {
+        //            m_Face.Serialize(writer);
+        //        }
+        //    }
+        //    writer.Write(Race);
+        //    writer.Write(m_TithingPoints);
+        //    writer.Write(m_Corpse);
+        //    writer.Write(m_CreationTime);
+        //    writer.Write(m_Stabled, true);
+        //    writer.Write(m_CantWalk);
+        //    VirtueInfo.Serialize(writer, m_Virtues);
+        //    writer.Write(m_Thirst);
+        //    writer.Write(m_BAC);
+        //    writer.Write(m_ShortTermMurders);
+        //    //writer.Write( m_ShortTermElapse );
+        //    //writer.Write( m_LongTermElapse );
+        //    //writer.Write( m_Followers );
+        //    writer.Write(m_FollowersMax);
+
+        //    writer.Write(m_MagicDamageAbsorb);
+
+        //    writer.Write(m_GuildFealty);
+
+        //    writer.Write(m_Guild);
+
+        //    writer.Write(m_DisplayGuildTitle);
+
+        //    writer.Write(m_CanSwim);
+
+        //    writer.Write(m_Squelched);
+
+        //    writer.Write(m_Holding);
+
+        //    writer.Write(m_VirtualArmor);
+
+        //    writer.Write(m_BaseSoundID);
+
+        //    writer.Write(m_DisarmReady);
+        //    writer.Write(m_StunReady);
+
+        //    //Poison.Serialize( m_Poison, writer );
+
+        //    writer.Write(m_StatCap);
+
+        //    writer.Write(m_NameHue);
+
+        //    writer.Write(m_Hunger);
+
+        //    writer.Write(m_Location);
+        //    writer.Write(m_Body);
+        //    writer.Write(m_Name);
+        //    writer.Write(m_GuildTitle);
+        //    writer.Write(m_Criminal);
+        //    writer.Write(m_Kills);
+        //    writer.Write(m_SpeechHue);
+        //    writer.Write(m_EmoteHue);
+        //    writer.Write(m_WhisperHue);
+        //    writer.Write(m_YellHue);
+        //    writer.Write(m_Language);
+        //    writer.Write(m_Female);
+        //    writer.Write(m_Warmode);
+        //    writer.Write(m_Hidden);
+        //    writer.Write((byte)m_Direction);
+        //    writer.Write(m_Hue);
+        //    writer.Write(m_Str);
+        //    writer.Write(m_Dex);
+        //    writer.Write(m_Int);
+        //    writer.Write(m_Hits);
+        //    writer.Write(m_Stam);
+        //    writer.Write(m_Mana);
+
+        //    writer.Write(m_Map);
+
+        //    writer.Write(m_Blessed);
+        //    writer.Write(m_Fame);
+        //    writer.Write(m_Karma);
+        //    writer.Write((byte)m_AccessLevel);
+        //    m_Skills.Serialize(writer);
+
+        //    writer.Write(m_Items);
+
+        //    writer.Write(m_Player);
+        //    writer.Write(m_Title);
+        //    writer.Write(m_Profile);
+        //    writer.Write(m_ProfileLocked);
+        //    writer.Write(m_AutoPageNotify);
+
+        //    writer.Write(m_LogoutLocation);
+        //    writer.Write(m_LogoutMap);
+
+        //    writer.Write((byte)m_StrLock);
+        //    writer.Write((byte)m_DexLock);
+        //    writer.Write((byte)m_IntLock);
+
+        //    if (m_StuckMenuUses != null)
+        //    {
+        //        writer.Write(true);
+
+        //        writer.Write(m_StuckMenuUses.Length);
+
+        //        for (int i = 0; i < m_StuckMenuUses.Length; ++i)
+        //        {
+        //            writer.Write(m_StuckMenuUses[i]);
+        //        }
+        //    }
+        //    else
+        //    {
+        //        writer.Write(false);
+        //    }
+        //}
+
         public virtual void Serialize(GenericWriter writer)
         {
-            writer.Write(37); // version
+            writer.Write((int)36); // version
 
             writer.Write(HarvestOrdinary);
             writer.Write(ContainerLoot);
             writer.Write(ContainerHarvest);
             writer.Write(ContainerCraft);
+
             writer.Write(NoAutoAttack);
+
             writer.Write(RainbowMsg);
+
             writer.Write(RaceMakeSounds);
             writer.Write(RaceMagicSchool);
             writer.Write(RaceWasFemale);
             writer.Write(RaceSection);
             writer.Write(RaceHomeLand);
+
             writer.Write(RecordHair);
             writer.Write(RecordBeard);
             writer.Write(RecordHairColor);
@@ -6441,82 +7033,45 @@ namespace Server
             writer.Write(DataStoreStr4);
             writer.Write(StolenArtifacts);
 
-
-            // 37
-            writer.Write(m_DisplayGuildAbbr);
-            // 36
-            writer.Write(m_BloodHue);
-            writer.Write(m_Deaths);
-            // 35
-            writer.Write(GuardImmune);
-            // 34
-            writer.Write(m_StrCap);
-            writer.Write(m_DexCap);
-            writer.Write(m_IntCap);
-            writer.Write(m_StrMaxCap);
-            writer.Write(m_DexMaxCap);
-            writer.Write(m_IntMaxCap);
-            writer.Write(m_SpecialSlayerMechanics);
-            if (m_SlayerVulnerabilities != null && m_SlayerVulnerabilities.Count > 0)
-            {
-                writer.Write(true);
-
-                writer.Write(m_SlayerVulnerabilities.Count);
-
-                for (int i = 0; i < m_SlayerVulnerabilities.Count; i++)
-                {
-                    writer.Write(m_SlayerVulnerabilities[i]);
-                }
-            }
-            else
-            {
-                writer.Write(false);
-            }
-            writer.Write(m_IgnoreMobiles);
             writer.WriteDeltaTime(m_LastStrGain);
             writer.WriteDeltaTime(m_LastIntGain);
             writer.WriteDeltaTime(m_LastDexGain);
+
             byte hairflag = 0x00;
+
             if (m_Hair != null)
-            {
                 hairflag |= 0x01;
-            }
             if (m_FacialHair != null)
-            {
                 hairflag |= 0x02;
-            }
-            if (m_Face != null)
-            {
-                hairflag |= 0x04;
-            }
-            writer.Write(hairflag);
+
+            writer.Write((byte)hairflag);
+
             if ((hairflag & 0x01) != 0)
-            {
                 m_Hair.Serialize(writer);
-            }
             if ((hairflag & 0x02) != 0)
-            {
                 m_FacialHair.Serialize(writer);
-            }
-            if ((hairflag & 0x04) != 0)
-            {
-                if (m_Face != null)
-                {
-                    m_Face.Serialize(writer);
-                }
-            }
-            writer.Write(Race);
-            writer.Write(m_TithingPoints);
+
+            writer.Write(this.Race);
+
+            writer.Write((int)m_TithingPoints);
+
             writer.Write(m_Corpse);
+
             writer.Write(m_CreationTime);
+
             writer.Write(m_Stabled, true);
+
             writer.Write(m_CantWalk);
+
             VirtueInfo.Serialize(writer, m_Virtues);
+
             writer.Write(m_Thirst);
             writer.Write(m_BAC);
+
             writer.Write(m_ShortTermMurders);
             //writer.Write( m_ShortTermElapse );
             //writer.Write( m_LongTermElapse );
+
             //writer.Write( m_Followers );
             writer.Write(m_FollowersMax);
 
@@ -6550,7 +7105,7 @@ namespace Server
             writer.Write(m_Hunger);
 
             writer.Write(m_Location);
-            writer.Write(m_Body);
+            writer.Write((int)m_Body);
             writer.Write(m_Name);
             writer.Write(m_GuildTitle);
             writer.Write(m_Criminal);
@@ -6610,6 +7165,9 @@ namespace Server
             {
                 writer.Write(false);
             }
+
+            if (!Utility.ClothingMod())
+                ShowHair();
         }
 
         [CommandProperty(AccessLevel.GameMaster)]

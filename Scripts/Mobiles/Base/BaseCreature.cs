@@ -2366,15 +2366,23 @@ namespace Server.Mobiles
 					IMount bSteed = this.Mount;
 					BaseMount iSteed = (BaseMount)bSteed;
 
-					BaseMount steed = new EvilMount();
-					steed.Body = iSteed.Body;
-					steed.ItemID = iSteed.ItemID;
-					steed.Hue = iSteed.Hue;
-					iSteed.Delete();
+                    if (iSteed != null)
+                    {
+                        Console.WriteLine("iSteed correctly spawned " + this.GetType().Name);
+                        BaseMount steed = new EvilMount();
+                        steed.Body = iSteed.Body;
+                        steed.ItemID = iSteed.ItemID;
+                        steed.Hue = iSteed.Hue;
+                        iSteed.Delete();
 
-					steed.Rider = this;
-					ActiveSpeed = 0.1;
-					PassiveSpeed = 0.2;
+                        steed.Rider = this;
+                        ActiveSpeed = 0.1;
+                        PassiveSpeed = 0.2;
+                    }
+                    else
+                    {
+                        Console.WriteLine("Warning: iSteed is null in OnAfterSpawn() for " + this.GetType().Name);
+                    }                    
 				}
 			}
 

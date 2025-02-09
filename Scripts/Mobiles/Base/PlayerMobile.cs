@@ -3756,185 +3756,572 @@ namespace Server.Mobiles
         //    Timer.DelayCall(TimeSpan.FromSeconds(5.0), new TimerStateCallback(ResetThings), this);
         //}
 
+        //public override void Deserialize(GenericReader reader)
+        //{
+        //    base.Deserialize(reader);
+        //    int version = reader.ReadInt(); // Always read version first
+
+        //    if (version > 38)
+        //    {
+        //        Console.WriteLine($"Warning: Unexpected version {version} detected in PlayerMobile deserialization!");
+        //    }
+
+        //    if (version >= 38)
+        //    {
+        //        m_DoubleClickID = reader.ReadBool();
+        //        m_InnTime = reader.ReadDateTime();
+        //        CraftQueue = reader.ReadInt();
+        //        CraftSuccess = reader.ReadInt();
+        //        CraftExceptional = reader.ReadInt();
+        //        CraftError = reader.ReadInt();
+        //        CraftDone = reader.ReadDateTime();
+        //        CraftSound = reader.ReadInt();
+        //        CraftSoundAfter = reader.ReadInt();
+        //        UsingAncientBook = reader.ReadBool();
+        //        SpellBarsArch4 = reader.ReadString();
+
+        //        SkillStart = reader.ReadInt();
+        //        SkillBoost = reader.ReadInt();
+        //        SkillEther = reader.ReadInt();
+
+        //        m_Camp = reader.ReadDateTime();
+        //        m_Bedroll = reader.ReadDateTime();
+
+        //        MyChat = reader.ReadString();
+        //        RegBar = reader.ReadString();
+        //        MyLibrary = reader.ReadString();
+
+        //        CharacterMOTD = reader.ReadInt();
+        //        CharacterSkill = reader.ReadInt();
+        //        CharacterKeys = reader.ReadString();
+        //        CharacterDiscovered = reader.ReadString();
+        //        CharacterSheath = reader.ReadInt();
+        //        CharacterGuilds = reader.ReadInt();
+        //        CharacterBoatDoor = reader.ReadString();
+        //        CharacterPublicDoor = reader.ReadString();
+        //        CharacterBegging = reader.ReadInt();
+        //        CharacterWepAbNames = reader.ReadInt();
+        //        CharacterElement = reader.ReadInt();
+
+        //        ArtifactQuestTime = reader.ReadString();
+        //        StandardQuest = reader.ReadString();
+        //        FishingQuest = reader.ReadString();
+        //        AssassinQuest = reader.ReadString();
+        //        MessageQuest = reader.ReadString();
+        //        BardsTaleQuest = reader.ReadString();
+
+        //        SpellBarsMage1 = reader.ReadString();
+        //        SpellBarsMage2 = reader.ReadString();
+        //        SpellBarsMage3 = reader.ReadString();
+        //        SpellBarsMage4 = reader.ReadString();
+        //        SpellBarsNecro1 = reader.ReadString();
+        //        SpellBarsNecro2 = reader.ReadString();
+        //        SpellBarsKnight1 = reader.ReadString();
+        //        SpellBarsKnight2 = reader.ReadString();
+        //        SpellBarsDeath1 = reader.ReadString();
+        //        SpellBarsDeath2 = reader.ReadString();
+        //        SpellBarsBard1 = reader.ReadString();
+        //        SpellBarsBard2 = reader.ReadString();
+        //        SpellBarsPriest1 = reader.ReadString();
+        //        SpellBarsPriest2 = reader.ReadString();
+        //        SpellBarsArch1 = reader.ReadString();
+        //        SpellBarsArch2 = reader.ReadString();
+        //        SpellBarsArch3 = reader.ReadString();
+        //        SpellBarsMonk1 = reader.ReadString();
+        //        SpellBarsMonk2 = reader.ReadString();
+        //        SpellBarsElly1 = reader.ReadString();
+        //        SpellBarsElly2 = reader.ReadString();
+
+        //        QuickBar = reader.ReadString();
+        //        ThiefQuest = reader.ReadString();
+        //        KilledSpecialMonsters = reader.ReadString();
+        //        MusicPlaylist = reader.ReadString();
+        //        CharacterWanted = reader.ReadString();
+        //        CharacterLoot = reader.ReadString();
+        //        CharMusical = reader.ReadString();
+        //        EpicQuestName = reader.ReadString();
+        //        CharacterBarbaric = reader.ReadInt();
+        //        SkillDisplay = reader.ReadInt();
+        //        MagerySpellHue = reader.ReadInt();
+        //        ClassicPoisoning = reader.ReadInt();
+        //        CharacterEvil = reader.ReadInt();
+        //        CharacterOriental = reader.ReadInt();
+        //        GumpHue = reader.ReadInt();
+        //        WeaponBarOpen = reader.ReadInt();
+        //        EpicQuestNumber = reader.ReadInt();
+
+        //        m_PeacedUntil = reader.ReadDateTime();
+        //        m_AnkhNextUse = reader.ReadDateTime();
+        //        m_AutoStabled = reader.ReadStrongMobileList();
+
+        //        m_AllianceMessageHue = reader.ReadEncodedInt();
+        //        m_GuildMessageHue = reader.ReadEncodedInt();
+
+        //        int rank = reader.ReadEncodedInt();
+        //        int maxRank = Guilds.RankDefinition.Ranks.Length - 1;
+        //        if (rank > maxRank)
+        //            rank = maxRank;
+        //        m_GuildRank = Guilds.RankDefinition.Ranks[rank];
+
+        //        m_LastOnline = reader.ReadDateTime();
+        //        m_Fugitive = reader.ReadEncodedInt();
+
+        //        m_BOBFilter = new Engines.BulkOrders.BOBFilter(reader);
+
+        //        if (reader.ReadBool()) // Hair/Beard Mods
+        //        {
+        //            m_HairModID = reader.ReadInt();
+        //            m_HairModHue = reader.ReadInt();
+        //            m_BeardModID = reader.ReadInt();
+        //            m_BeardModHue = reader.ReadInt();
+        //        }
+
+        //        SavagePaintExpiration = reader.ReadTimeSpan();
+
+        //        m_NpcGuild = (NpcGuild)reader.ReadInt();
+        //        m_NpcGuildJoinTime = reader.ReadDateTime();
+        //        m_NpcGuildGameTime = reader.ReadTimeSpan();
+
+        //        m_PermaFlags = reader.ReadStrongMobileList();
+        //        NextTailorBulkOrder = reader.ReadTimeSpan();
+        //        NextSmithBulkOrder = reader.ReadTimeSpan();
+
+        //        m_Flags = (PlayerFlag)reader.ReadInt();
+        //        m_LongTermElapse = reader.ReadTimeSpan();
+        //        m_ShortTermElapse = reader.ReadTimeSpan();
+        //        m_GameTime = reader.ReadTimeSpan();
+        //    }
+
+        //    // Ensure all lists are initialized
+        //    if (m_AutoStabled == null) m_AutoStabled = new List<Mobile>();
+        //    if (m_PermaFlags == null) m_PermaFlags = new List<Mobile>();
+        //    if (m_RecentlyReported == null) m_RecentlyReported = new List<Mobile>();
+
+        //    // Ensure Guild Rank has a valid default value
+        //    if (m_GuildRank == null)
+        //        m_GuildRank = Guilds.RankDefinition.Member;
+
+        //    // Ensure LastOnline is set correctly
+        //    if (m_LastOnline == DateTime.MinValue && Account != null)
+        //        m_LastOnline = ((Account)Account).LastLogin;
+
+        //    if (AccessLevel > AccessLevel.Player)
+        //        m_IgnoreMobiles = true;
+
+        //    // Restore stabled pets
+        //    List<Mobile> list = this.Stabled;
+        //    for (int i = 0; i < list.Count; ++i)
+        //    {
+        //        BaseCreature bc = list[i] as BaseCreature;
+        //        if (bc != null)
+        //            bc.IsStabled = true;
+        //    }
+
+        //    // Restore buffs
+        //    if (Hidden)
+        //        AddBuff(new BuffInfo(BuffIcon.HidingAndOrStealth, 1075655));
+
+        //    // Ensure character races are valid
+        //    if (!MyServerSettings.MonstersAllowed() && RaceID > 0)
+        //        BaseRace.BackToHuman(this);
+
+        //    // Handle guild memberships
+        //    if (m_NpcGuild != NpcGuild.None && version < 38)
+        //        CharacterGuilds = 1;
+        //    else if (version < 38)
+        //        CharacterGuilds = 0;
+
+        //    // Delay some actions to avoid initialization errors
+        //    Timer.DelayCall(TimeSpan.FromSeconds(5.0), new TimerStateCallback(ResetThings), this);
+        //}
+
         public override void Deserialize(GenericReader reader)
         {
             base.Deserialize(reader);
-            int version = reader.ReadInt(); // Always read version first
+            int version = reader.ReadInt();
 
-            if (version > 38)
+            switch (version)
             {
-                Console.WriteLine($"Warning: Unexpected version {version} detected in PlayerMobile deserialization!");
+                case 38:
+                case 37:
+                    {
+                        DoubleClickID = reader.ReadBool();
+                        goto case 36;
+                    }
+                case 36:
+                    {
+                        m_InnTime = reader.ReadDateTime();
+                        goto case 35;
+                    }
+                case 35:
+                    {
+                        CraftQueue = reader.ReadInt();
+                        CraftSuccess = reader.ReadInt();
+                        CraftExceptional = reader.ReadInt();
+                        CraftError = reader.ReadInt();
+                        CraftDone = reader.ReadDateTime();
+                        CraftSound = reader.ReadInt();
+                        CraftSoundAfter = reader.ReadInt();
+
+                        goto case 34;
+                    }
+                case 34:
+                    {
+                        UsingAncientBook = reader.ReadBool();
+                        SpellBarsArch4 = reader.ReadString();
+
+                        goto case 33;
+                    }
+                case 33:
+                    {
+                        SkillStart = reader.ReadInt();
+                        SkillBoost = reader.ReadInt();
+                        SkillEther = reader.ReadInt();
+
+                        if (SkillStart < 1)
+                        {
+                            SkillBoost = MyServerSettings.SkillBoost();
+
+                            if (Skills.Cap == 11000)
+                            {
+                                SkillStart = 11000;
+                            }
+                            else if (Skills.Cap == 16000)
+                            {
+                                SkillStart = 11000;
+                                SkillEther = 5000;
+                            }
+                            else if (Skills.Cap == 10000)
+                            {
+                                SkillStart = 10000;
+                            }
+                            else if (Skills.Cap == 15000)
+                            {
+                                SkillStart = 10000;
+                                SkillEther = 5000;
+                            }
+                            else if (Skills.Cap == 13000)
+                            {
+                                SkillStart = 13000;
+                            }
+                            else if (Skills.Cap == 18000)
+                            {
+                                SkillStart = 13000;
+                                SkillEther = 5000;
+                            }
+                            else if (Skills.Cap == 40000)
+                            {
+                                SkillStart = 40000;
+                            }
+                            else if (Skills.Cap == 45000)
+                            {
+                                SkillStart = 40000;
+                                SkillEther = 5000;
+                            }
+                            else
+                            {
+                                SkillStart = 10000;
+                                SkillEther = 0;
+                            }
+                        }
+
+                        if (SkillBoost < MyServerSettings.SkillBoost())
+                            SkillBoost = MyServerSettings.SkillBoost();
+
+                        Skills.Cap = SkillStart + SkillBoost + SkillEther;
+
+                        goto case 32;
+                    }
+                case 32:
+                    {
+                        m_Camp = reader.ReadDateTime();
+                        m_Bedroll = reader.ReadDateTime();
+
+                        goto case 31;
+                    }
+                case 31:
+                    {
+                        MyChat = reader.ReadString();
+
+                        goto case 30;
+                    }
+                case 30:
+                    {
+                        RegBar = reader.ReadString();
+                        MyLibrary = reader.ReadString();
+
+                        goto case 29;
+                    }
+                case 29:
+                    {
+                        CharacterMOTD = reader.ReadInt();
+                        CharacterSkill = reader.ReadInt();
+                        CharacterKeys = reader.ReadString();
+                        CharacterDiscovered = reader.ReadString();
+                        CharacterSheath = reader.ReadInt();
+                        CharacterGuilds = reader.ReadInt();
+                        CharacterBoatDoor = reader.ReadString();
+                        CharacterPublicDoor = reader.ReadString();
+                        CharacterBegging = reader.ReadInt();
+                        CharacterWepAbNames = reader.ReadInt();
+                        CharacterElement = reader.ReadInt();
+
+                        ArtifactQuestTime = reader.ReadString();
+                        StandardQuest = reader.ReadString();
+                        FishingQuest = reader.ReadString();
+                        AssassinQuest = reader.ReadString();
+                        MessageQuest = reader.ReadString();
+                        BardsTaleQuest = reader.ReadString();
+
+                        SpellBarsMage1 = reader.ReadString();
+                        SpellBarsMage2 = reader.ReadString();
+                        SpellBarsMage3 = reader.ReadString();
+                        SpellBarsMage4 = reader.ReadString();
+                        SpellBarsNecro1 = reader.ReadString();
+                        SpellBarsNecro2 = reader.ReadString();
+                        SpellBarsKnight1 = reader.ReadString();
+                        SpellBarsKnight2 = reader.ReadString();
+                        SpellBarsDeath1 = reader.ReadString();
+                        SpellBarsDeath2 = reader.ReadString();
+                        SpellBarsBard1 = reader.ReadString();
+                        SpellBarsBard2 = reader.ReadString();
+                        SpellBarsPriest1 = reader.ReadString();
+                        SpellBarsPriest2 = reader.ReadString();
+                        SpellBarsArch1 = reader.ReadString();
+                        SpellBarsArch2 = reader.ReadString();
+                        SpellBarsArch3 = reader.ReadString();
+                        SpellBarsMonk1 = reader.ReadString();
+                        SpellBarsMonk2 = reader.ReadString();
+                        SpellBarsElly1 = reader.ReadString();
+                        SpellBarsElly2 = reader.ReadString();
+
+                        QuickBar = reader.ReadString();
+                        ThiefQuest = reader.ReadString();
+                        KilledSpecialMonsters = reader.ReadString();
+                        MusicPlaylist = reader.ReadString();
+                        CharacterWanted = reader.ReadString();
+                        CharacterLoot = reader.ReadString();
+                        CharMusical = reader.ReadString();
+                        EpicQuestName = reader.ReadString();
+                        CharacterBarbaric = reader.ReadInt();
+                        SkillDisplay = reader.ReadInt();
+                        MagerySpellHue = reader.ReadInt();
+                        ClassicPoisoning = reader.ReadInt();
+                        CharacterEvil = reader.ReadInt();
+                        CharacterOriental = reader.ReadInt();
+                        GumpHue = reader.ReadInt();
+                        WeaponBarOpen = reader.ReadInt();
+                        EpicQuestNumber = reader.ReadInt();
+
+                        goto case 28;
+                    }
+                case 28:
+                    {
+                        m_PeacedUntil = reader.ReadDateTime();
+
+                        goto case 27;
+                    }
+                case 27:
+                    {
+                        m_AnkhNextUse = reader.ReadDateTime();
+
+                        goto case 26;
+                    }
+                case 26:
+                    {
+                        m_AutoStabled = reader.ReadStrongMobileList();
+
+                        goto case 25;
+                    }
+                case 25:
+                    {
+                        if (version < 36) { int NotUsed2 = reader.ReadInt(); }
+                        goto case 24;
+                    }
+                case 24:
+                    {
+                        if (version < 36) { DateTime NotUsed3 = reader.ReadDeltaTime(); }
+                        goto case 23;
+                    }
+                case 23:
+                    {
+                        if (version < 36) { m_NoLongUsedDatas = new NoLongUsedDataInfo(reader); }
+                        goto case 22;
+                    }
+                case 22:
+                    {
+                        if (version < 36) { DateTime NotUsed4 = reader.ReadDateTime(); }
+                        goto case 21;
+                    }
+                case 21:
+                    {
+                        if (version < 36) { int NotUsed5 = reader.ReadEncodedInt(); }
+                        if (version < 36) { int NotUsed6 = reader.ReadInt(); }
+                        goto case 20;
+                    }
+                case 20:
+                    {
+                        m_AllianceMessageHue = reader.ReadEncodedInt();
+                        m_GuildMessageHue = reader.ReadEncodedInt();
+
+                        goto case 19;
+                    }
+                case 19:
+                    {
+                        int rank = reader.ReadEncodedInt();
+                        int maxRank = Guilds.RankDefinition.Ranks.Length - 1;
+                        if (rank > maxRank)
+                            rank = maxRank;
+
+                        m_GuildRank = Guilds.RankDefinition.Ranks[rank];
+                        m_LastOnline = reader.ReadDateTime();
+                        goto case 18;
+                    }
+                case 18:
+                    {
+                        if (version < 36) { int NotUsed7 = reader.ReadEncodedInt(); }
+
+                        goto case 17;
+                    }
+                case 17: // changed how DoneQuests is serialized
+                case 16:
+                    {
+                        if (version < 36) { int NotUsed8 = reader.ReadEncodedInt(); }
+                        if (version < 36) { int NotUsed9 = reader.ReadEncodedInt(); }
+                        m_Fugitive = reader.ReadEncodedInt();
+                        goto case 15;
+                    }
+                case 15:
+                    {
+                        if (version < 36) { DateTime NotUsed10 = reader.ReadDeltaTime(); }
+                        goto case 14;
+                    }
+                case 14:
+                    {
+                        if (version < 36) { int NotUsed11 = reader.ReadEncodedInt(); }
+                        goto case 13;
+                    }
+                case 13: // just removed m_PayedInsurance list
+                case 12:
+                    {
+                        m_BOBFilter = new Engines.BulkOrders.BOBFilter(reader);
+                        goto case 11;
+                    }
+                case 11:
+                    {
+                        goto case 10;
+                    }
+                case 10:
+                    {
+                        if (reader.ReadBool())
+                        {
+                            m_HairModID = reader.ReadInt();
+                            m_HairModHue = reader.ReadInt();
+                            m_BeardModID = reader.ReadInt();
+                            m_BeardModHue = reader.ReadInt();
+                        }
+
+                        goto case 9;
+                    }
+                case 9:
+                    {
+                        SavagePaintExpiration = reader.ReadTimeSpan();
+                        goto case 8;
+                    }
+                case 8:
+                    {
+                        m_NpcGuild = (NpcGuild)reader.ReadInt();
+                        m_NpcGuildJoinTime = reader.ReadDateTime();
+                        m_NpcGuildGameTime = reader.ReadTimeSpan();
+                        goto case 7;
+                    }
+                case 7:
+                    {
+                        m_PermaFlags = reader.ReadStrongMobileList();
+                        goto case 6;
+                    }
+                case 6:
+                    {
+                        NextTailorBulkOrder = reader.ReadTimeSpan();
+                        goto case 5;
+                    }
+                case 5:
+                    {
+                        NextSmithBulkOrder = reader.ReadTimeSpan();
+                        goto case 4;
+                    }
+                case 4:
+                    {
+                        if (version < 36) { DateTime NotUsed12 = reader.ReadDeltaTime(); }
+                        if (version < 36) { List<Mobile> NotUsed13 = reader.ReadStrongMobileList(); }
+                        goto case 3;
+                    }
+                case 3:
+                    {
+                        if (version < 36) { DateTime NotUsed14 = reader.ReadDeltaTime(); }
+                        if (version < 36) { DateTime NotUsed15 = reader.ReadDeltaTime(); }
+                        if (version < 36) { int NotUsed16 = reader.ReadInt(); }
+                        goto case 2;
+                    }
+                case 2:
+                    {
+                        m_Flags = (PlayerFlag)reader.ReadInt();
+                        goto case 1;
+                    }
+                case 1:
+                    {
+                        m_LongTermElapse = reader.ReadTimeSpan();
+                        m_ShortTermElapse = reader.ReadTimeSpan();
+                        m_GameTime = reader.ReadTimeSpan();
+                        goto case 0;
+                    }
+                case 0:
+                    {
+                        break;
+                    }
             }
 
-            if (version >= 38)
-            {
-                m_DoubleClickID = reader.ReadBool();
-                m_InnTime = reader.ReadDateTime();
-                CraftQueue = reader.ReadInt();
-                CraftSuccess = reader.ReadInt();
-                CraftExceptional = reader.ReadInt();
-                CraftError = reader.ReadInt();
-                CraftDone = reader.ReadDateTime();
-                CraftSound = reader.ReadInt();
-                CraftSoundAfter = reader.ReadInt();
-                UsingAncientBook = reader.ReadBool();
-                SpellBarsArch4 = reader.ReadString();
+            if (m_RecentlyReported == null)
+                m_RecentlyReported = new List<Mobile>();
 
-                SkillStart = reader.ReadInt();
-                SkillBoost = reader.ReadInt();
-                SkillEther = reader.ReadInt();
+            if (m_PermaFlags == null)
+                m_PermaFlags = new List<Mobile>();
 
-                m_Camp = reader.ReadDateTime();
-                m_Bedroll = reader.ReadDateTime();
+            if (m_BOBFilter == null)
+                m_BOBFilter = new Engines.BulkOrders.BOBFilter();
 
-                MyChat = reader.ReadString();
-                RegBar = reader.ReadString();
-                MyLibrary = reader.ReadString();
-
-                CharacterMOTD = reader.ReadInt();
-                CharacterSkill = reader.ReadInt();
-                CharacterKeys = reader.ReadString();
-                CharacterDiscovered = reader.ReadString();
-                CharacterSheath = reader.ReadInt();
-                CharacterGuilds = reader.ReadInt();
-                CharacterBoatDoor = reader.ReadString();
-                CharacterPublicDoor = reader.ReadString();
-                CharacterBegging = reader.ReadInt();
-                CharacterWepAbNames = reader.ReadInt();
-                CharacterElement = reader.ReadInt();
-
-                ArtifactQuestTime = reader.ReadString();
-                StandardQuest = reader.ReadString();
-                FishingQuest = reader.ReadString();
-                AssassinQuest = reader.ReadString();
-                MessageQuest = reader.ReadString();
-                BardsTaleQuest = reader.ReadString();
-
-                SpellBarsMage1 = reader.ReadString();
-                SpellBarsMage2 = reader.ReadString();
-                SpellBarsMage3 = reader.ReadString();
-                SpellBarsMage4 = reader.ReadString();
-                SpellBarsNecro1 = reader.ReadString();
-                SpellBarsNecro2 = reader.ReadString();
-                SpellBarsKnight1 = reader.ReadString();
-                SpellBarsKnight2 = reader.ReadString();
-                SpellBarsDeath1 = reader.ReadString();
-                SpellBarsDeath2 = reader.ReadString();
-                SpellBarsBard1 = reader.ReadString();
-                SpellBarsBard2 = reader.ReadString();
-                SpellBarsPriest1 = reader.ReadString();
-                SpellBarsPriest2 = reader.ReadString();
-                SpellBarsArch1 = reader.ReadString();
-                SpellBarsArch2 = reader.ReadString();
-                SpellBarsArch3 = reader.ReadString();
-                SpellBarsMonk1 = reader.ReadString();
-                SpellBarsMonk2 = reader.ReadString();
-                SpellBarsElly1 = reader.ReadString();
-                SpellBarsElly2 = reader.ReadString();
-
-                QuickBar = reader.ReadString();
-                ThiefQuest = reader.ReadString();
-                KilledSpecialMonsters = reader.ReadString();
-                MusicPlaylist = reader.ReadString();
-                CharacterWanted = reader.ReadString();
-                CharacterLoot = reader.ReadString();
-                CharMusical = reader.ReadString();
-                EpicQuestName = reader.ReadString();
-                CharacterBarbaric = reader.ReadInt();
-                SkillDisplay = reader.ReadInt();
-                MagerySpellHue = reader.ReadInt();
-                ClassicPoisoning = reader.ReadInt();
-                CharacterEvil = reader.ReadInt();
-                CharacterOriental = reader.ReadInt();
-                GumpHue = reader.ReadInt();
-                WeaponBarOpen = reader.ReadInt();
-                EpicQuestNumber = reader.ReadInt();
-
-                m_PeacedUntil = reader.ReadDateTime();
-                m_AnkhNextUse = reader.ReadDateTime();
-                m_AutoStabled = reader.ReadStrongMobileList();
-
-                m_AllianceMessageHue = reader.ReadEncodedInt();
-                m_GuildMessageHue = reader.ReadEncodedInt();
-
-                int rank = reader.ReadEncodedInt();
-                int maxRank = Guilds.RankDefinition.Ranks.Length - 1;
-                if (rank > maxRank)
-                    rank = maxRank;
-                m_GuildRank = Guilds.RankDefinition.Ranks[rank];
-
-                m_LastOnline = reader.ReadDateTime();
-                m_Fugitive = reader.ReadEncodedInt();
-
-                m_BOBFilter = new Engines.BulkOrders.BOBFilter(reader);
-
-                if (reader.ReadBool()) // Hair/Beard Mods
-                {
-                    m_HairModID = reader.ReadInt();
-                    m_HairModHue = reader.ReadInt();
-                    m_BeardModID = reader.ReadInt();
-                    m_BeardModHue = reader.ReadInt();
-                }
-
-                SavagePaintExpiration = reader.ReadTimeSpan();
-
-                m_NpcGuild = (NpcGuild)reader.ReadInt();
-                m_NpcGuildJoinTime = reader.ReadDateTime();
-                m_NpcGuildGameTime = reader.ReadTimeSpan();
-
-                m_PermaFlags = reader.ReadStrongMobileList();
-                NextTailorBulkOrder = reader.ReadTimeSpan();
-                NextSmithBulkOrder = reader.ReadTimeSpan();
-
-                m_Flags = (PlayerFlag)reader.ReadInt();
-                m_LongTermElapse = reader.ReadTimeSpan();
-                m_ShortTermElapse = reader.ReadTimeSpan();
-                m_GameTime = reader.ReadTimeSpan();
-            }
-
-            // Ensure all lists are initialized
-            if (m_AutoStabled == null) m_AutoStabled = new List<Mobile>();
-            if (m_PermaFlags == null) m_PermaFlags = new List<Mobile>();
-            if (m_RecentlyReported == null) m_RecentlyReported = new List<Mobile>();
-
-            // Ensure Guild Rank has a valid default value
             if (m_GuildRank == null)
-                m_GuildRank = Guilds.RankDefinition.Member;
+                m_GuildRank = Guilds.RankDefinition.Member; //Default to member if going from older verstion to new version (only time it should be null)
 
-            // Ensure LastOnline is set correctly
             if (m_LastOnline == DateTime.MinValue && Account != null)
                 m_LastOnline = ((Account)Account).LastLogin;
 
             if (AccessLevel > AccessLevel.Player)
                 m_IgnoreMobiles = true;
 
-            // Restore stabled pets
             List<Mobile> list = this.Stabled;
+
             for (int i = 0; i < list.Count; ++i)
             {
                 BaseCreature bc = list[i] as BaseCreature;
+
                 if (bc != null)
                     bc.IsStabled = true;
             }
 
-            // Restore buffs
-            if (Hidden)
+            if (Hidden) //Hiding is the only buff where it has an effect that's serialized.
                 AddBuff(new BuffInfo(BuffIcon.HidingAndOrStealth, 1075655));
 
-            // Ensure character races are valid
             if (!MyServerSettings.MonstersAllowed() && RaceID > 0)
                 BaseRace.BackToHuman(this);
 
-            // Handle guild memberships
             if (m_NpcGuild != NpcGuild.None && version < 38)
                 CharacterGuilds = 1;
             else if (version < 38)
                 CharacterGuilds = 0;
 
-            // Delay some actions to avoid initialization errors
             Timer.DelayCall(TimeSpan.FromSeconds(5.0), new TimerStateCallback(ResetThings), this);
         }
-
 
         private void ResetThings(object state)
         {
@@ -3942,10 +4329,159 @@ namespace Server.Mobiles
             ((PlayerMobile)state).RevertMods();
         }
 
+        /// <summary>
+        /// /////////////////////////////
+        /// </summary>
+        /// <param name="writer"></param>
+        //public override void Serialize(GenericWriter writer)
+        //{
+        //    //cleanup our anti-macro table
+        //    foreach (Hashtable t in m_AntiMacroTable.Values)
+        //    {
+        //        ArrayList remove = new ArrayList();
+        //        foreach (CountAndTimeStamp time in t.Values)
+        //        {
+        //            if (time.TimeStamp + SkillCheck.AntiMacroExpire <= DateTime.Now)
+        //                remove.Add(time);
+        //        }
+
+        //        for (int i = 0; i < remove.Count; ++i)
+        //            t.Remove(remove[i]);
+        //    }
+        //    CheckKillDecay();
+
+        //    base.Serialize(writer);
+        //    writer.Write((int)38); // version
+        //    writer.Write(m_DoubleClickID);
+        //    writer.Write(m_InnTime);
+        //    writer.Write(CraftQueue);
+        //    writer.Write(CraftSuccess);
+        //    writer.Write(CraftExceptional);
+        //    writer.Write(CraftError);
+        //    writer.Write(CraftDone);
+        //    writer.Write(CraftSound);
+        //    writer.Write(CraftSoundAfter);
+        //    writer.Write(UsingAncientBook);
+        //    writer.Write(SpellBarsArch4);
+
+        //    writer.Write(SkillStart);
+        //    writer.Write(SkillBoost);
+        //    writer.Write(SkillEther);
+
+        //    writer.Write(m_Camp);
+        //    writer.Write(m_Bedroll);
+
+        //    writer.Write(MyChat);
+
+        //    writer.Write(RegBar);
+        //    writer.Write(MyLibrary);
+
+        //    writer.Write(CharacterMOTD);
+        //    writer.Write(CharacterSkill);
+        //    writer.Write(CharacterKeys);
+        //    writer.Write(CharacterDiscovered);
+        //    writer.Write(CharacterSheath);
+        //    writer.Write(CharacterGuilds);
+        //    writer.Write(CharacterBoatDoor);
+        //    writer.Write(CharacterPublicDoor);
+        //    writer.Write(CharacterBegging);
+        //    writer.Write(CharacterWepAbNames);
+        //    writer.Write(CharacterElement);
+
+        //    writer.Write(ArtifactQuestTime);
+        //    writer.Write(StandardQuest);
+        //    writer.Write(FishingQuest);
+        //    writer.Write(AssassinQuest);
+        //    writer.Write(MessageQuest);
+        //    writer.Write(BardsTaleQuest);
+
+        //    writer.Write(SpellBarsMage1);
+        //    writer.Write(SpellBarsMage2);
+        //    writer.Write(SpellBarsMage3);
+        //    writer.Write(SpellBarsMage4);
+        //    writer.Write(SpellBarsNecro1);
+        //    writer.Write(SpellBarsNecro2);
+        //    writer.Write(SpellBarsKnight1);
+        //    writer.Write(SpellBarsKnight2);
+        //    writer.Write(SpellBarsDeath1);
+        //    writer.Write(SpellBarsDeath2);
+        //    writer.Write(SpellBarsBard1);
+        //    writer.Write(SpellBarsBard2);
+        //    writer.Write(SpellBarsPriest1);
+        //    writer.Write(SpellBarsPriest2);
+        //    writer.Write(SpellBarsArch1);
+        //    writer.Write(SpellBarsArch2);
+        //    writer.Write(SpellBarsArch3);
+        //    writer.Write(SpellBarsMonk1);
+        //    writer.Write(SpellBarsMonk2);
+        //    writer.Write(SpellBarsElly1);
+        //    writer.Write(SpellBarsElly2);
+
+        //    writer.Write(QuickBar);
+        //    writer.Write(ThiefQuest);
+        //    writer.Write(KilledSpecialMonsters);
+        //    writer.Write(MusicPlaylist);
+        //    writer.Write(CharacterWanted);
+        //    writer.Write(CharacterLoot);
+        //    writer.Write(CharMusical);
+        //    writer.Write(EpicQuestName);
+        //    writer.Write(CharacterBarbaric);
+        //    writer.Write(SkillDisplay);
+        //    writer.Write(MagerySpellHue);
+        //    writer.Write(ClassicPoisoning);
+        //    writer.Write(CharacterEvil);
+        //    writer.Write(CharacterOriental);
+        //    writer.Write(GumpHue);
+        //    writer.Write(WeaponBarOpen);
+        //    writer.Write(EpicQuestNumber);
+
+        //    writer.Write((DateTime)m_PeacedUntil);
+        //    writer.Write((DateTime)m_AnkhNextUse);
+        //    writer.Write(m_AutoStabled, true);
+
+        //    writer.WriteEncodedInt(m_AllianceMessageHue);
+        //    writer.WriteEncodedInt(m_GuildMessageHue);
+
+        //    writer.WriteEncodedInt(m_GuildRank.Rank);
+        //    writer.Write(m_LastOnline);
+
+        //    writer.WriteEncodedInt((int)m_Fugitive);
+
+        //    m_BOBFilter.Serialize(writer);
+
+        //    bool useMods = (m_HairModID != -1 || m_BeardModID != -1);
+
+        //    writer.Write(useMods);
+
+        //    if (useMods)
+        //    {
+        //        writer.Write((int)m_HairModID);
+        //        writer.Write((int)m_HairModHue);
+        //        writer.Write((int)m_BeardModID);
+        //        writer.Write((int)m_BeardModHue);
+        //    }
+
+        //    writer.Write(SavagePaintExpiration);
+
+        //    writer.Write((int)m_NpcGuild);
+        //    writer.Write((DateTime)m_NpcGuildJoinTime);
+        //    writer.Write((TimeSpan)m_NpcGuildGameTime);
+
+        //    writer.Write(m_PermaFlags, true);
+
+        //    writer.Write(NextTailorBulkOrder);
+
+        //    writer.Write(NextSmithBulkOrder);
+
+        //    writer.Write((int)m_Flags);
+
+        //    writer.Write(m_LongTermElapse);
+        //    writer.Write(m_ShortTermElapse);
+        //    writer.Write(this.GameTime);
+        //}
+
         public override void Serialize(GenericWriter writer)
         {
-            base.Serialize(writer);
-            writer.Write((int)38); // version
             //cleanup our anti-macro table
             foreach (Hashtable t in m_AntiMacroTable.Values)
             {
@@ -3959,9 +4495,17 @@ namespace Server.Mobiles
                 for (int i = 0; i < remove.Count; ++i)
                     t.Remove(remove[i]);
             }
+
             CheckKillDecay();
+
+            base.Serialize(writer);
+
+            writer.Write((int)38); // version
+
             writer.Write(m_DoubleClickID);
+
             writer.Write(m_InnTime);
+
             writer.Write(CraftQueue);
             writer.Write(CraftSuccess);
             writer.Write(CraftExceptional);
@@ -3969,6 +4513,7 @@ namespace Server.Mobiles
             writer.Write(CraftDone);
             writer.Write(CraftSound);
             writer.Write(CraftSoundAfter);
+
             writer.Write(UsingAncientBook);
             writer.Write(SpellBarsArch4);
 

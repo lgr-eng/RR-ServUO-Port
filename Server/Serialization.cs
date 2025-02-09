@@ -825,10 +825,22 @@ namespace Server
 
         public override string ReadString()
         {
-            if (ReadByte() != 0)
-                return m_File.ReadString();
+            //if (ReadByte() != 0)
+            //    return m_File.ReadString();
+            //else
+            //    return null;
+            byte prefix = ReadByte(); // 0 = null, 1 = has value
+            if (prefix != 0)
+            {
+                string str = m_File.ReadString();
+                Console.WriteLine($"ReadString: {str}");
+                return str;
+            }
             else
+            {
+                Console.WriteLine("ReadString: NULL");
                 return null;
+            }
         }
 
         public override DateTime ReadDeltaTime()
@@ -855,13 +867,17 @@ namespace Server
             int v = 0, shift = 0;
             byte b;
 
+            Console.WriteLine("Starting ReadEncodedInt...");
+
             do
             {
                 b = m_File.ReadByte();
+                Console.WriteLine($"Byte read: {b:X2} (Shift: {shift})");
                 v |= (b & 0x7F) << shift;
                 shift += 7;
             } while (b >= 0x80);
 
+            Console.WriteLine($"Final ReadEncodedInt: {v}");
             return v;
         }
 
