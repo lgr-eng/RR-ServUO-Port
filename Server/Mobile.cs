@@ -5822,26 +5822,38 @@ namespace Server
                     }
                 case 36:
                     {
+                        HarvestOrdinary = reader.ReadBool();
+                        ContainerLoot = reader.ReadInt();
+                        ContainerHarvest = reader.ReadInt();
+                        ContainerCraft = reader.ReadInt();
                         m_BloodHue = reader.ReadInt();
                         m_Deaths = reader.ReadInt();
                     }
                     goto case 35;
                 case 35:
-                    GuardImmune = reader.ReadBool();
+                    {
+                        NoAutoAttack = reader.ReadBool();
+                        GuardImmune = reader.ReadBool();
+                    }
                     goto case 34;
                 case 34:
                     {
+                        RainbowMsg = reader.ReadBool();
                         m_StrCap = reader.ReadInt();
                         m_DexCap = reader.ReadInt();
                         m_IntCap = reader.ReadInt();
                         m_StrMaxCap = reader.ReadInt();
                         m_DexMaxCap = reader.ReadInt();
                         m_IntMaxCap = reader.ReadInt();
-
                         goto case 33;
                     }
                 case 33:
                     {
+                        RaceMakeSounds = reader.ReadBool();
+                        RaceMagicSchool = reader.ReadInt();
+                        RaceWasFemale = reader.ReadBool();
+                        RaceSection = reader.ReadInt();
+                        RaceHomeLand = reader.ReadInt();
                         m_SpecialSlayerMechanics = reader.ReadBool();
 
                         if (reader.ReadBool())
@@ -5863,6 +5875,27 @@ namespace Server
                     }
                 case 32:
                     {
+                        RecordHair = reader.ReadInt();
+                        RecordBeard = reader.ReadInt();
+                        RecordHairColor = reader.ReadInt();
+                        RecordBeardColor = reader.ReadInt();
+                        RecordSkinColor = reader.ReadInt();
+                        RaceID = reader.ReadInt(); if (RaceID == 1031) { RaceID = 810; }
+                        RaceAngerSound = reader.ReadInt();
+                        RaceIdleSound = reader.ReadInt();
+                        RaceDeathSound = reader.ReadInt();
+                        RaceAttackSound = reader.ReadInt();
+                        RaceHurtSound = reader.ReadInt();
+                        CoinPurse = reader.ReadInt();
+                        DataStoreInt2 = reader.ReadInt();
+                        DataStoreInt3 = reader.ReadInt();
+                        DataStoreInt4 = reader.ReadInt();
+                        StolenBoxTime = reader.ReadInt();
+                        DataStoreStr1 = reader.ReadString();
+                        DataStoreStr2 = reader.ReadString();
+                        DataStoreStr3 = reader.ReadString();
+                        DataStoreStr4 = reader.ReadString();
+                        StolenArtifacts = reader.ReadString();
                         m_IgnoreMobiles = reader.ReadBool();
 
                         goto case 31;
@@ -6375,16 +6408,47 @@ namespace Server
         {
             writer.Write(37); // version
 
+            writer.Write(HarvestOrdinary);
+            writer.Write(ContainerLoot);
+            writer.Write(ContainerHarvest);
+            writer.Write(ContainerCraft);
+            writer.Write(NoAutoAttack);
+            writer.Write(RainbowMsg);
+            writer.Write(RaceMakeSounds);
+            writer.Write(RaceMagicSchool);
+            writer.Write(RaceWasFemale);
+            writer.Write(RaceSection);
+            writer.Write(RaceHomeLand);
+            writer.Write(RecordHair);
+            writer.Write(RecordBeard);
+            writer.Write(RecordHairColor);
+            writer.Write(RecordBeardColor);
+            writer.Write(RecordSkinColor);
+            writer.Write(RaceID);
+            writer.Write(RaceAngerSound);
+            writer.Write(RaceIdleSound);
+            writer.Write(RaceDeathSound);
+            writer.Write(RaceAttackSound);
+            writer.Write(RaceHurtSound);
+            writer.Write(CoinPurse);
+            writer.Write(DataStoreInt2);
+            writer.Write(DataStoreInt3);
+            writer.Write(DataStoreInt4);
+            writer.Write(StolenBoxTime);
+            writer.Write(DataStoreStr1);
+            writer.Write(DataStoreStr2);
+            writer.Write(DataStoreStr3);
+            writer.Write(DataStoreStr4);
+            writer.Write(StolenArtifacts);
+
+
             // 37
             writer.Write(m_DisplayGuildAbbr);
-
             // 36
             writer.Write(m_BloodHue);
             writer.Write(m_Deaths);
-
             // 35
             writer.Write(GuardImmune);
-
             // 34
             writer.Write(m_StrCap);
             writer.Write(m_DexCap);
@@ -6392,9 +6456,7 @@ namespace Server
             writer.Write(m_StrMaxCap);
             writer.Write(m_DexMaxCap);
             writer.Write(m_IntMaxCap);
-
             writer.Write(m_SpecialSlayerMechanics);
-
             if (m_SlayerVulnerabilities != null && m_SlayerVulnerabilities.Count > 0)
             {
                 writer.Write(true);
@@ -6410,42 +6472,32 @@ namespace Server
             {
                 writer.Write(false);
             }
-
             writer.Write(m_IgnoreMobiles);
-
             writer.WriteDeltaTime(m_LastStrGain);
             writer.WriteDeltaTime(m_LastIntGain);
             writer.WriteDeltaTime(m_LastDexGain);
-
             byte hairflag = 0x00;
-
             if (m_Hair != null)
             {
                 hairflag |= 0x01;
             }
-
             if (m_FacialHair != null)
             {
                 hairflag |= 0x02;
             }
-
             if (m_Face != null)
             {
                 hairflag |= 0x04;
             }
-
             writer.Write(hairflag);
-
             if ((hairflag & 0x01) != 0)
             {
                 m_Hair.Serialize(writer);
             }
-
             if ((hairflag & 0x02) != 0)
             {
                 m_FacialHair.Serialize(writer);
             }
-
             if ((hairflag & 0x04) != 0)
             {
                 if (m_Face != null)
@@ -6453,28 +6505,18 @@ namespace Server
                     m_Face.Serialize(writer);
                 }
             }
-
             writer.Write(Race);
-
             writer.Write(m_TithingPoints);
-
             writer.Write(m_Corpse);
-
             writer.Write(m_CreationTime);
-
             writer.Write(m_Stabled, true);
-
             writer.Write(m_CantWalk);
-
             VirtueInfo.Serialize(writer, m_Virtues);
-
             writer.Write(m_Thirst);
             writer.Write(m_BAC);
-
             writer.Write(m_ShortTermMurders);
             //writer.Write( m_ShortTermElapse );
             //writer.Write( m_LongTermElapse );
-
             //writer.Write( m_Followers );
             writer.Write(m_FollowersMax);
 
@@ -10785,6 +10827,21 @@ namespace Server
         { }
 
         #region RRPort
+        public string m_DataStoreStr1;
+        [CommandProperty(AccessLevel.GameMaster)]
+        public string DataStoreStr1 { get { return m_DataStoreStr1; } set { m_DataStoreStr1 = value; } }
+
+        public string m_DataStoreStr2;
+        [CommandProperty(AccessLevel.GameMaster)]
+        public string DataStoreStr2 { get { return m_DataStoreStr2; } set { m_DataStoreStr2 = value; } }
+
+        public string m_DataStoreStr3;
+        [CommandProperty(AccessLevel.GameMaster)]
+        public string DataStoreStr3 { get { return m_DataStoreStr3; } set { m_DataStoreStr3 = value; } }
+
+        public string m_DataStoreStr4;
+        [CommandProperty(AccessLevel.GameMaster)]
+        public string DataStoreStr4 { get { return m_DataStoreStr4; } set { m_DataStoreStr4 = value; } }
         public int m_StolenBoxTime;
         [CommandProperty(AccessLevel.GameMaster)]
         public int StolenBoxTime { get { return m_StolenBoxTime; } set { m_StolenBoxTime = value; } }
