@@ -89,8 +89,9 @@ namespace Server.Engines.Craft
 		}
 
 		public override void InitCraftList()
-		{
-			int index = -1;
+        {
+            MarkOption = true;
+            int index = -1;
 
 /*
 encaustic painting - mix dyes with wax - get a canvas - make a painting

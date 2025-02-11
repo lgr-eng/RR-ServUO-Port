@@ -21,8 +21,16 @@ namespace Server.Engines.Craft
 	}
 
 	public class CraftItem
-	{
-		private CraftResCol m_arCraftRes;
+    {
+        #region ServUO Port
+        public int DisplayID { get; set; }
+        public Recipe Recipe { get; set; }
+        public Action<Mobile, CraftItem, BaseTool> TryCraft { get; set; }
+        public bool UseSubRes2 { get; set; }
+        public int ItemHue { get; set; }
+        #endregion
+
+        private CraftResCol m_arCraftRes;
 		private CraftSkillCol m_arCraftSkill;
 		private Type m_Type;
 
@@ -880,8 +888,8 @@ namespace Server.Engines.Craft
 					valMainSkill = valSkill;
 				}
 
-				if ( gainSkills ) // This is a passive check. Success chance is entirely dependent on the main skill
-					from.CheckSkill( craftSkill.SkillToMake, minSkill, maxSkill );
+				if (gainSkills && !UseAllRes) // This is a passive check. Success chance is entirely dependent on the main skill
+                    from.CheckSkill( craftSkill.SkillToMake, minSkill, maxSkill );
 			}
 
 			double chance;
@@ -928,12 +936,9 @@ namespace Server.Engines.Craft
 								int iMin = craftSystem.MinCraftEffect;
 								int iMax = (craftSystem.MaxCraftEffect - iMin) + 1;
 								int iRandom = Utility.Random( iMax );
-								iRandom += iMin + 1;
-
-								if ( CraftSystem.CraftingMany( from ) )
-									RunCommand( from, craftSystem, this, typeRes, tool );
-								else 
-									new InternalTimer( from, craftSystem, this, typeRes, tool, iRandom ).Start();
+								iRandom += iMin + 1;								
+								new InternalTimer( from, craftSystem, this, typeRes, tool, iRandom ).Start();
+                                return;
 							}
 							else
 							{
@@ -962,26 +967,14 @@ namespace Server.Engines.Craft
 			else
 			{
 				from.SendLocalizedMessage( 500119 ); // You must wait to perform another action
-			}
-		}
-
-		private object RequiredExpansionMessage( Expansion expansion )	//Eventually convert to TextDefinition, but that requires that we convert all the gumps to ues it too.  Not that it wouldn't be a bad idea.
-		{
-			switch( expansion )
-			{
-				case Expansion.SE:
-					return 1063307; // The "Samurai Empire" expansion is required to attempt this item.
-				case Expansion.ML:
-					return 1072650; // The "Mondain's Legacy" expansion is required to attempt this item.
-				default:
-					return String.Format( "The \"{0}\" expansion is required to attempt this item.", ExpansionInfo.GetInfo( expansion ).Name );
-			}
-		}
+            }
+            AutoCraftTimer.EndTimer(from);
+        }		
 
 		public void CompleteCraft( int quality, Mobile from, CraftSystem craftSystem, Type typeRes, BaseTool tool, CustomCraft customCraft )
-		{
-			CraftContext context = craftSystem.GetContext( from );
-
+        {
+            ((PlayerMobile)from).CraftToolReduced = false;
+            CraftContext context = craftSystem.GetContext( from );
 			int badCraft = craftSystem.CanCraft( from, tool, m_Type );
 
 			if ( badCraft > 0 )
@@ -1091,10 +1084,20 @@ namespace Server.Engines.Craft
 
 				if ( item != null )
 				{
-					item.Built = true;
-					item.BuiltBy = from;
+                    if (item != null)
+                    {
+                        if (quality == 2 && IsMarkable(item.GetType()) && (context.MarkOption == CraftMarkOption.MarkItem))
+                        {
+                            item.Built = true;
+                            item.BuiltBy = from; // Apply maker's mark only if exceptional & MarkOption is enabled
+                        }
+                        else
+                        {
+                            item.Built = true; // Ensure non-exceptional items are not marked
+                        }
+                    }
 
-					if( item is ICraftable )
+                    if ( item is ICraftable )
 						endquality = ((ICraftable)item).OnCraft( quality, from, craftSystem, typeRes, tool, this, resHue );
 					else if ( item.Hue == 0 )
 						item.Hue = resHue;
@@ -1253,6 +1256,7 @@ namespace Server.Engines.Craft
 					return;
 				}
 
+                Console.Write("CraftReduceTool");
 				CraftSystem.CraftReduceTool( from, tool );
 
 				if ( tool.UsesRemaining < 1 )

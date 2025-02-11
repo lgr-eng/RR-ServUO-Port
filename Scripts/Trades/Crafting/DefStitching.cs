@@ -108,9 +108,10 @@ namespace Server.Engines.Craft
 		}
 
 		public override void InitCraftList()
-		{
-			#region Footwear
-			AddCraft( typeof( LeatherSandals ), 1015288, "leather sandals", 42.4, 67.4, typeof( DemonSkins ), 1063757, 4, 1042081 );
+        {
+            MarkOption = true;
+            #region Footwear
+            AddCraft( typeof( LeatherSandals ), 1015288, "leather sandals", 42.4, 67.4, typeof( DemonSkins ), 1063757, 4, 1042081 );
 			AddCraft( typeof( LeatherShoes ), 1015288, "leather shoes", 56.5, 71.5, typeof( DemonSkins ), 1063757, 6, 1042081 );
 			AddCraft( typeof( LeatherBoots ), 1015288, "leather boots", 63.1, 88.1, typeof( DemonSkins ), 1063757, 8, 1042081 );
 			AddCraft( typeof( LeatherThighBoots ), 1015288, "leather thigh boots", 71.4, 96.4, typeof( DemonSkins ), 1063757, 10, 1042081 );

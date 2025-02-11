@@ -184,15 +184,15 @@ namespace Server.Items
 
 		public static bool CheckTool( Item tool, Mobile m )
 		{
-			Item check = m.FindItemOnLayer( Layer.OneHanded );
+			//Item check = m.FindItemOnLayer( Layer.OneHanded );
 
-			if ( check is BaseTool && check != tool )
-				return false;
+			//if ( check is BaseTool && check != tool )
+			//	return false;
 
-			check = m.FindItemOnLayer( Layer.TwoHanded );
+			//check = m.FindItemOnLayer( Layer.TwoHanded );
 
-			if ( check is BaseTool && check != tool )
-				return false;
+			//if ( check is BaseTool && check != tool )
+			//	return false;
 
 			return true;
 		}
@@ -204,68 +204,80 @@ namespace Server.Items
 			base.OnSingleClick( from );
 		}
 
-		public override void OnDoubleClick( Mobile from )
-		{
-			if ( !MySettings.S_AllowMacroResources )
-			{ 
-				CaptchaGump.sendCaptcha(from, BaseTool.OnDoubleClickRedirected, this);
-			}
-			else if ( Parent == from )
-			{
-				CraftSystem system = this.CraftSystem;
+        public override void OnDoubleClick(Mobile from)
+        {
 
-				int num = system.CanCraft( from, this, null );
+            if (IsChildOf(from.Backpack) || Parent == from)
+            {
 
-				if ( num > 0 && ( num != 1044267 || !Core.SE ) ) // Blacksmithing shows the gump regardless of proximity of an anvil and forge after SE
-				{
-					from.SendLocalizedMessage( num );
-				}
-				else
-				{
-					CraftContext context = system.GetContext( from );
+                CraftSystem system = this.CraftSystem;
 
-					from.SendGump( new CraftGump( from, system, this, null ) );
+                if (system == null)
+                {
+                    from.SendMessage("Crafting system is unavailable.");
+                    return;
+                }
 
-					if ( this is TomeOfWands ){ from.SendSound( 0x55 ); }
-				}
-			}
-			else
-			{
-				from.SendLocalizedMessage( 502641 ); // You must equip this item to use it.
-			}
-		}
+                int num = system.CanCraft(from, this, null);
 
-		public static void OnDoubleClickRedirected(Mobile from, object o)
-		{
-			if (o == null || (!(o is BaseTool)))
-				return;
+                if (num > 0 && (num != 1044267 || !Core.SE))
+                {
+                    from.SendLocalizedMessage(num);
+                }
+                else
+                {
+                    CraftContext context = system.GetContext(from);
 
-			BaseTool tool = (BaseTool)o;
+                    try
+                    {
+                        from.SendGump(new CraftGump(from, system, this, null));
+                    }
+                    catch (Exception ex)
+                    {
+                        from.SendMessage("An error occurred while opening the crafting interface.");
+                    }
 
-			if ( tool.Parent == from )
-			{
-				CraftSystem system = tool.CraftSystem;
+                    if (this is TomeOfWands)
+                    {
+                        from.SendSound(0x55);
+                    }
+                }
+            }
+            else
+            {
+                from.SendLocalizedMessage(1042001); // That must be in your pack for you to use it.
+            }
+        }
+        //public static void OnDoubleClickRedirected(Mobile from, object o)
+        //{
+        //	if (o == null || (!(o is BaseTool)))
+        //		return;
 
-				int num = system.CanCraft(from, tool, null);
+        //	BaseTool tool = (BaseTool)o;
 
-				if (num > 0 && (num != 1044267 || !Core.SE)) // Blacksmithing shows the gump regardless of proximity of an anvil and forge after SE
-				{
-					from.SendLocalizedMessage(num);
-				}
-				else
-				{
-					CraftContext context = system.GetContext(from);
+        //	if ( tool.Parent == from )
+        //	{
+        //		CraftSystem system = tool.CraftSystem;
 
-					from.SendGump(new CraftGump(from, system, tool, null));
-				}
-			}
-			else
-			{
-				from.SendLocalizedMessage( 502641 ); // You must equip this item to use it.
-			}
-		}
+        //		int num = system.CanCraft(from, tool, null);
 
-		public override void Serialize( GenericWriter writer )
+        //		if (num > 0 && (num != 1044267 || !Core.SE)) // Blacksmithing shows the gump regardless of proximity of an anvil and forge after SE
+        //		{
+        //			from.SendLocalizedMessage(num);
+        //		}
+        //		else
+        //		{
+        //			CraftContext context = system.GetContext(from);
+
+        //			from.SendGump(new CraftGump(from, system, tool, null));
+        //		}
+        //	}
+        //	else
+        //          {
+        //              from.SendLocalizedMessage(1042001); // That must be in your pack for you to use it.
+        //          }
+        //}
+        public override void Serialize( GenericWriter writer )
 		{
 			base.Serialize( writer );
 

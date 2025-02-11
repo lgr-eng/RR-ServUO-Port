@@ -5,15 +5,36 @@ using Server.Items;
 
 namespace Server.Engines.Craft
 {
-	public class CraftContext
+    public enum CraftMarkOption
+    {
+        MarkItem,
+        DoNotMark
+    }
+    public class CraftContext
 	{
-		private List<CraftItem> m_Items;
+        #region ServUO Port
+        private int m_MakeTotal;
+        public int MakeTotal
+        {
+            get
+            {
+                return m_MakeTotal;
+            }
+            set
+            {
+                m_MakeTotal = value;
+            }
+        }
+        private CraftMarkOption m_MarkOption;
+        #endregion
+
+        private List<CraftItem> m_Items;
 		private int m_LastResourceIndex;
 		private int m_LastResourceIndex2;
 		private int m_LastGroupIndex;
 		private bool m_DoNotColor;
 		private CraftResource m_CraftingResource;
-		private string m_Description;
+        private string m_Description;
 		private Type m_ItemSelected;
 		private int m_ItemID;
 		private int m_Hue;
@@ -25,7 +46,18 @@ namespace Server.Engines.Craft
 		public int LastGroupIndex{ get{ return m_LastGroupIndex; } set{ m_LastGroupIndex = value; } }
 		public bool DoNotColor{ get{ return m_DoNotColor; } set{ m_DoNotColor = value; } }
 		public CraftResource CraftingResource{ get{ return m_CraftingResource; } set{ m_CraftingResource = value; } }
-		public string Description{ get{ return m_Description; } set{ m_Description = value; } }
+        public CraftMarkOption MarkOption
+        {
+            get
+            {
+                return m_MarkOption;
+            }
+            set
+            {
+                m_MarkOption = value;
+            }
+        }
+        public string Description{ get{ return m_Description; } set{ m_Description = value; } }
 		public Type ItemSelected{ get{ return m_ItemSelected; } set{ m_ItemSelected = value; } }
 		public int ItemID{ get{ return m_ItemID; } set{ m_ItemID = value; } }
 		public int Hue{ get{ return m_Hue; } set{ m_Hue = value; } }

@@ -152,7 +152,8 @@ namespace Server.Engines.Craft
 			AddSubRes( typeof( XindiSkeletal ),		CraftResources.GetClilocCraftName( CraftResource.XindiSkeletal ), CraftResources.GetSkill( CraftResource.XindiSkeletal ), CraftResources.GetClilocMaterialName( CraftResource.XindiSkeletal ), cannot );
 			AddSubRes( typeof( ZabrakSkeletal ),	CraftResources.GetClilocCraftName( CraftResource.ZabrakSkeletal ), CraftResources.GetSkill( CraftResource.ZabrakSkeletal ), CraftResources.GetClilocMaterialName( CraftResource.ZabrakSkeletal ), cannot );
 
-			BreakDown = true;
+            MarkOption = true;
+            BreakDown = true;
 			Repair = true;
 			CanEnhance = true;
 		}

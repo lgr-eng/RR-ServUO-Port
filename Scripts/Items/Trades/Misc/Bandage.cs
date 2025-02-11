@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Server;
+using Server.Globals;
 using Server.Gumps;
 using Server.Items;
 using Server.Mobiles;
@@ -532,8 +533,8 @@ namespace Server.Items
 			double resDelay = ( patient.Alive ? 0.0 : 5.0 );
 
 			if ( healer == patient )
-				seconds = 5.0 + (0.5 * ((double)(120 - dex) / 10));
-			else
+				seconds = GlobalUtilities.GetHealingSeconds(healer.Dex);
+            else
 			{
 				if ( GetPrimarySkill( patient ) == SkillName.Veterinary )
 					seconds = 2.0;

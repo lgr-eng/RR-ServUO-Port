@@ -5546,30 +5546,13 @@ namespace Server
 
         public virtual int Damage(int amount, Mobile from, bool informMount, bool checkDisrupt)
         {
-            string logFilePath = @"E:\UO RR Porting\RR Port\CrashLog.txt";
-
-            void LogToFile(string message)
-            {
-                using (StreamWriter sw = File.AppendText(logFilePath))
-                {
-                    sw.WriteLine($"{DateTime.Now}: {message}");
-                }
-            }
-
-            LogToFile("=== Mobile.Damage() Debug Log ===");
-            LogToFile($"Target: {this?.Name ?? "NULL"} (ID: {this?.Serial ?? 0}) is taking {amount} damage.");
-            LogToFile($"Attacker: {from?.Name ?? "NULL"} (ID: {from?.Serial ?? 0})");
-            LogToFile($"InformMount: {informMount}, CheckDisrupt: {checkDisrupt}");
-
             if (!CanBeDamaged() || m_Deleted)
             {
-                LogToFile("WARNING: Target cannot be damaged or has been deleted.");
                 return 0;
             }
 
             if (!Region.OnDamage(this, ref amount))
             {
-                LogToFile("WARNING: Damage was blocked by the region settings.");
                 return 0;
             }
 
@@ -5578,17 +5561,13 @@ namespace Server
                 int oldHits = Hits;
                 int newHits = oldHits - amount;
 
-                LogToFile($"Old HP: {oldHits}, New HP after damage: {newHits}");
-
                 if (checkDisrupt && m_Spell != null)
                 {
-                    LogToFile("INFO: Target was casting a spell, disrupting.");
                     m_Spell.OnCasterHurt();
                 }
 
                 if (from != null)
                 {
-                    LogToFile($"INFO: Registering damage dealt by {from.Name}.");
                     RegisterDamage(amount, from);
                 }
 
@@ -5601,32 +5580,26 @@ namespace Server
 
                 if (m != null && informMount)
                 {
-                    LogToFile($"INFO: Mount detected, informing it about damage.");
                     m.OnRiderDamaged(from, ref amount, newHits < 0);
                 }
 
                 if (newHits < 0)
                 {
-                    LogToFile("INFO: Target is now dead.");
                     m_LastKiller = from;
                     Hits = 0;
 
                     if (oldHits >= 0)
                     {
-                        LogToFile("INFO: Calling Kill() method.");
                         Kill();
                     }
                 }
                 else
                 {
-                    LogToFile("INFO: Applying fatigue handler.");
                     FatigueHandler(this, amount, DFA);
 
                     Hits = newHits;
                 }
             }
-
-            LogToFile("=== END OF DAMAGE FUNCTION ===");
             return amount;
         }
 
@@ -6623,7 +6596,7 @@ namespace Server
                         if (version < 15)
                         {
                             m_Followers = 0;
-                            m_FollowersMax = 5;
+                            m_FollowersMax = 1;
                         }
 
                         m_Location = reader.ReadPoint3D();
@@ -12553,14 +12526,21 @@ namespace Server
 
         public void DefaultMobileInit()
         {
-            m_StatCap = Config.Get("PlayerCaps.TotalStatCap", 225);
-            m_StrCap = Config.Get("PlayerCaps.StrCap", 125);
-            m_DexCap = Config.Get("PlayerCaps.DexCap", 125);
-            m_IntCap = Config.Get("PlayerCaps.IntCap", 125);
-            m_StrMaxCap = Config.Get("PlayerCaps.StrMaxCap", 150);
-            m_DexMaxCap = Config.Get("PlayerCaps.DexMaxCap", 150);
-            m_IntMaxCap = Config.Get("PlayerCaps.IntMaxCap", 150);
-            m_FollowersMax = 5;
+            //m_StatCap = Config.Get("PlayerCaps.TotalStatCap", 250);
+            //m_StrCap = Config.Get("PlayerCaps.StrCap", 125);
+            //m_DexCap = Config.Get("PlayerCaps.DexCap", 125);
+            //m_IntCap = Config.Get("PlayerCaps.IntCap", 125);
+            //m_StrMaxCap = Config.Get("PlayerCaps.StrMaxCap", 150);
+            //m_DexMaxCap = Config.Get("PlayerCaps.DexMaxCap", 150);
+            //m_IntMaxCap = Config.Get("PlayerCaps.IntMaxCap", 150);
+            m_StatCap = 225;
+            m_StrCap = 125;
+            m_DexCap = 125;
+            m_IntCap = 125;
+            m_StrMaxCap = 150;
+            m_DexMaxCap = 150;
+            m_IntMaxCap = 150;
+            m_FollowersMax = 1;
             m_Skills = new Skills(this);
             m_Items = new List<Item>();
             m_StatMods = new List<StatMod>();

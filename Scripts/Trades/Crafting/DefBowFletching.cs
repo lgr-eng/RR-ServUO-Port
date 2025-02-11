@@ -99,37 +99,27 @@ namespace Server.Engines.Craft
 		public override CraftECA ECA{ get{ return CraftECA.FiftyPercentChanceMinusTenPercent; } }
 
 		public override void InitCraftList()
-		{
-			int index = -1;
+        {
+            MarkOption = true;
+            int index = -1;
 
 			// Materials
-			if ( !AllowManyCraft( m_Tools ) ){ AddCraft( typeof( Kindling ), 1044457, "kindling from a log", 0.0, 00.0, typeof( BaseLog ), 1044466, 1, 1044351 ); }
-
 			index = AddCraft( typeof( Kindling ), 1044457, "kindling from logs", 0.0, 00.0, typeof( BaseLog ), 1044466, 1, 1044351 );
-			if ( !AllowManyCraft( m_Tools ) ){ SetUseAllRes( index, true ); }
 
 			index = AddCraft( typeof( Shaft ), 1044457, "shafts from logs", 0.0, 40.0, typeof( BaseLog ), 1044466, 1, 1044351 );
-			if ( !AllowManyCraft( m_Tools ) ){ SetUseAllRes( index, true ); }
-
-			if ( !AllowManyCraft( m_Tools ) ){ AddCraft( typeof( Kindling ), 1044457, "kindling from a board", 0.0, 00.0, typeof( Board ), 1015101, 1, 1044351 ); }
 
 			index = AddCraft( typeof( Kindling ), 1044457, "kindling from boards", 0.0, 00.0, typeof( Board ), 1015101, 1, 1044351 );
-			if ( !AllowManyCraft( m_Tools ) ){ SetUseAllRes( index, true ); }
 
 			index = AddCraft( typeof( Shaft ), 1044457, "shafts from boards", 0.0, 40.0, typeof( Board ), 1015101, 1, 1044351 );
-			if ( !AllowManyCraft( m_Tools ) ){ SetUseAllRes( index, true ); }
 
 			// Ammunition
 			index = AddCraft( typeof( Arrow ), 1044565, 1023903, 0.0, 40.0, typeof( Shaft ), 1044560, 1, 1044561 );
 			AddRes( index, typeof( Feather ), 1044562, 1, 1044563 );
-			if ( !AllowManyCraft( m_Tools ) ){ SetUseAllRes( index, true ); }
 
 			index = AddCraft( typeof( Bolt ), 1044565, 1027163, 0.0, 40.0, typeof( Shaft ), 1044560, 1, 1044561 );
 			AddRes( index, typeof( Feather ), 1044562, 1, 1044563 );
-			if ( !AllowManyCraft( m_Tools ) ){ SetUseAllRes( index, true ); }
 
 			index = AddCraft( typeof( FukiyaDarts ), 1044565, 1030246, 50.0, 90.0, typeof( Board ), 1015101, 1, 1044351 );
-			if ( !AllowManyCraft( m_Tools ) ){ SetUseAllRes( index, true ); }
 
 			// Weapons
 			AddCraft( typeof( Bow ), 1044566, 1025042, 30.0, 70.0, typeof( Board ), 1015101, 7, 1044351 );

@@ -16,7 +16,7 @@ namespace Server.Items
 
 		public override double DefaultWeight
 		{
-			get { return ( Core.ML ? ( 0.02 / 3 ) : 0.02 ); }
+			get { return 0.0025; }
 		}
 
 		[Constructable]
@@ -65,7 +65,7 @@ namespace Server.Items
 			if ( box != null && IsChildOf( box ) )
 			{
 				Delete();
-				int nRate = 10;
+				int nRate = 7;
 
 				int nCoins = this.Amount;
 				int nGold = (int)Math.Floor((decimal)(this.Amount / nRate));
@@ -109,9 +109,9 @@ namespace Server.Items
 	public class DDSilver : Item
 	{
 		public override double DefaultWeight
-		{
-			get { return ( Core.ML ? ( 0.02 / 3 ) : 0.02 ); }
-		}
+        {
+            get { return 0.0025; }
+        }
 
 		[Constructable]
 		public DDSilver() : this( 1 )
@@ -159,7 +159,7 @@ namespace Server.Items
 			if ( box != null && IsChildOf( box ) )
 			{
 				Delete();
-				int nRate = 5;
+				int nRate = 3;
 
 				int nCoins = this.Amount;
 				int nGold = (int)Math.Floor((decimal)(this.Amount / nRate));
@@ -203,9 +203,9 @@ namespace Server.Items
 	public class DDJewels : Item
 	{
 		public override double DefaultWeight
-		{
-			get { return ( Core.ML ? ( 0.02 / 3 ) : 0.02 ); }
-		}
+        {
+            get { return 0.0025; }
+        }
 
 		[Constructable]
 		public DDJewels() : this( 1 )
@@ -274,9 +274,9 @@ namespace Server.Items
 	public class DDXormite : Item
 	{
 		public override double DefaultWeight
-		{
-			get { return ( Core.ML ? ( 0.02 / 3 ) : 0.02 ); }
-		}
+        {
+            get { return 0.0025; }
+        }
 
 		[Constructable]
 		public DDXormite() : this( 1 )
@@ -346,9 +346,9 @@ namespace Server.Items
 	public class DDGemstones : Item
 	{
 		public override double DefaultWeight
-		{
-			get { return ( Core.ML ? ( 0.02 / 3 ) : 0.02 ); }
-		}
+        {
+            get { return 0.0025; }
+        }
 
 		[Constructable]
 		public DDGemstones() : this( 1 )
@@ -417,9 +417,9 @@ namespace Server.Items
 	public class DDGoldNuggets : Item
 	{
 		public override double DefaultWeight
-		{
-			get { return ( Core.ML ? ( 0.02 / 3 ) : 0.02 ); }
-		}
+        {
+            get { return 0.0025; }
+        }
 
 		[Constructable]
 		public DDGoldNuggets() : this( 1 )

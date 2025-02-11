@@ -92,8 +92,9 @@ namespace Server.Engines.Craft
 		}
 
 		public override void InitCraftList()
-		{
-			int index = -1;
+        {
+            MarkOption = true;
+            int index = -1;
 
 			// 1
 			AddCraft( typeof( FancyArmoire ),		"Armoires", 1044312, 51.5, 76.5,	typeof( Board ), 1015101, 35, 1044351 );

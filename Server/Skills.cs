@@ -156,7 +156,7 @@ namespace Server
                         value = Cap;
                 }
 
-                if (value > 125) { value = 125; }
+                //if (value > 125) { value = 125; }
 
                 return value;
             }
@@ -1063,7 +1063,7 @@ namespace Server
 
                 if (sk == null)
                 {
-                    m_Skills[skillID] = sk = new Skill(this, SkillInfo.Table[skillID], 0, 1000, SkillLock.Up);
+                    m_Skills[skillID] = sk = new Skill(this, SkillInfo.Table[skillID], 0, 500, SkillLock.Up);
                 }
 
                 return sk;
@@ -1185,7 +1185,7 @@ namespace Server
         public Skills(Mobile owner)
         {
             m_Owner = owner;
-            m_Cap = Config.Get("PlayerCaps.TotalSkillCap", 7000); ;
+            m_Cap = 5000;
 
             var info = SkillInfo.Table;
 
@@ -1217,7 +1217,7 @@ namespace Server
                     {
                         if (version < 2)
                         {
-                            m_Cap = 7000;
+                            m_Cap = 5000;
                         }
 
                         if (version < 3)

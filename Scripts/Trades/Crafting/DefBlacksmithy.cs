@@ -437,6 +437,7 @@ namespace Server.Engines.Craft
 			AddSubRes( typeof( TrimantiumIngot ),	CraftResources.GetClilocCraftName( CraftResource.Trimantium ), CraftResources.GetSkill( CraftResource.Trimantium ), CraftResources.GetClilocMaterialName( CraftResource.Trimantium ), cannot );
 			AddSubRes( typeof( XonoliteIngot ),		CraftResources.GetClilocCraftName( CraftResource.Xonolite ), CraftResources.GetSkill( CraftResource.Xonolite ), CraftResources.GetClilocMaterialName( CraftResource.Xonolite ), cannot );
 
+            MarkOption = true;
 			BreakDown = true;
 			Repair = true;
 			CanEnhance = true;

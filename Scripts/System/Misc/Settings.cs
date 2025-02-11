@@ -331,7 +331,7 @@ namespace Server
 			if ( MySettings.S_BlackMarket )
 				return true;
 
-			return false;
+			return true;
 		}
 
 		public static double CorpseDecay()
@@ -465,13 +465,13 @@ namespace Server
 		{
 			int skill = 0;
 
-			if ( MySettings.S_SkillBoost > 10 )
-				MySettings.S_SkillBoost = 10;
+			//if ( MySettings.S_SkillBoost > 10 )
+			//	MySettings.S_SkillBoost = 10;
 
-			if ( MySettings.S_SkillBoost < 1 )
-				MySettings.S_SkillBoost = 0;
+			//if ( MySettings.S_SkillBoost < 1 )
+			//	MySettings.S_SkillBoost = 0;
 
-			skill = MySettings.S_SkillBoost * 1000;
+			//skill = MySettings.S_SkillBoost * 1000;
 
 			return skill;
 		}
@@ -511,7 +511,7 @@ namespace Server
 			else if ( area == "fugitive" )
 				pm.SkillStart = 13000;
 			else
-				pm.SkillStart = 10000;
+				pm.SkillStart = 5000;
 
 			pm.Skills.Cap = pm.SkillStart + pm.SkillBoost + pm.SkillEther;
 		}
@@ -779,12 +779,12 @@ namespace Server
         // If true, then characters will not get hungry or thirsty when inside places like banks, inns, or houses...allowing you
         // to step away from the game without your character starving eventually.
 
-        public static bool S_Belly = false;
+        public static bool S_Belly = true;
 
         // This number can be set from 5 to 60, which determines the number of minutes that hunger and thirst are checked for
         // reduction (default is 5).
 
-        public static int S_FoodCheck = 5;
+        public static int S_FoodCheck = 10;
 
         // Below is the guild base fee to join a guild. This is the intial cost to join the first guild. If you quit, and join
         // another guild, then the fee will increase by that amount. It is based on the number of guild you were a member of
@@ -915,7 +915,7 @@ namespace Server
         // This value is between 0 and 10, where you can set the amount of extra GM skill points characters get. So if you set
         // it to '2' then characters get 200 (2 x 100) more skills points available.
 
-        public static int S_SkillBoost = 10;
+        public static int S_SkillBoost = 0;
 
         // To use special weapon abilities, this is the minimum skill level required (weapon skill and tactics) where the
         // default is 70.0 (minimum of 20.0). Each ability requires 10 additional points above the previous (70, 80, 90, etc).

@@ -75,6 +75,67 @@ namespace Server.Mobiles
 
     public class PlayerMobile : Mobile
     {
+        #region ServUO Port
+        private Dictionary<int, bool> m_AcquiredRecipes;
+
+        public virtual bool HasRecipe(Recipe r)
+        {
+            if (r == null)
+            {
+                return false;
+            }
+
+            return HasRecipe(r.ID);
+        }
+
+        public virtual bool HasRecipe(int recipeID)
+        {
+            if (m_AcquiredRecipes != null && m_AcquiredRecipes.ContainsKey(recipeID))
+            {
+                return m_AcquiredRecipes[recipeID];
+            }
+
+            return false;
+        }
+
+        public virtual void AcquireRecipe(Recipe r)
+        {
+            if (r != null)
+            {
+                AcquireRecipe(r.ID);
+            }
+        }
+
+        public virtual void AcquireRecipe(int recipeID)
+        {
+            if (m_AcquiredRecipes == null)
+            {
+                m_AcquiredRecipes = new Dictionary<int, bool>();
+            }
+
+            m_AcquiredRecipes[recipeID] = true;
+        }
+
+        public virtual void ResetRecipes()
+        {
+            m_AcquiredRecipes = null;
+        }
+
+        [CommandProperty(AccessLevel.GameMaster)]
+        public int KnownRecipes
+        {
+            get
+            {
+                if (m_AcquiredRecipes == null)
+                {
+                    return 0;
+                }
+
+                return m_AcquiredRecipes.Count;
+            }
+        }
+        #endregion
+
         private Timer Craft_Msg_Timer;
         private Timer Craft_Snd_Timer;
         private Timer Craft_Aft_Timer;
@@ -810,17 +871,17 @@ namespace Server.Mobiles
         public virtual void UpdateFollowers()
         {
 
-            if ((this.Skills[SkillName.Herding].Base >= 120.0) && (this.Skills[SkillName.Veterinary].Base >= 120.0) && (this.Skills[SkillName.Druidism].Base >= 120.0) && (this.Skills[SkillName.Taming].Base >= 120.0))
-                this.FollowersMax = 8;
+            //if ((this.Skills[SkillName.Herding].Base >= 120.0) && (this.Skills[SkillName.Veterinary].Base >= 120.0) && (this.Skills[SkillName.Druidism].Base >= 120.0) && (this.Skills[SkillName.Taming].Base >= 120.0))
+            //    this.FollowersMax = 8;
 
-            else if ((this.Skills[SkillName.Herding].Base >= 90) && (this.Skills[SkillName.Veterinary].Base >= 90) && (this.Skills[SkillName.Druidism].Base >= 90) && (this.Skills[SkillName.Taming].Base >= 90))
-                this.FollowersMax = 7;
+            //else if ((this.Skills[SkillName.Herding].Base >= 90) && (this.Skills[SkillName.Veterinary].Base >= 90) && (this.Skills[SkillName.Druidism].Base >= 90) && (this.Skills[SkillName.Taming].Base >= 90))
+            //    this.FollowersMax = 7;
 
-            else if ((this.Skills[SkillName.Herding].Base >= 60) && (this.Skills[SkillName.Veterinary].Base >= 60) && (this.Skills[SkillName.Druidism].Base >= 60) && (this.Skills[SkillName.Taming].Base >= 60))
-                this.FollowersMax = 6;
+            //else if ((this.Skills[SkillName.Herding].Base >= 60) && (this.Skills[SkillName.Veterinary].Base >= 60) && (this.Skills[SkillName.Druidism].Base >= 60) && (this.Skills[SkillName.Taming].Base >= 60))
+            //    this.FollowersMax = 6;
 
-            else
-                this.FollowersMax = 5;
+            //else
+            //    this.FollowersMax = 5;
         }
 
         public override int GetMaxResistance(ResistanceType type)
@@ -1575,33 +1636,33 @@ namespace Server.Mobiles
         {
             if (m is PlayerMobile)
             {
-                int record = ((PlayerMobile)m).SkillStart + ((PlayerMobile)m).SkillBoost + ((PlayerMobile)m).SkillEther;
+                //int record = ((PlayerMobile)m).SkillStart + ((PlayerMobile)m).SkillBoost + ((PlayerMobile)m).SkillEther;
 
-                if (m.Skills.Cap != record)
-                {
-                    MyServerSettings.SkillBegin("default", (PlayerMobile)m);
-                    ((PlayerMobile)m).Fugitive = 0;
-                    for (int i = 0; i < m.Skills.Length; i++)
-                    {
-                        Skill skill = (Skill)m.Skills[i];
-                        skill.Base = 0;
-                    }
-                }
+                //if (m.Skills.Cap != record)
+                //{
+                //    MyServerSettings.SkillBegin("default", (PlayerMobile)m);
+                //    ((PlayerMobile)m).Fugitive = 0;
+                //    for (int i = 0; i < m.Skills.Length; i++)
+                //    {
+                //        Skill skill = (Skill)m.Skills[i];
+                //        skill.Base = 0;
+                //    }
+                //}
 
-                if (((PlayerMobile)m).SkillEther != 5000 && m.StatCap != 250)
-                {
-                    m.StatCap = 250;
-                    m.RawStr = 20;
-                    m.RawInt = 20;
-                    m.RawDex = 20;
-                }
-                else if (((PlayerMobile)m).SkillEther == 5000 && m.StatCap != 300)
-                {
-                    m.StatCap = 300;
-                    m.RawStr = 20;
-                    m.RawInt = 20;
-                    m.RawDex = 20;
-                }
+                //if (((PlayerMobile)m).SkillEther != 5000 && m.StatCap != 250)
+                //{
+                //    m.StatCap = 300;
+                //    m.RawStr = 20;
+                //    m.RawInt = 20;
+                //    m.RawDex = 20;
+                //}
+                //else if (((PlayerMobile)m).SkillEther == 5000 && m.StatCap != 300)
+                //{
+                //    m.StatCap = 350;
+                //    m.RawStr = 20;
+                //    m.RawInt = 20;
+                //    m.RawDex = 20;
+                //}
             }
         }
 
@@ -2361,6 +2422,16 @@ namespace Server.Mobiles
             }
 
             BaseRace.SyncRace(this, true);
+            // Reset movement speed to normal
+            ResetMovementSpeed();
+        }
+        private void ResetMovementSpeed()
+        {
+            // Reset speed to normal (use SpeedControl if applicable in your codebase)
+            if (NetState != null)
+            {
+                NetState.Send(SpeedControl.Disable); // Disables any custom speed control, restoring default speed
+            }
         }
 
         public static MusicName[] MusicList = new MusicName[]
@@ -3942,7 +4013,29 @@ namespace Server.Mobiles
 
             switch (version)
             {
+                case 39:
+                    {
+                        int recipeCount = reader.ReadInt();
+
+                        if (recipeCount > 0)
+                        {
+                            m_AcquiredRecipes = new Dictionary<int, bool>();
+
+                            for (int i = 0; i < recipeCount; i++)
+                            {
+                                int r = reader.ReadInt();
+                                if (reader.ReadBool()) //Don't add in recipies which we haven't gotten or have been removed
+                                {
+                                    m_AcquiredRecipes.Add(r, true);
+                                }
+                            }
+                        }
+                        goto case 38;
+                    }
                 case 38:
+                    {
+                        goto case 37;
+                    }
                 case 37:
                     {
                         DoubleClickID = reader.ReadBool();
@@ -4500,7 +4593,22 @@ namespace Server.Mobiles
 
             base.Serialize(writer);
 
-            writer.Write((int)38); // version
+            writer.Write((int)39); // version
+
+            if (m_AcquiredRecipes == null)
+            {
+                writer.Write(0);
+            }
+            else
+            {
+                writer.Write(m_AcquiredRecipes.Count);
+
+                foreach (var kvp in m_AcquiredRecipes)
+                {
+                    writer.Write(kvp.Key);
+                    writer.Write(kvp.Value);
+                }
+            }
 
             writer.Write(m_DoubleClickID);
 
@@ -4801,7 +4909,16 @@ namespace Server.Mobiles
         private bool m_HasMoved;
         public long NextMovementTime { get { return m_NextMovementTime; } }
 
-        public virtual bool UsesFastwalkPrevention { get { return (AccessLevel < AccessLevel.Counselor); } }
+        public virtual bool UsesFastwalkPrevention
+        {
+            get
+            {
+                if (Alive)
+                    return (AccessLevel < AccessLevel.Counselor);
+                else
+                    return false;
+            }
+        }
 
         //public override TimeSpan ComputeMovementSpeed(Direction dir, bool checkTurning)
         //{

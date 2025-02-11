@@ -15,7 +15,62 @@ namespace Server.Engines.Craft
 
 	public abstract class CraftSystem
 	{
-		private int m_MinCraftEffect;
+        #region ServUO Port
+        private readonly CraftSubResCol m_CraftSubRes2;
+        public CraftSubResCol CraftSubRes2
+        {
+            get
+            {
+                return m_CraftSubRes2;
+            }
+        }
+        private bool m_MarkOption;
+        public bool MarkOption
+        {
+            get
+            {
+                return m_MarkOption;
+            }
+            set
+            {
+                m_MarkOption = value;
+            }
+        }
+        public void SetSubRes2(Type type, string name)
+        {
+            m_CraftSubRes2.ResType = type;
+            m_CraftSubRes2.NameString = name;
+            m_CraftSubRes2.Init = true;
+        }
+
+        public void SetSubRes2(Type type, int name)
+        {
+            m_CraftSubRes2.ResType = type;
+            m_CraftSubRes2.NameNumber = name;
+            m_CraftSubRes2.Init = true;
+        }
+
+        public void AddSubRes2(Type type, int name, double reqSkill, object message)
+        {
+            CraftSubRes craftSubRes = new CraftSubRes(type, name, reqSkill, message);
+            m_CraftSubRes2.Add(craftSubRes);
+        }
+
+        public void AddSubRes2(Type type, int name, double reqSkill, int genericName, object message)
+        {
+            CraftSubRes craftSubRes = new CraftSubRes(type, name, reqSkill, genericName, message);
+            m_CraftSubRes2.Add(craftSubRes);
+        }
+
+        public void AddSubRes2(Type type, string name, double reqSkill, object message)
+        {
+            CraftSubRes craftSubRes = new CraftSubRes(type, name, reqSkill, message);
+            m_CraftSubRes2.Add(craftSubRes);
+        }
+        #endregion
+
+
+        private int m_MinCraftEffect;
 		private int m_MaxCraftEffect;
 		private double m_Delay;
 		private bool m_BreakDown;
@@ -51,13 +106,13 @@ namespace Server.Engines.Craft
 
 		public abstract double GetChanceAtMin( CraftItem item );
 
-		public static bool AllowManyCraft( BaseTool tool )
-		{
-			if ( tool != null && ( tool is BaseRunicTool || tool is TomeOfWands ) )
-				return false;
+		//public static bool AllowManyCraft( BaseTool tool )
+		//{
+		//	if ( tool != null && ( tool is BaseRunicTool || tool is TomeOfWands ) )
+		//		return false;
 
-			return MySettings.S_CraftMany;
-		}
+		//	return false;
+		//}
 
 		public static void SetCraftResource( CraftContext context, int index, CraftSubRes res )
 		{
@@ -192,12 +247,15 @@ namespace Server.Engines.Craft
 
 		public static bool CraftFinished( Mobile m, BaseTool tool )
 		{
-			if ( !AllowManyCraft( tool ) )
-				return true;
-			if ( m is PlayerMobile && DateTime.Now >= ((PlayerMobile)m).CraftDone )
-				return true;
-			else
-				m.SendMessage( "You must wait a moment before doing something else." );
+            //if ( !AllowManyCraft( tool ) )
+            //	return true;
+            if (m is PlayerMobile && DateTime.Now >= ((PlayerMobile)m).CraftDone)
+            {
+                Console.WriteLine("craftfinished");
+                return true;
+            }
+            else
+                m.SendMessage("You must wait a moment before doing something else.");
 
 			return false;
 		}
@@ -227,16 +285,20 @@ namespace Server.Engines.Craft
 			}
 		}
 
-		public static void CraftReduceTool( Mobile m, BaseTool tool )
-		{
-			if ( m is PlayerMobile && !((PlayerMobile)m).CraftToolReduced )
-			{
-				tool.UsesRemaining--;
-				((PlayerMobile)m).CraftToolReduced = true;
-			}
-		}
+        public static void CraftReduceTool(Mobile m, BaseTool tool)
+        {
+            if (m is PlayerMobile && !((PlayerMobile)m).CraftToolReduced)
+            {
+                tool.UsesRemaining--;
+                ((PlayerMobile)m).CraftToolReduced = true;
+            }
+            else
+            {
+                Console.WriteLine("CraftReduceTool was skipped.");
+            }
+        }
 
-		public static void CraftStartTool( Mobile m )
+        public static void CraftStartTool( Mobile m )
 		{
 			if ( m is PlayerMobile )
 				((PlayerMobile)m).CraftToolReduced = false;
@@ -263,9 +325,7 @@ namespace Server.Engines.Craft
 		{
 			if ( m is PlayerMobile )
 			{
-				if ( !AllowManyCraft( tool ) )
-					m.PlaySound( sound );
-				else if ( ((PlayerMobile)m).CraftSound == -1 )
+				if ( ((PlayerMobile)m).CraftSound == -1 )
 					((PlayerMobile)m).CraftSound = sound;
 				else if ( ((PlayerMobile)m).CraftSound > 0 ){}
 					// DO NOTHING
@@ -278,9 +338,7 @@ namespace Server.Engines.Craft
 		{
 			if ( m is PlayerMobile )
 			{
-				if ( !AllowManyCraft( tool ) )
-					m.PlaySound( sound );
-				else if ( ((PlayerMobile)m).CraftSoundAfter == -1 )
+				if (((PlayerMobile)m).CraftSoundAfter == -1 )
 					((PlayerMobile)m).CraftSoundAfter = sound;
 				else if ( ((PlayerMobile)m).CraftSoundAfter > 0 ){}
 					// DO NOTHING
@@ -368,8 +426,9 @@ namespace Server.Engines.Craft
 			m_CraftItems = new CraftItemCol();
 			m_CraftGroups = new CraftGroupCol();
 			m_CraftSubRes = new CraftSubResCol();
+            m_CraftSubRes2 = new CraftSubResCol();
 
-			InitCraftList();
+            InitCraftList();
 		}
 
 		public virtual bool ConsumeOnFailure( Mobile from, Type resourceType, CraftItem craftItem )

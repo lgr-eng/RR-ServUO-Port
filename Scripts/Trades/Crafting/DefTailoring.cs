@@ -145,8 +145,9 @@ namespace Server.Engines.Craft
 		}
 
 		public override void InitCraftList()
-		{
-			int index = -1;
+        {
+            MarkOption = true;
+            int index = -1;
 
 			#region Hats
 			AddCraft( typeof( SkullCap ), 1011375, 1025444, 0.0, 25.0, typeof( Fabric ), 1044286, 2, 1044287 );

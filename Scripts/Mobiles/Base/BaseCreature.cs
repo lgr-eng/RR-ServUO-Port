@@ -5293,7 +5293,7 @@ namespace Server.Mobiles
 			if ( FightMode == FightMode.CharmMonster ){ FightMode = FightMode.Closest; }
 			else if ( FightMode == FightMode.CharmAnimal ){ FightMode = FightMode.Aggressor; }
 
-			if ( FollowersMax > 5 ){ FollowersMax = 5; }
+			//if ( FollowersMax > 5 ){ FollowersMax = 5; }
 
 			if ( !IsCitizen() && MySettings.S_LineOfSight && WhisperHue != 999 && WhisperHue != 666 && !CanHearGhosts && !Controlled && (this.Region is DungeonRegion || this.Region is DeadRegion || this.Region is CaveRegion || this.Region is BardDungeonRegion || this.Region is OutDoorBadRegion) )
 			{
@@ -8178,9 +8178,9 @@ namespace Server.Mobiles
 			InhumanSpeech speechType = this.SpeechType;
 
 			if ( speechType != null )
-				speechType.OnDeath( this );
+				speechType.OnDeath( this );            
 
-			return base.OnBeforeDeath();
+            return base.OnBeforeDeath();
 		}
 
 		private bool m_NoKillAwards;
@@ -8520,7 +8520,10 @@ namespace Server.Mobiles
 					}
 				}
 
-				base.OnDeath( c );
+                var e = new CreatureDeathEventArgs(this, LastKiller, c);
+                EventSink.InvokeCreatureDeath(e);
+
+                base.OnDeath( c );
 
 				if ( DeleteCorpseOnDeath || ( ( this.Name == "a follower" || this.Name == "a sailor" || this.Name == "a pirate" ) && this.EmoteHue > 0 ) )
 					c.Delete();

@@ -582,6 +582,7 @@ namespace Server
 
         public CreatureDeathEventArgs(Mobile creature, Mobile killer, Container corpse)
         {
+            Console.WriteLine("CreatureDeathEventArgs");
             Creature = creature;
             Killer = killer;
             Corpse = corpse;
@@ -655,6 +656,7 @@ namespace Server
 
         public ConnectedEventArgs(Mobile m)
         {
+            Console.WriteLine("ConnectedEventArgs");
             m_Mobile = m;
         }
     }

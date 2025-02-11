@@ -569,7 +569,7 @@ namespace Server.Items
 		public class TaskTimer : Timer 
 		{
 			private Item i_item; 
-			public TaskTimer( Item task ) : base( TimeSpan.FromMinutes( 0.3 ) )
+			public TaskTimer( Item task ) : base( TimeSpan.FromMinutes( 60.0 ) )
 			{ 
 				Priority = TimerPriority.OneMinute; 
 				i_item = task; 

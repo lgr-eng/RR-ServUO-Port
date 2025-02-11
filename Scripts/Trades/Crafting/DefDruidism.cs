@@ -88,8 +88,9 @@ namespace Server.Engines.Craft
 		}
 
 		public override void InitCraftList()
-		{
-			int index = -1;
+        {
+            MarkOption = true;
+            int index = -1;
 
 			index = AddCraft( typeof( LureStonePotion ), "Brews", "stone in a jar", 10.0, 30.0, typeof( MoonCrystal ), "Moon Crystal", 1, 1044129 );
 			AddSkill( index, SkillName.Veterinary, 5.0, 15.0 );

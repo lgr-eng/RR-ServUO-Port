@@ -139,9 +139,7 @@ namespace Server
         bool InLOS(Mobile target);
         bool InLOS(object target);
         bool InLOS(Point3D target);
-    }
-    
-
+    } 
     public interface IArtifact
     {
         int ArtifactRarity { get; }

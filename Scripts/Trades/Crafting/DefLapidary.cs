@@ -203,9 +203,10 @@ namespace Server.Engines.Craft
 		}
 
 		public override void InitCraftList()
-		{
-			#region Chainmail
-			AddCraft( typeof( ChainCoif ), "Chain/Ringmail", 1025051, 14.5, 64.5, typeof( AmethystBlocks ), 1063706, 10, 1044513 );
+        {
+            MarkOption = true;
+            #region Chainmail
+            AddCraft( typeof( ChainCoif ), "Chain/Ringmail", 1025051, 14.5, 64.5, typeof( AmethystBlocks ), 1063706, 10, 1044513 );
 			AddCraft( typeof( ChainLegs ), "Chain/Ringmail", 1025054, 36.7, 86.7, typeof( AmethystBlocks ), 1063706, 18, 1044513 );
 			AddCraft( typeof( ChainChest ), "Chain/Ringmail", 1025055, 39.1, 89.1, typeof( AmethystBlocks ), 1063706, 20, 1044513 );
 			AddCraft( typeof( ChainSkirt ), "Chain/Ringmail", "chainmail skirt", 36.7, 86.7, typeof( AmethystBlocks ), 1063706, 18, 1044513 );

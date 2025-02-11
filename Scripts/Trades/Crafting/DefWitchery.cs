@@ -88,8 +88,9 @@ namespace Server.Engines.Craft
 		}
 
 		public override void InitCraftList()
-		{
-			int index = -1;
+        {
+            MarkOption = true;
+            int index = -1;
 
 			index = AddCraft( typeof( UndeadEyesScroll ), "Brews", "eyes of the dead mixture", 10.0, 30.0, typeof( MummyWrap ), "Mummy Wrap", 1, 1044129 );
 			AddRes( index, typeof ( EyeOfToad ), "Eye of Toad", 1, 1044129 );

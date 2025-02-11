@@ -150,7 +150,7 @@ namespace Server.Misc
 			m_Mobile = newChar;
 
 			newChar.Player = true;
-			newChar.StatCap = 250; 
+			newChar.StatCap = 225; 
 			MyServerSettings.SkillBegin( "default", (PlayerMobile)newChar );
 			newChar.AccessLevel = args.Account.AccessLevel;
 			newChar.Female = args.Female;

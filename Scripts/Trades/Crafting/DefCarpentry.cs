@@ -100,21 +100,14 @@ namespace Server.Engines.Craft
 		{
 			int index = -1;
 
-			if ( !AllowManyCraft( m_Tools ) ){ AddCraft( typeof( Kindling ), 1044294, "kindling from a log", 0.0, 00.0, typeof( BaseLog ), 1044466, 1, 1044351 ); }
 
 			index = AddCraft( typeof( Kindling ), 1044294, "kindling from logs", 0.0, 00.0, typeof( BaseLog ), 1044466, 1, 1044351 );
-			if ( !AllowManyCraft( m_Tools ) ){ SetUseAllRes( index, true ); }
 
 			index = AddCraft( typeof( BarkFragment ),	1044294, "bark from logs",	40.0, 70.0, typeof( BaseLog ), 1044466, 1, 1044465 );
-			if ( !AllowManyCraft( m_Tools ) ){ SetUseAllRes( index, true ); }
-
-			if ( !AllowManyCraft( m_Tools ) ){ AddCraft( typeof( Kindling ), 1044294, "kindling from a board", 0.0, 00.0, typeof( Board ), 1015101, 1, 1044351 ); }
 
 			index = AddCraft( typeof( Kindling ), 1044294, "kindling from boards", 0.0, 00.0, typeof( Board ), 1015101, 1, 1044351 );
-			if ( !AllowManyCraft( m_Tools ) ){ SetUseAllRes( index, true ); }
 
 			index = AddCraft( typeof( BarkFragment ),	1044294, "bark from boards",	40.0, 70.0, typeof( Board ), 1015101, 1, 1044465 );
-			if ( !AllowManyCraft( m_Tools ) ){ SetUseAllRes( index, true ); }
 
 			AddCraft( typeof( TenFootPole ), 1044294, "ten foot pole", 43.6, 68.6, typeof( Board ), 1015101, 6, 1044351 );
 
@@ -344,7 +337,8 @@ namespace Server.Engines.Craft
 			AddCraft( typeof( WaterTroughEastDeed ), 1044299, 1044349, 94.7, 119.7, typeof( Board ), 1015101, 150, 1044351 );
 			AddCraft( typeof( WaterTroughSouthDeed ), 1044299, 1044350, 94.7, 119.7, typeof( Board ), 1015101, 150, 1044351 );
 
-			BreakDown = true;
+            MarkOption = true;
+            BreakDown = true;
 			Repair = true;
 			CanEnhance = true;
 

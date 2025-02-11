@@ -100,12 +100,11 @@ namespace Server.Engines.Craft
 		}
 
 		public override void InitCraftList()
-		{
-			int index = AddCraft( typeof( Bottle ), 1044050, 1023854, 52.5, 102.5, typeof( Sand ), 1044625, 1, 1044627 );
-			if ( !AllowManyCraft( m_Tools ) ){ SetUseAllRes( index, true ); }
+        {
+            MarkOption = true;
+            int index = AddCraft( typeof( Bottle ), 1044050, 1023854, 52.5, 102.5, typeof( Sand ), 1044625, 1, 1044627 );
 
 			index = AddCraft( typeof( Jar ), 1044050, "jar", 52.5, 102.5, typeof( Sand ), 1044625, 1, 1044627 );
-			if ( !AllowManyCraft( m_Tools ) ){ SetUseAllRes( index, true ); }
 
 			AddCraft( typeof( SmallFlask ), 1044050, 1044610, 52.5, 102.5, typeof( Sand ), 1044625, 2, 1044627 );
 			AddCraft( typeof( MediumFlask ), 1044050, 1044611, 52.5, 102.5, typeof( Sand ), 1044625, 3, 1044627 );

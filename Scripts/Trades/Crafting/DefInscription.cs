@@ -388,55 +388,54 @@ namespace Server.Engines.Craft
 
 			// Blank Scrolls
 			index = AddCraft( typeof( BlankScroll ), "Books & Scrolls", "Blank Scrolls", 40.0, 70.0, typeof( BarkFragment ), 1073477, 1, 1073478 );
-			if ( !AllowManyCraft( m_Tools ) ){ SetUseAllRes( index, true ); }
 
 			// Writing Book
 			index = AddCraft(typeof(WritingBook), "Books & Scrolls", "Book", 50.0, 126, typeof( Leather ), 1044462, 8, 1044463);
 			AddRes( index, typeof( BlankScroll ), 1044377, 10, 1044378 );
-			AddRes( index, typeof( Beeswax ), 1025154, 5, 1044253 );
+			AddRes( index, typeof( Beeswax ), 1025154, 2, 1044253 );
 
 			// Bulk Order Book
 			index = AddCraft(typeof(Engines.BulkOrders.BulkOrderBook), "Books & Scrolls", "Bulk Order Book", 65.0, 115.0, typeof( Leather ), 1044462, 10, 1044463);
 			AddRes( index, typeof( BlankScroll ), 1044377, 10, 1044378 );
-			AddRes( index, typeof( Beeswax ), 1025154, 5, 1044253 );
+			AddRes( index, typeof( Beeswax ), 1025154, 2, 1044253 );
 
-			AddCraft( typeof( Monocle ), "Books & Scrolls", "librarian set", 5.0, 55.0, typeof( Leather ), 1044462, 10, 1044463);
+            index = AddCraft( typeof( Monocle ), "Books & Scrolls", "librarian set", 5.0, 55.0, typeof( Leather ), 1044462, 10, 1044463);
 			AddRes( index, typeof( BlankScroll ), 1044377, 10, 1044378 );
-			AddRes( index, typeof( Beeswax ), 1025154, 5, 1044253 );
+			AddRes( index, typeof( Beeswax ), 1025154, 2, 1044253 );
 
 			// Runebook
 			index = AddCraft( typeof( Runebook ), "Books & Scrolls", "Runebook", 45.0, 95.0, typeof( Leather ), 1044462, 8, 1044463);
 			AddRes( index, typeof( BlankScroll ), 1044377, 10, 1044378 );
-			AddRes( index, typeof( Beeswax ), 1025154, 5, 1044253 );
+			AddRes( index, typeof( Beeswax ), 1025154, 2, 1044253 );
 			AddRes( index, typeof( GateTravelScroll ), 1044446, 1, 1044253 );
 
 			index = AddCraft(typeof(SongBook), "Books & Scrolls", "Bardic Songs", 50.0, 126, typeof( Leather ), 1044462, 8, 1044463);
 			AddRes( index, typeof( BlankScroll ), 1044377, 10, 1044378 );
-			AddRes( index, typeof( Beeswax ), 1025154, 5, 1044253 );
+			AddRes( index, typeof( Beeswax ), 1025154, 2, 1044253 );
 
 			index = AddCraft(typeof(BookOfBushido), "Books & Scrolls", "Bushido Book", 50.0, 126, typeof( Leather ), 1044462, 8, 1044463);
 			AddRes( index, typeof( BlankScroll ), 1044377, 10, 1044378 );
-			AddRes( index, typeof( Beeswax ), 1025154, 5, 1044253 );
+			AddRes( index, typeof( Beeswax ), 1025154, 2, 1044253 );
 
 			index = AddCraft(typeof(ElementalSpellbook), "Books & Scrolls", "Elemental Spellbook", 50.0, 126, typeof( Leather ), 1044462, 8, 1044463);
 			AddRes( index, typeof( BlankScroll ), 1044377, 10, 1044378 );
-			AddRes( index, typeof( Beeswax ), 1025154, 5, 1044253 );
+			AddRes( index, typeof( Beeswax ), 1025154, 2, 1044253 );
 
 			index = AddCraft(typeof(BookOfChivalry), "Books & Scrolls", "Knightship Book", 50.0, 126, typeof( Leather ), 1044462, 8, 1044463);
 			AddRes( index, typeof( BlankScroll ), 1044377, 10, 1044378 );
-			AddRes( index, typeof( Beeswax ), 1025154, 5, 1044253 );
+			AddRes( index, typeof( Beeswax ), 1025154, 2, 1044253 );
 
 			index = AddCraft(typeof(Spellbook), "Books & Scrolls", "Magery Spellbook", 50.0, 126, typeof( Leather ), 1044462, 8, 1044463);
 			AddRes( index, typeof( BlankScroll ), 1044377, 10, 1044378 );
-			AddRes( index, typeof( Beeswax ), 1025154, 5, 1044253 );
+			AddRes( index, typeof( Beeswax ), 1025154, 2, 1044253 );
 
 			index = AddCraft(typeof(NecromancerSpellbook), "Books & Scrolls", "Necromancer Spellbook", 50.0, 126, typeof( Leather ), 1044462, 8, 1044463);
 			AddRes( index, typeof( BlankScroll ), 1044377, 10, 1044378 );
-			AddRes( index, typeof( Beeswax ), 1025154, 5, 1044253 );
+			AddRes( index, typeof( Beeswax ), 1025154, 2, 1044253 );
 
 			index = AddCraft(typeof(BookOfNinjitsu), "Books & Scrolls", "Ninjitsu Book", 50.0, 126, typeof( Leather ), 1044462, 8, 1044463);
 			AddRes( index, typeof( BlankScroll ), 1044377, 10, 1044378 );
-			AddRes( index, typeof( Beeswax ), 1025154, 5, 1044253 );
+			AddRes( index, typeof( Beeswax ), 1025154, 2, 1044253 );
 
 			// Set the overridable material
 			SetSubRes( typeof( Leather ), CraftResources.GetClilocCraftName( CraftResource.RegularLeather ) );

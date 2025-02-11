@@ -283,7 +283,8 @@ namespace Server.Engines.Craft
 			AddSubRes( typeof( SilurianScales ),	CraftResources.GetClilocCraftName( CraftResource.SilurianScales ), CraftResources.GetSkill( CraftResource.SilurianScales ), CraftResources.GetClilocMaterialName( CraftResource.SilurianScales ), cannot );
 			AddSubRes( typeof( KraytScales ),		CraftResources.GetClilocCraftName( CraftResource.KraytScales ), CraftResources.GetSkill( CraftResource.KraytScales ), CraftResources.GetClilocMaterialName( CraftResource.KraytScales ), cannot );
 
-			BreakDown = true;
+            MarkOption = true;
+            BreakDown = true;
 			Repair = true;
 			CanEnhance = true;
 		}

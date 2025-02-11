@@ -138,8 +138,9 @@ namespace Server.Engines.Craft
 		}
 
 		public override void InitCraftList()
-		{
-			int index = -1;
+        {
+            MarkOption = true;
+            int index = -1;
 
 			// Agility Potion
 			index = AddCraft( typeof( AgilityPotion ), "Potions", "agility", 15.0, 65.0, typeof( Bloodmoss ), 1044354, 1, 1044362 );

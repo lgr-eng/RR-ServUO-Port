@@ -831,7 +831,24 @@ namespace Server
 
 	public sealed class AosSkillBonuses : BaseAttributes
 	{
-		private List<SkillMod> m_Mods;
+        #region ServUO Port
+        public static int GetLabel(SkillName skill)
+        {
+            switch (skill)
+            {
+                case SkillName.Psychology:
+                    return 1002070; // Psychology
+                case SkillName.Forensics:
+                    return 1002078; // Forensic Evaluation
+                case SkillName.Lockpicking:
+                    return 1002097; // Lockpicking
+                default:
+                    return 1044060 + (int)skill;
+            }
+        }
+        #endregion
+
+        private List<SkillMod> m_Mods;
 
 		public AosSkillBonuses( Item owner )
 			: base( owner )

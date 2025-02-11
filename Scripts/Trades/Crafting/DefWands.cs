@@ -118,8 +118,9 @@ namespace Server.Engines.Craft
 		}
 
 		public override void InitCraftList()
-		{
-			int index = -1;
+        {
+            MarkOption = true;
+            int index = -1;
 
 			int wandTypes = 0;
 			string strCircle = "1st Circle";

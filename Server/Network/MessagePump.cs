@@ -68,19 +68,42 @@ namespace Server.Network
             {
                 foreach (SocketState state in l.Slice())
                 {
-                    NetState ns = new NetState(state);
+                    string clientIP = state.Socket.RemoteEndPoint.ToString();
+                    Console.WriteLine($"[DEBUG] New connection attempt - IP: {clientIP}");
 
-                    ns.Start();
+                    // Find if the same account is already logged in
+                    var existingNetState = NetState.Instances.FirstOrDefault(netState =>
+                        netState?.Account != null && netState.Account.Username == "admin"
+                    );
 
-                    if (ns.Running && Display(ns))
+                    if (existingNetState != null)
+                    {
+                        Console.WriteLine($"[WARNING] Duplicate login detected for {existingNetState.Account.Username}. Closing previous session.");
+                        existingNetState.Dispose(); // Close the old session before allowing a new one
+                    }
+
+                    // Create the new session
+                    NetState newState = new NetState(state);
+                    newState.Start();
+
+                    if (newState.Running && Display(newState))
                     {
                         Utility.PushColor(ConsoleColor.Green);
-                        Console.WriteLine("Client: {0}: Connected. [{1} Online]", ns, NetState.Instances.Count);
+                        Console.WriteLine("Client: {0}: Connected. [{1} Online]", newState, NetState.Instances.Count);
                         Utility.PopColor();
+                    }
+
+                    Console.WriteLine($"[DEBUG] Active Connections:");
+                    foreach (var conn in NetState.Instances)
+                    {
+                        Console.WriteLine($"- {conn.Socket?.RemoteEndPoint?.ToString() ?? "Unknown"} (Account: {conn.Account?.Username ?? "Unknown"})");
                     }
                 }
             }
         }
+
+
+
 
         public static bool Display(NetState ns)
         {

@@ -1487,9 +1487,9 @@ namespace Server
 		}
 
 		public static ItemSalesInfo[] m_SellingInfo = new ItemSalesInfo[]
-		{
-			new ItemSalesInfo( typeof(	AbbatoirDeed	),	440	,	0	,	0	,	false	,	false	,	World.None	,	Category.None	,	Material.None	,	Market.Butcher	),
-			new ItemSalesInfo( typeof(	JewelryBracelet	),	20	,	15	,	0	,	false	,	false	,	World.None	,	Category.None	,	Material.None	,	Market.Jeweler	),
+        {            
+            new ItemSalesInfo( typeof(  AbbatoirDeed    ),  440 ,   0   ,   0   ,   false   ,   false   ,   World.None  ,   Category.None   ,   Material.None   ,   Market.Butcher  ),
+            new ItemSalesInfo( typeof(	JewelryBracelet	),	20	,	15	,	0	,	false	,	false	,	World.None	,	Category.None	,	Material.None	,	Market.Jeweler	),
 			new ItemSalesInfo( typeof(	JewelryCirclet	),	20	,	15	,	0	,	false	,	false	,	World.None	,	Category.None	,	Material.None	,	Market.Jeweler	),
 			new ItemSalesInfo( typeof(	AdmiralsHeartyRum	),	1600	,	0	,	0	,	false	,	false	,	World.None	,	Category.Rare	,	Material.None	,	Market.Art	),
 			new ItemSalesInfo( typeof(	AdventurerCrate	),	400	,	5	,	75	,	false	,	false	,	World.None	,	Category.None	,	Material.None	,	Market.Sailor	),
@@ -1960,7 +1960,7 @@ namespace Server
 			new ItemSalesInfo( typeof(	Bedroll	),	5	,	15	,	0	,	false	,	false	,	World.None	,	Category.None	,	Material.None	,	Market.Provisions	),
 			new ItemSalesInfo( typeof(	apiBeeHiveDeed	),	2000	,	10	,	0	,	false	,	false	,	World.None	,	Category.None	,	Material.None	,	Market.Wax	),
 			new ItemSalesInfo( typeof(	BeekeeperCrate	),	400	,	5	,	75	,	false	,	false	,	World.None	,	Category.None	,	Material.None	,	Market.Wax	),
-			new ItemSalesInfo( typeof(	Beeswax	),	1000	,	15	,	0	,	false	,	false	,	World.None	,	Category.None	,	Material.None	,	Market.Wax	),
+			new ItemSalesInfo( typeof(	Beeswax	),	400	,	15	,	0	,	false	,	false	,	World.None	,	Category.None	,	Material.None	,	Market.Wax	),
 			new ItemSalesInfo( typeof(	BeggarVest	),	12	,	15	,	0	,	false	,	false	,	World.None	,	Category.None	,	Material.Cloth	,	Market.Tailor	),
 			new ItemSalesInfo( typeof(	BeginnerBook	),	5	,	15	,	0	,	false	,	false	,	World.None	,	Category.Book	,	Material.None	,	Market.Sage	),
 			new ItemSalesInfo( typeof(	Belt	),	10	,	15	,	0	,	false	,	false	,	World.None	,	Category.None	,	Material.Cloth	,	Market.Tailor	),
